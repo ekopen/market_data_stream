@@ -5,26 +5,28 @@ from kafka import KafkaProducer
 import json, websocket, atexit
 from datetime import datetime, timezone
 
-API_KEY = 'd0amcgpr01qm3l9meas0d0amcgpr01qm3l9measg'
-SYMBOL = 'BINANCE:ETHUSDT'
 
+
+# producer class
 producer = KafkaProducer(
     bootstrap_servers='localhost:9092',
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
+# producer close function
 def close_producer():
     print("Closing Kafka producer...")
     producer.close()
-atexit.register(close_producer)
+atexit.register(close_producer) #ensures a complete closing
 
-def start_producer():
+def start_producer(SYMBOL, API_KEY):
     def on_message(ws, message):
         data = json.loads(message)
-        if data.get('type') == 'trade':
-            received_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
-            for t in data['data']:
-                trade_time = datetime.fromtimestamp(t['t'] / 1000, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z")
+        if data.get('type') == 'trade': #checks to make sure the data is trade data
+            received_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z") #converting to readable date format
+            for t in data['data']: #loops through every trade in the block
+                trade_time = datetime.fromtimestamp(t['t'] / 1000, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z") #another date format conversion
+                # schema for passing to Kafka (even though technically Kafka is schemaless)
                 payload = {
                     'timestamp': trade_time,
                     'timestamp_ms': t['t'],
@@ -33,9 +35,9 @@ def start_producer():
                     'volume': t['v'],
                     'received_at': received_at
                 }
-                producer.send('price_ticks', payload)
-                # print("Sent:", payload)
+                producer.send('price_ticks', payload) #sends to the Kafka price_ticks topic
 
+    #the rest of this code initializes the websocket
     def on_open(ws):
         print("WebSocket connected")
         ws.send(json.dumps({"type": "subscribe", "symbol": SYMBOL}))
