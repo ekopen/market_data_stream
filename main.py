@@ -9,12 +9,16 @@ API_KEY = 'd0amcgpr01qm3l9meas0d0amcgpr01qm3l9measg'
 SYMBOL = 'BINANCE:ETHUSDT'
 
 if __name__ == "__main__":
-    #using threading, as we need the producer to run in the background as we consume and store data
-    producer_thread = threading.Thread(target=start_producer, args=(SYMBOL, API_KEY))
-    producer_thread.daemon = True
-    producer_thread.start()
+    try:
+        #using threading, as we need the producer to run in the background as we consume and store data
+        producer_thread = threading.Thread(target=start_producer, args=(SYMBOL, API_KEY))
+        producer_thread.daemon = True
+        producer_thread.start()
 
-    print("Producer thread started.")
+        print("Producer thread started.")
 
-    # start consumer
-    start_consumer()
+        start_consumer()
+    except KeyboardInterrupt:
+        print("Keyboard interrupt received. Exiting...")
+    # Let atexit handle closing Kafka producer
+        exit(0)

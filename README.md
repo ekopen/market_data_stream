@@ -15,31 +15,48 @@ The subject of our data stream will be financial data, specifically for Crypto w
 
 ---
 
-## Kafka Setup Instructions
+## Docker/Kafka Setup Instructions
 
-### 1. Downloads
+### Prerequisites
 
-- Kafka: [kafka.apache.org/downloads](https://kafka.apache.org/downloads)  
-  > Use the **Scala 2.13** release: `kafka_2.13-3.5.1.tgz`  
-  > (Later versions may lack Zookeeper compatibility)
+- **Download Docker Desktop**  
 
-- Java (Required): [Adoptium Temurin Java](https://adoptium.net/temurin/releases/?os=windows)
-  > Use Version 17
+- **Install Python dependencies**
+  ```bash
+  pip install kafka-python websocket-client
+  ```
 
----
+- **Launch Kafka and ZooKeeper with Docker Compose**
+  ```bash
+  docker-compose up -d
+  ```
 
-### 2. Starting Kafka Locally
+- **Create Kafka Topic**
+  
+  First, open a terminal inside your running Kafka container:
+  ```bash
+  docker exec -it 02project2-kafka-1 bash
+  ```
 
-In **three separate terminal windows**, run the following:
+  Then, inside the container shell, run:
+  ```bash
+  kafka-topics --create --topic price_ticks \
+    --bootstrap-server localhost:9092 \
+    --partitions 1 --replication-factor 1
+  ```
 
-#### Zookeeper
-```bash
-bin/zookeeper-server-start.sh config/zookeeper.properties
-bin/kafka-server-start.sh config/server.properties
-bin/kafka-topics.sh --create --topic price_ticks --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
-```
-May need to use WSL if there are Java issues.
+- **Run the Data Pipeline**
+  ```bash
+  python main.py
+  ```
 
-### 3. Installations
+  This will start the Kafka producer (WebSocket ingestion) and consumer (SQLite storage) in a multi-threaded setup.
 
-pip install kafka-python
+
+
+
+
+
+
+
+

@@ -20,6 +20,8 @@ CREATE TABLE IF NOT EXISTS price_ticks
         ) 
 ''')
 
+c.execute("DELETE FROM price_ticks")
+
 def start_consumer():
     consumer = KafkaConsumer(
         'price_ticks', #connecting to our price ticks topic
