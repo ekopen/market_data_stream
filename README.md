@@ -24,6 +24,7 @@ The subject of our data stream will be financial data, specifically for Crypto w
   > (Later versions may lack Zookeeper compatibility)
 
 - Java (Required): [Adoptium Temurin Java](https://adoptium.net/temurin/releases/?os=windows)
+  > Use Version 17
 
 ---
 
@@ -36,4 +37,9 @@ In **three separate terminal windows**, run the following:
 bin/zookeeper-server-start.sh config/zookeeper.properties
 bin/kafka-server-start.sh config/server.properties
 bin/kafka-topics.sh --create --topic price_ticks --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+```
+May need to use WSL if there are Java issues.
 
+### 3. Installations
+
+pip install kafka-python

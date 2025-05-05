@@ -5,8 +5,6 @@ from kafka import KafkaProducer
 import json, websocket, atexit
 from datetime import datetime, timezone
 
-
-
 # producer class
 producer = KafkaProducer(
     bootstrap_servers='localhost:9092',
@@ -35,6 +33,7 @@ def start_producer(SYMBOL, API_KEY):
                     'volume': t['v'],
                     'received_at': received_at
                 }
+                print("Sending payload to Kafka:", payload)
                 producer.send('price_ticks', payload) #sends to the Kafka price_ticks topic
 
     #the rest of this code initializes the websocket

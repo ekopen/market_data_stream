@@ -26,6 +26,7 @@ def start_consumer():
         bootstrap_servers='localhost:9092',
         value_deserializer=lambda m: json.loads(m.decode('utf-8'))
     )
+    print("Kafka consumer connected. Waiting for messages...")
 
     for message in consumer:
         data = message.value #get the message output
