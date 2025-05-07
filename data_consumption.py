@@ -3,12 +3,6 @@
 from kafka import KafkaConsumer
 import json
 import clickhouse_connect
-from datetime import datetime
-
-
-def parse_clickhouse_datetime(dt_str):
-    # Strip the ' UTC' suffix and convert to datetime object
-    return datetime.strptime(dt_str.replace(' UTC', ''), "%Y-%m-%d %H:%M:%S")
 
 #initialize clickhouse
 client = clickhouse_connect.get_client(
@@ -45,21 +39,21 @@ def start_consumer():
     print("Kafka consumer connected. Waiting for messages...")
 
     for message in consumer:
-            data = message.value
-            try:
-                parsed_data = {
-                    'timestamp': parse_clickhouse_datetime(data['timestamp']),
-                    'timestamp_ms': int(data['timestamp_ms']),
-                    'symbol': data['symbol'],
-                    'price': float(data['price']),
-                    'volume': float(data['volume']),
-                    'received_at': parse_clickhouse_datetime(data['received_at']),
-                }
+        data = message.value #get the message output
+        try: #attempt to insert into clickhouse
+            print("Received message for clickhouse:", data)
+            client.insert('price_ticks', [{
+                'timestamp': data['timestamp'].replace(' UTC', ''),
+                'timestamp_ms': data['timestamp_ms'],
+                'symbol': data['symbol'],
+                'price': data['price'],
+                'volume': data['volume'],
+                'received_at': data['received_at'].replace(' UTC', '')
+            }]) #insert into the table
 
-                print("Data types being inserted:", {k: type(v) for k, v in parsed_data.items()})
-                client.insert('price_ticks', [parsed_data])
-                print("Appended to Clickhouse", parsed_data)
+            print("Appended to Clickhouse", data)
+        except Exception as e: #backup message in vase of error
+            print("Error inserting into Clickhouse:", e)
 
-            except Exception as e:
-                print("Error inserting into Clickhouse:", e)
+
 
