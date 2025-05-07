@@ -1,26 +1,40 @@
 # data_consumption.py
-# Kafka consumer that reads the data and then appends to SQLite table
+# Kafka consumer that reads the data and then appends to a clickhouse table
 from kafka import KafkaConsumer
 import json
-import sqlite3
+import clickhouse_connect
+from datetime import datetime
 
-#initialize the SQL database
-conn = sqlite3.connect("db/pricing_data.db", check_same_thread=False)
-c = conn.cursor()
 
-c.execute('''
-CREATE TABLE IF NOT EXISTS price_ticks 
-        (
-        timestamp TEXT,
-        timestamp_ms INTEGER,
-        symbol TEXT,
-        price REAL,
-        volume REAL,
-        received_at TEXT
-        ) 
+def parse_clickhouse_datetime(dt_str):
+    # Strip the ' UTC' suffix and convert to datetime object
+    return datetime.strptime(dt_str.replace(' UTC', ''), "%Y-%m-%d %H:%M:%S")
+
+#initialize clickhouse
+client = clickhouse_connect.get_client(
+    host='localhost',
+    port=8123,
+    username='default',
+    password='mysecurepassword',) #TEMPORARY PASSWORD
+
+#creating a table if it does not exist
+client.command('''
+CREATE TABLE IF NOT EXISTS price_ticks(
+    timestamp DateTime,
+    timestamp_ms Int64,
+    symbol String,
+    price Float64,
+    volume Float64,
+    received_at DateTime
+) 
+ENGINE = MergeTree()
+PARTITION BY toYYYYMMDD(timestamp)
+ORDER BY (timestamp, symbol)
+TTL timestamp + INTERVAL 2 HOUR DELETE
 ''')
 
-c.execute("DELETE FROM price_ticks")
+#deleting existing rows
+client.command('TRUNCATE TABLE price_ticks')       
 
 def start_consumer():
     consumer = KafkaConsumer(
@@ -31,23 +45,21 @@ def start_consumer():
     print("Kafka consumer connected. Waiting for messages...")
 
     for message in consumer:
-        data = message.value #get the message output
-        try: #attempt to insert into the SQL table
-            c.execute('''
-                INSERT INTO price_ticks (timestamp, timestamp_ms, symbol, price, volume, received_at)
-                VALUES (?, ?, ?, ?, ?, ?)
-            ''', (
-                data['timestamp'],
-                data['timestamp_ms'],
-                data['symbol'],
-                data['price'],
-                data['volume'],
-                data['received_at']
-            ))
-            conn.commit()
-            print("Appended to database", data)
-        except Exception as e: #backup message in vase of error
-            print("Error inserting:", e)
+            data = message.value
+            try:
+                parsed_data = {
+                    'timestamp': parse_clickhouse_datetime(data['timestamp']),
+                    'timestamp_ms': int(data['timestamp_ms']),
+                    'symbol': data['symbol'],
+                    'price': float(data['price']),
+                    'volume': float(data['volume']),
+                    'received_at': parse_clickhouse_datetime(data['received_at']),
+                }
 
+                print("Data types being inserted:", {k: type(v) for k, v in parsed_data.items()})
+                client.insert('price_ticks', [parsed_data])
+                print("Appended to Clickhouse", parsed_data)
 
+            except Exception as e:
+                print("Error inserting into Clickhouse:", e)
 

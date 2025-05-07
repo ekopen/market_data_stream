@@ -24,6 +24,7 @@ The subject of our data stream will be financial data, specifically for Crypto w
 - **Install Python dependencies**
   ```bash
   pip install kafka-python websocket-client
+  pip install clickhouse-connect
   ```
 
 - **Launch Kafka and ZooKeeper with Docker Compose**
@@ -43,6 +44,11 @@ The subject of our data stream will be financial data, specifically for Crypto w
   kafka-topics --create --topic price_ticks \
     --bootstrap-server localhost:9092 \
     --partitions 1 --replication-factor 1
+  ```
+
+- **Initiate Clickhouse**
+  ```bash
+  docker exec -it clickhouse clickhouse-client
   ```
 
 - **Run the Data Pipeline**
