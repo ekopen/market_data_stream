@@ -3,6 +3,7 @@
 from kafka import KafkaConsumer
 import json
 import clickhouse_connect
+from datetime import datetime, timezone
 
 #initialize clickhouse
 client = clickhouse_connect.get_client(
@@ -27,8 +28,27 @@ ORDER BY (timestamp, symbol)
 TTL timestamp + INTERVAL 2 HOUR DELETE
 ''')
 
-#deleting existing rows
+#deleting existing rows (EVENTUALLY GET RID OF THIS)
 client.command('TRUNCATE TABLE price_ticks')       
+
+def validate_and_parse(data):
+
+    timestamp_dt = datetime.fromisoformat(data['timestamp'])
+    timestamp_dt = timestamp_dt.astimezone(timezone.utc).replace(tzinfo=None)
+
+    received_at_dt = datetime.fromisoformat(data['received_at'])
+    received_at_dt = received_at_dt.astimezone(timezone.utc).replace(tzinfo=None)
+
+    # return a tuple in the exact order of table schema:
+    return (
+        timestamp_dt,                  # DateTime
+        data['timestamp_ms'],          # Int64
+        data['symbol'],                # String
+        float(data['price']),          # Float64
+        float(data['volume']),         # Float64
+        received_at_dt                 # DateTime
+    )
+
 
 def start_consumer():
     consumer = KafkaConsumer(
@@ -39,21 +59,17 @@ def start_consumer():
     print("Kafka consumer connected. Waiting for messages...")
 
     for message in consumer:
-        data = message.value #get the message output
-        try: #attempt to insert into clickhouse
-            print("Received message for clickhouse:", data)
-            client.insert('price_ticks', [{
-                'timestamp': data['timestamp'].replace(' UTC', ''),
-                'timestamp_ms': data['timestamp_ms'],
-                'symbol': data['symbol'],
-                'price': data['price'],
-                'volume': data['volume'],
-                'received_at': data['received_at'].replace(' UTC', '')
-            }]) #insert into the table
+        data = message.value
+        print("Received message for ClickHouse:", data)
 
-            print("Appended to Clickhouse", data)
-        except Exception as e: #backup message in vase of error
-            print("Error inserting into Clickhouse:", e)
+        try:
+            validated_row = validate_and_parse(data)
+            client.insert('price_ticks', [validated_row])
+            print("Appended to ClickHouse:", validated_row)
+
+        except Exception as e:
+            print("Full exception:", repr(e), e.args)
+            raise
 
 
 

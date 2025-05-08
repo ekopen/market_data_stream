@@ -1,6 +1,5 @@
 # data_ingestion.py
 # starts the kafka producer and integrates it with Finnhub's API/Websocket
-# so I do not get cut off from the API, I am going to limit pulls and take the first message
 
 from kafka import KafkaProducer
 import json, websocket, atexit, time
@@ -24,25 +23,21 @@ def start_producer(SYMBOL, API_KEY):
     def on_message(ws, message):
         data = json.loads(message)
         if data.get('type') == 'trade': #checks to make sure the data is trade data
-            now = time.time()
-            #creating logic to limit pulls
-            if now - last_sent_time[0] >= .1:
-                t = data['data'][0]
-                received_at = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z") #converting to readable date format
 
-                trade_time = datetime.fromtimestamp(t['t'] / 1000, tz=timezone.utc).strftime("%Y-%m-%d %H:%M:%S %Z") #another date format conversion
+            for t in data['data']:
+                trade_time = datetime.fromtimestamp(t['t'] / 1000, tz=timezone.utc)
+                received_at = datetime.now(timezone.utc)
                 # schema for passing to Kafka (even though technically Kafka is schemaless)
                 payload = {
-                    'timestamp': trade_time,
+                    'timestamp': trade_time.isoformat(),
                     'timestamp_ms': t['t'],
                     'symbol': t['s'],
                     'price': t['p'],
                     'volume': t['v'],
-                    'received_at': received_at
+                    'received_at': received_at.isoformat()
                 }
                 print("Sending payload to Kafka:", payload)
                 producer.send('price_ticks', payload) #sends to the Kafka price_ticks topic
-                last_sent_time[0] = now
 
     #the rest of this code initializes the websocket
     def on_open(ws):

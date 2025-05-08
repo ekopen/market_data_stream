@@ -16,7 +16,7 @@ if __name__ == "__main__":
         producer_thread.start()
 
         print("Producer thread started.")
-
+        
         start_consumer()
     except KeyboardInterrupt:
         print("Keyboard interrupt received. Exiting...")
