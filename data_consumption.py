@@ -1,35 +1,9 @@
 # data_consumption.py
-# Kafka consumer that reads the data and then appends to a clickhouse table
+# Kafka consumer that reads the data and then starts appending it to the hot/warm/cold tables
 from kafka import KafkaConsumer
 import json
-import clickhouse_connect
 from datetime import datetime, timezone
-
-#initialize clickhouse
-client = clickhouse_connect.get_client(
-    host='localhost',
-    port=8123,
-    username='default',
-    password='mysecurepassword',) #TEMPORARY PASSWORD
-
-#creating a table if it does not exist
-client.command('''
-CREATE TABLE IF NOT EXISTS price_ticks(
-    timestamp DateTime,
-    timestamp_ms Int64,
-    symbol String,
-    price Float64,
-    volume Float64,
-    received_at DateTime
-) 
-ENGINE = MergeTree()
-PARTITION BY toYYYYMMDD(timestamp)
-ORDER BY (timestamp, symbol)
-TTL timestamp + INTERVAL 2 HOUR DELETE
-''')
-
-#deleting existing rows (EVENTUALLY GET RID OF THIS)
-client.command('TRUNCATE TABLE price_ticks')       
+from clickhouse import client
 
 def validate_and_parse(data):
 
@@ -49,7 +23,6 @@ def validate_and_parse(data):
         received_at_dt                 # DateTime
     )
 
-
 def start_consumer():
     consumer = KafkaConsumer(
         'price_ticks', #connecting to our price ticks topic
@@ -60,7 +33,7 @@ def start_consumer():
 
     for message in consumer:
         data = message.value
-        print("Received message for ClickHouse:", data)
+        print("Received message:", data)
 
         try:
             validated_row = validate_and_parse(data)
