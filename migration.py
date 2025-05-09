@@ -2,36 +2,29 @@
 
 import time
 from datetime import datetime, timedelta, timezone
-from clickhouse import client
+from clickhouse import get_client
 
-def hot_to_warm():
-    time.sleep(2)
+def hot_to_warm():   
+    ch_client = get_client()
     while True:
         print("Migrating from hot to cold") 
         try:
 
-            cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=1)
-            formatted_cutoff = cutoff_time.strftime('%Y-%m-%d %H:%M:%S')
+            first_row = ch_client.query('''
+                SELECT max(timestamp) FROM price_ticks
+            ''').result_rows
 
-            # get hot data from clickhouse
-            rows = client.query(
-                f'''
+            first_timestamp = first_row[0][0]
+
+            cutoff = first_timestamp - timedelta(seconds=5)
+
+
+            old_rows = ch_client.query(f'''
                 SELECT * FROM price_ticks
-                '''
-            ).result_rows
+                WHERE timestamp < toDateTime('{cutoff}')
+            ''').result_rows
 
-            print("Cutoff time:", formatted_cutoff)
-            print("First row:", rows[0])
-            print("Last row:", rows[-1])
-
-            # filtered = []
-            # for row in rows:
-            #     row_time = row[0].replace(tzinfo=timezone.utc)
-            #     print("Row time:", row_time)
-            #     if row_time < cutoff:
-            #         filtered.append(row)
-
-            # print("Filtered rows:", filtered)
+            print("Rows to move:", len(old_rows))
 
         except Exception as e:
             print("[hot_to_warm] Exception:", e)

@@ -4,9 +4,10 @@
 from kafka import KafkaConsumer
 import json
 from datetime import datetime, timezone
-from clickhouse import client, create_clickhouse_table
+from clickhouse import get_client, create_clickhouse_table
 from postgres import cursor, conn, create_postgres_table
 from migration import hot_to_warm
+import threading
 
 def validate_and_parse(data):
 
@@ -30,7 +31,8 @@ def start_consumer():
 
     create_clickhouse_table() #create the table if it does not exist
     create_postgres_table() #create the table if it does not exist
-    hot_to_warm() #start the hot to warm migration process
+    threading.Thread(target=hot_to_warm, daemon=True).start() #start the hot to warm thread
+    ch_client = get_client() #get client
 
     consumer = KafkaConsumer(
         'price_ticks', #connecting to our price ticks topic
@@ -45,7 +47,7 @@ def start_consumer():
 
         try:
             validated_row = validate_and_parse(data)
-            client.insert('price_ticks', [validated_row])
+            ch_client.insert('price_ticks', [validated_row])
             #print("Appended to ClickHouse:", validated_row)
 
         except Exception as e:
