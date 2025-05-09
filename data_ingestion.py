@@ -36,7 +36,7 @@ def start_producer(SYMBOL, API_KEY):
                     'volume': t['v'],
                     'received_at': received_at.isoformat()
                 }
-                print("Sending payload to Kafka:", payload)
+                #print("Sending payload to Kafka:", payload)
                 producer.send('price_ticks', payload) #sends to the Kafka price_ticks topic
 
     #the rest of this code initializes the websocket

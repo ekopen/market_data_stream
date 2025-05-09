@@ -2,8 +2,9 @@
 # calls our Kafka producer and consumer to being the data collection process
 
 import threading
+import time
 from data_ingestion import start_producer
-from data_consumption import start_consumer
+from data_consumption import start_consumer, hot_to_warm
 
 API_KEY = 'd0amcgpr01qm3l9meas0d0amcgpr01qm3l9measg'
 SYMBOL = 'BINANCE:ETHUSDT'
@@ -18,6 +19,7 @@ if __name__ == "__main__":
         print("Producer thread started.")
         
         start_consumer()
+
     except KeyboardInterrupt:
         print("Keyboard interrupt received. Exiting...")
     # Let atexit handle closing Kafka producer

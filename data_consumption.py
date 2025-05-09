@@ -1,9 +1,12 @@
 # data_consumption.py
 # Kafka consumer that reads the data and then starts appending it to the hot/warm/cold tables
+# handles moving from hot to warm to cold as well (via batch processes)
 from kafka import KafkaConsumer
 import json
 from datetime import datetime, timezone
-from clickhouse import client
+from clickhouse import client, create_clickhouse_table
+from postgres import cursor, conn, create_postgres_table
+from migration import hot_to_warm
 
 def validate_and_parse(data):
 
@@ -24,6 +27,11 @@ def validate_and_parse(data):
     )
 
 def start_consumer():
+
+    create_clickhouse_table() #create the table if it does not exist
+    create_postgres_table() #create the table if it does not exist
+    hot_to_warm() #start the hot to warm migration process
+
     consumer = KafkaConsumer(
         'price_ticks', #connecting to our price ticks topic
         bootstrap_servers='localhost:9092',
@@ -33,16 +41,17 @@ def start_consumer():
 
     for message in consumer:
         data = message.value
-        print("Received message:", data)
+        #print("Received message:", data)
 
         try:
             validated_row = validate_and_parse(data)
             client.insert('price_ticks', [validated_row])
-            print("Appended to ClickHouse:", validated_row)
+            #print("Appended to ClickHouse:", validated_row)
 
         except Exception as e:
             print("Full exception:", repr(e), e.args)
             raise
+
 
 
 
