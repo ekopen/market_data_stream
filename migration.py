@@ -3,6 +3,7 @@
 import time
 from datetime import datetime, timedelta, timezone
 from clickhouse import get_client
+from postgres import cursor, conn
 
 def hot_to_warm():   
     ch_client = get_client()
@@ -15,9 +16,7 @@ def hot_to_warm():
             ''').result_rows
 
             first_timestamp = first_row[0][0]
-
             cutoff = first_timestamp - timedelta(seconds=5)
-
 
             old_rows = ch_client.query(f'''
                 SELECT * FROM price_ticks
@@ -26,10 +25,25 @@ def hot_to_warm():
 
             print("Rows to move:", len(old_rows))
 
+            #insert into postgres
+            insert_query = '''
+                    INSERT INTO price_ticks (timestamp, timestamp_ms, symbol, price, volume, received_at)
+                    VALUES (%s, %s, %s, %s, %s, %s)
+                '''
+            cursor.executemany(insert_query, old_rows)
+            print(f"Moved {len(old_rows)} rows from hot (clickhouse) to warm (postgres).")
+
+            ch_client.command(f'''
+                ALTER TABLE price_ticks
+                DELETE WHERE timestamp < '{cutoff}'
+            ''')
+            print(f"Deleted {len(old_rows)} rows from hot (clickhouse).")
+
+
         except Exception as e:
             print("[hot_to_warm] Exception:", e)
 
-        time.sleep(1)
+        time.sleep(10)
 
 
 # def hot_to_warm():
