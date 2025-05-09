@@ -17,6 +17,10 @@ conn.autocommit = True
 cursor = conn.cursor()
 
 def create_postgres_table():
+    # delete existing data
+    cursor.execute('''
+    DROP TABLE IF EXISTS price_ticks
+    ''')
     #creating a table if it does not exist
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS price_ticks(
@@ -27,5 +31,3 @@ def create_postgres_table():
         volume FLOAT8,
         received_at TIMESTAMPTZ
     )''')
-
-#enable BATCH writing to postgres
