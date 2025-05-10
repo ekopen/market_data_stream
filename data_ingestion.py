@@ -18,8 +18,8 @@ def close_producer():
 atexit.register(close_producer) #ensures a complete closing
 
 def start_producer(SYMBOL, API_KEY):
-    last_sent_time = [0]
-
+    print("Producer thread started.")
+    
     def on_message(ws, message):
         data = json.loads(message)
         if data.get('type') == 'trade': #checks to make sure the data is trade data

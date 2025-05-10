@@ -36,5 +36,5 @@ def create_clickhouse_table():
     ENGINE = MergeTree()
     PARTITION BY toYYYYMMDD(timestamp)
     ORDER BY (timestamp, symbol)
-    TTL timestamp + INTERVAL 1 MINUTE DELETE
+    TTL timestamp + INTERVAL 5 MINUTE DELETE
     ''')

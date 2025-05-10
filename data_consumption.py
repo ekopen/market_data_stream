@@ -4,9 +4,8 @@
 from kafka import KafkaConsumer
 import json
 from datetime import datetime, timezone
-from clickhouse import get_client, create_clickhouse_table
-from postgres import cursor, conn, create_postgres_table
-from migration import hot_to_warm
+from clickhouse import get_client
+from postgres import cursor, conn
 import threading
 
 def validate_and_parse(data):
@@ -29,9 +28,6 @@ def validate_and_parse(data):
 
 def start_consumer():
 
-    create_clickhouse_table() #create the table if it does not exist
-    create_postgres_table() #create the table if it does not exist
-    threading.Thread(target=hot_to_warm, daemon=True).start() #start the hot to warm thread
     ch_client = get_client() #get client
 
     consumer = KafkaConsumer(
