@@ -19,10 +19,6 @@ client = clickhouse_connect.get_client(
     password='mysecurepassword',) #TEMPORARY PASSWORD
 
 def create_clickhouse_table():
-    #delete existing data
-    client.command('''
-    DROP TABLE IF EXISTS price_ticks
-    ''')
     #creating a table if it does not exist
     client.command('''
     CREATE TABLE IF NOT EXISTS price_ticks(
@@ -35,6 +31,12 @@ def create_clickhouse_table():
     ) 
     ENGINE = MergeTree()
     PARTITION BY toYYYYMMDD(timestamp)
-    ORDER BY (timestamp, symbol)
+    ORDER BY timestamp_ms
     TTL timestamp + INTERVAL 5 MINUTE DELETE
+    ''')
+
+def delete_clickhouse_table():
+    #deleting the table if it exists
+    client.command('''
+    DROP TABLE IF EXISTS price_ticks
     ''')

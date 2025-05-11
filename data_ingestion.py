@@ -26,7 +26,6 @@ def start_producer(SYMBOL, API_KEY):
     def on_message(ws, message):
         data = json.loads(message)
         if data.get('type') == 'trade': #checks to make sure the data is trade data
-
             for t in data['data']:
                 trade_time = datetime.fromtimestamp(t['t'] / 1000, tz=timezone.utc)
                 received_at = datetime.now(timezone.utc)
