@@ -4,6 +4,9 @@
 from kafka import KafkaProducer
 import json, websocket, atexit, time
 from datetime import datetime, timezone
+import threading
+
+stop_event = threading.Event() #helps to stop the producer thread
 
 # producer class
 producer = KafkaProducer(
@@ -44,7 +47,24 @@ def start_producer(SYMBOL, API_KEY):
         print("WebSocket connected")
         ws.send(json.dumps({"type": "subscribe", "symbol": SYMBOL}))
 
+    def on_close(ws, close_status_code, close_msg):
+        print("WebSocket closed:", close_status_code, close_msg)
+
     ws = websocket.WebSocketApp(f"wss://ws.finnhub.io?token={API_KEY}",
                                 on_message=on_message,
-                                on_open=on_open)
-    ws.run_forever()
+                                on_open=on_open,
+                                on_close=on_close)
+
+    # start the producer in a separate thread
+    wst = threading.Thread(target=ws.run_forever)
+    wst.daemon = True
+    wst.start()
+
+    # Wait for shutdown
+    try:
+        while not stop_event.is_set():
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print("KeyboardInterrupt received in producer.")
+        stop_event.set()
+        ws.close()
