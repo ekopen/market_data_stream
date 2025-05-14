@@ -7,6 +7,8 @@ from datetime import datetime, timezone
 from storage_hot import get_client
 from storage_warm import cursor, conn
 import threading
+import time
+
 
 def validate_and_parse(data):
 
@@ -26,7 +28,7 @@ def validate_and_parse(data):
         received_at_dt                 # DateTime
     )
 
-def start_consumer():
+def start_consumer(stop_event):
 
     ch_client = get_client() #get client
 
@@ -37,18 +39,28 @@ def start_consumer():
     )
     print("Kafka consumer connected. Waiting for messages...")
 
-    for message in consumer:
-        data = message.value
-        #print("Received message:", data)
+    #using batching to improve performance
+    batch = []
+    last_flush = time.time()
+    BATCH_SIZE = 300
+    FLUSH_INTERVAL = 1.5  # seconds
 
+    for message in consumer:
+        if stop_event.is_set():
+            print("Stop event received, breaking consumer loop.")
+            break
         try:
-            validated_row = validate_and_parse(data)
-            ch_client.insert('price_ticks', [validated_row])
-            #print("Appended to ClickHouse:", validated_row)
+            validated_row = validate_and_parse(message.value)
+            batch.append(validated_row)
+
+            if len(batch) >= BATCH_SIZE or (time.time() - last_flush) > FLUSH_INTERVAL:
+                ch_client.insert('price_ticks', batch)
+                print(f"Inserted {len(batch)} rows.")
+                batch.clear()
+                last_flush = time.time()
 
         except Exception as e:
             print("Full exception:", repr(e), e.args)
-            raise
 
 
 

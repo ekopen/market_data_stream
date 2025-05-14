@@ -6,8 +6,6 @@ import json, websocket, atexit, time
 from datetime import datetime, timezone
 import threading
 
-stop_event = threading.Event() #helps to stop the producer thread
-
 # producer class
 producer = KafkaProducer(
     bootstrap_servers='localhost:9092',
@@ -20,7 +18,7 @@ def close_producer():
     producer.close()
 atexit.register(close_producer) #ensures a complete closing
 
-def start_producer(SYMBOL, API_KEY):
+def start_producer(SYMBOL, API_KEY, stop_event):
     print("Producer thread started.")
     
     def on_message(ws, message):
@@ -59,11 +57,9 @@ def start_producer(SYMBOL, API_KEY):
     wst.daemon = True
     wst.start()
 
-    # Wait for shutdown
     try:
         while not stop_event.is_set():
-            time.sleep(1)
-    except KeyboardInterrupt:
-        print("KeyboardInterrupt received in producer.")
-        stop_event.set()
+            time.sleep(0.5)
+    finally:
+        print("Shutting down producer WebSocket.")
         ws.close()

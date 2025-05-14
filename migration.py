@@ -8,7 +8,7 @@ from storage_warm import cursor, conn
 from storage_cold import cold_upload
 import pandas as pd
 
-def hot_to_warm(hot_duration=20): #duration in seconds   
+def hot_to_warm(hot_duration=5): #duration in seconds   
     time.sleep(hot_duration) #pause before beginning the migration
     ch_client = get_client() #initiate a new clickhouse client
     while True:
@@ -56,9 +56,9 @@ def hot_to_warm(hot_duration=20): #duration in seconds
 
         time.sleep(hot_duration) #pause before moving more data
 
-def warm_to_cold(warm_duration=45): #duration in seconds   
-    time.sleep(warm_duration) #pause before beginning the migration
 
+def warm_to_cold(warm_duration=60): #duration in seconds   
+    time.sleep(warm_duration) #pause before beginning the migration
     while True:
         print("Migrating from warm to hot") 
         try:
@@ -71,16 +71,18 @@ def warm_to_cold(warm_duration=45): #duration in seconds
 
             cutoff_ms = first_timestamp_ms - (warm_duration * 1000)
 
+            print("Cutoff timestamp in ms:", cutoff_ms)
+
             # get rows older than the cutoff
-            cursor.execute(f'''
+            cursor.execute('''
                 SELECT * FROM price_ticks
-                WHERE timestamp_ms < {cutoff_ms}
-            ''', (cutoff_ms))
+                WHERE timestamp_ms < %s
+            ''', (cutoff_ms,))
             old_rows = cursor.fetchall()
 
             df = pd.DataFrame(old_rows, columns=['timestamp', 'timestamp_ms', 'symbol', 'price', 'volume', 'received_at'])
 
-            filename = f'cold_storage_{datetime.now().strftime('%Y%m%d_%H%M%S')}.parquet'
+            filename = f'cold_storage_until_{cutoff_ms}.parquet'
             df.to_parquet(filename, index=False)
             s3_key = f"archived_data/{filename}"
 
@@ -90,9 +92,13 @@ def warm_to_cold(warm_duration=45): #duration in seconds
             # remove the old rows from warm storage
             cursor.execute(f'''
                 DELETE FROM price_ticks
-                WHERE timestamp_ms < {cutoff_ms}
-            ''', (cutoff_ms))
-            print(f"Moved {len(old_rows)} rows from warm to cold storage. There are {cursor.rowcount} rows remaining in the warm table.")
+                WHERE timestamp_ms < %s
+            ''', (cutoff_ms,))
+
+            cursor.execute('SELECT COUNT(*) FROM price_ticks')
+            remaining = cursor.fetchone()[0]
+
+            print(f"Moved {len(old_rows)} rows from warm to cold storage. There are {remaining} rows remaining in the warm table.")
 
         except Exception as e:
             print("[warm_to_cold] Exception:", e)
