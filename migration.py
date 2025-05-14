@@ -14,17 +14,9 @@ def hot_to_warm(hot_duration=5): #duration in seconds
     while True:
         print("Migrating from hot to cold") 
         try:
-            #using the api stream as an anchor for data "freshness", since it seems to be outdated data
-            first_row = ch_client.query('''
-                SELECT max(timestamp_ms) FROM price_ticks
-            ''').result_rows
-
-            first_timestamp_ms = first_row[0][0]
-            cutoff_ms = first_timestamp_ms - (hot_duration * 1000)
-
-            # if you want to use the current time as the cutoff, uncomment this
-            # cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=hot_duration)
-            # cutoff_ms = int(cutoff_time.timestamp() * 1000)
+            # gets the current time and subtracts the hot duration to get the cutoff time
+            cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=hot_duration)
+            cutoff_ms = int(cutoff_time.timestamp() * 1000)
 
             # gets all data past the cutoff time
             old_rows = ch_client.query(f'''
@@ -62,14 +54,9 @@ def warm_to_cold(warm_duration=60): #duration in seconds
     while True:
         print("Migrating from warm to hot") 
         try:
-            # get the first timestamp from the warm storage to serve as an anchor for the cutoff
-            cursor.execute('''
-                SELECT max(timestamp_ms) FROM price_ticks
-            ''')
-            first_row = cursor.fetchone()
-            first_timestamp_ms = first_row[0]
-
-            cutoff_ms = first_timestamp_ms - (warm_duration * 1000)
+            # gets the current time and subtracts the warm duration to get the cutoff time
+            cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=warm_duration)
+            cutoff_ms = cutoff_time - (warm_duration * 1000)
 
             print("Cutoff timestamp in ms:", cutoff_ms)
 
