@@ -1,7 +1,7 @@
 #migration.py
 #moves data from table to table depending on storage requirements
 
-import time
+import time, os
 from datetime import timedelta, datetime, timezone
 from storage_hot import get_client
 from storage_warm import cursor, conn
@@ -75,6 +75,7 @@ def warm_to_cold(warm_duration=60): #duration in seconds
 
             # upload to cold storage
             cold_upload(filename, 'cold_storage',s3_key)
+            os.remove(filename)  # remove the local file after uploading
 
             # remove the old rows from warm storage
             cursor.execute(f'''
