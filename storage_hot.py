@@ -1,4 +1,4 @@
-# clickhouse.py
+# storage_hot.py
 # enables storing hot data to clikhouse
 import clickhouse_connect
 

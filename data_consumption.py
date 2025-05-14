@@ -4,8 +4,8 @@
 from kafka import KafkaConsumer
 import json
 from datetime import datetime, timezone
-from clickhouse import get_client
-from postgres import cursor, conn
+from storage_hot import get_client
+from storage_warm import cursor, conn
 import threading
 
 def validate_and_parse(data):

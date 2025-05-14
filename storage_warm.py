@@ -1,4 +1,4 @@
- #postgres.py
+# storage_warm.py
 # enables storing warm data to postgres
 import psycopg2
 

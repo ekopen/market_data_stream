@@ -1,32 +1,17 @@
 # main.py
-# calls our Kafka producer and consumer to being the data collection process
+# controls all sub functions
 
-import threading
-from clickhouse import create_clickhouse_table, delete_clickhouse_table
-from postgres import create_postgres_table, delete_postgres_table
+from storage_hot import create_clickhouse_table, delete_clickhouse_table
+from storage_warm import create_postgres_table, delete_postgres_table
 from migration import hot_to_warm
 from data_ingestion import start_producer, stop_event
 from data_consumption import start_consumer
-import signal
-import sys
-import os
+import os, threading
 from dotenv import load_dotenv
-
 load_dotenv()  # Load from .env file
 
-API_KEY = os.getenv('FINNHUB_API_KEY')
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
+API_KEY = os.getenv("FINNHUB_API_KEY")
 SYMBOL = 'BINANCE:ETHUSDT'
-
-# Function to handle shutdown, which is a bit more diffiult with all the threads
-def graceful_exit(sig, frame):
-    print("\nGracefully shutting down...")
-    stop_event.set()
-    sys.exit(0)
-
-signal.signal(signal.SIGINT, graceful_exit)
-signal.signal(signal.SIGTERM, graceful_exit)
 
 if __name__ == "__main__":
     try:
@@ -40,6 +25,8 @@ if __name__ == "__main__":
 
         #start migrating data between tables
         threading.Thread(target=hot_to_warm, daemon=True).start() #start the hot to warm thread
+        threading.Thread(target=hot_to_warm, daemon=True).start() #start the warm to cold thread
+
 
         #start ingesting data from the websocket and feed to kafka
         producer_thread = threading.Thread(target=start_producer, args=(SYMBOL, API_KEY))
