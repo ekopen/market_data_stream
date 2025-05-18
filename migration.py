@@ -42,17 +42,7 @@ def hot_to_warm(stop_event,hot_duration=60): #duration in seconds
                 DELETE WHERE timestamp_ms < {cutoff_ms}
             ''')
 
-            # get the new hot table
-            hot_rows = ch_client.query(f'''
-                SELECT * FROM price_ticks
-            ''').result_rows
-
-            print(f"Moved {len(warm_rows)} rows from hot to warm storage. There are {len(hot_rows)} rows remaining in the hot table.")
-
-            #export hot rows to parquet file
-            hot_df = pd.DataFrame(hot_rows, columns=['timestamp', 'timestamp_ms', 'symbol', 'price', 'volume', 'received_at'])
-            hot_df.to_parquet("data/hot_data.parquet", index=False)
-
+            print(f"Moved {len(warm_rows)} rows from hot to warm storage.")
 
         except Exception as e:
             print("[hot_to_warm] Exception:", e)
@@ -61,7 +51,7 @@ def hot_to_warm(stop_event,hot_duration=60): #duration in seconds
 
 def warm_to_cold(stop_event,warm_duration=300): #duration in seconds   
     time.sleep(warm_duration*2) #pause before beginning the migration
-    last_local_file = None
+
     while not stop_event.is_set():
         print("Migrating from warm to hot") 
         try:
@@ -92,18 +82,7 @@ def warm_to_cold(stop_event,warm_duration=300): #duration in seconds
             df.rename(columns={'second': 'timestamp'}, inplace=True)
 
             filename = f'data/cold_data_until_{cutoff_ms}.parquet'
-            viz_filename = 'data/cold_data.parquet'
             df.to_parquet(filename, index=False)
-            df.to_parquet(viz_filename, index=False) #dup cold data for viz
-
-            #get rid of the of cold file
-            if last_local_file and os.path.exists(last_local_file):
-                s3_key = f"archived_data/{os.path.basename(last_local_file)}"
-                cold_upload(last_local_file, 'cold_data', s3_key)
-                os.remove(last_local_file)
-                print(f"Archived and deleted old local file: {last_local_file}")
-
-            last_local_file = filename
 
             # remove the old rows from warm storage
             cursor.execute(f'''
@@ -111,19 +90,21 @@ def warm_to_cold(stop_event,warm_duration=300): #duration in seconds
                 WHERE timestamp_ms < %s
             ''', (cutoff_ms,))
 
-            # get the new warm table
-            cursor.execute('''
-                SELECT * FROM price_ticks
-            ''')
-            warm_rows = cursor.fetchall()
-
-            print(f"Moved {len(cold_rows)} rows from warm to cold storage. There are {len(warm_rows)} rows remaining in the warm table.")
-
-            #export warm rows to parquet file
-            warm_df = pd.DataFrame(warm_rows, columns=['timestamp', 'timestamp_ms', 'symbol', 'price', 'volume', 'received_at'])
-            warm_df.to_parquet("data/warm_data.parquet", index=False)
+            print(f"Moved {len(cold_rows)} rows from warm to cold storage.")
 
         except Exception as e:
             print("[warm_to_cold] Exception:", e)
 
         time.sleep(warm_duration) #pause before moving more data
+
+# def cold_to_cloud(stop_event,cold_duration=86400): #duration in seconds   
+#     time.sleep(cold_duration*2) #pause before beginning the migration
+
+#     while not stop_event.is_set():
+#         print("Migrating from cold to cloud") 
+#         try:
+#             # migrate all parquets older than 24 hours to cloud
+#         except Exception as e:
+#             print("[cold_to_cloud] Exception:", e)
+
+#         time.sleep(cold_duration) #pause before moving more data
