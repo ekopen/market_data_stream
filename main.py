@@ -32,8 +32,8 @@ if __name__ == "__main__":
         create_postgres_table()
 
         #start migrating data between tables
-        threading.Thread(target=hot_to_warm, daemon=True).start() #start the hot to warm thread
-        threading.Thread(target=warm_to_cold, daemon=True).start() #start the warm to cold thread
+        threading.Thread(target=hot_to_warm, args=(stop_event,), daemon=True).start() #start the hot to warm thread
+        threading.Thread(target=warm_to_cold, args=(stop_event,), daemon=True).start() #start the warm to cold thread
 
 
         #start ingesting data from the websocket and feed to kafka

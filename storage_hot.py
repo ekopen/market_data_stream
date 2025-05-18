@@ -40,3 +40,5 @@ def delete_clickhouse_table():
     client.command('''
     DROP TABLE IF EXISTS price_ticks
     ''')
+
+

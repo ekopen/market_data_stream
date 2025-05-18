@@ -7,11 +7,16 @@ from storage_hot import get_client
 from storage_warm import cursor, conn
 from storage_cold import cold_upload
 import pandas as pd
+import threading
 
-def hot_to_warm(hot_duration=5): #duration in seconds   
-    time.sleep(hot_duration) #pause before beginning the migration
+stop_event = threading.Event()
+
+def hot_to_warm(stop_event,hot_duration=60): #duration in seconds   
+    time.sleep(hot_duration*2) #pause before beginning the migration
     ch_client = get_client() #initiate a new clickhouse client
-    while True:
+    os.makedirs("data", exist_ok=True)
+
+    while not stop_event.is_set():
         print("Migrating from hot to cold") 
         try:
             # gets the current time and subtracts the hot duration to get the cutoff time
@@ -19,7 +24,7 @@ def hot_to_warm(hot_duration=5): #duration in seconds
             cutoff_ms = int(cutoff_time.timestamp() * 1000)
 
             # gets all data past the cutoff time
-            old_rows = ch_client.query(f'''
+            warm_rows = ch_client.query(f'''
                 SELECT * FROM price_ticks
                 WHERE timestamp_ms < {cutoff_ms}
             ''').result_rows
@@ -29,34 +34,40 @@ def hot_to_warm(hot_duration=5): #duration in seconds
                     INSERT INTO price_ticks (timestamp, timestamp_ms, symbol, price, volume, received_at)
                     VALUES (%s, %s, %s, %s, %s, %s)
                 '''
-            cursor.executemany(insert_query, old_rows)
+            cursor.executemany(insert_query, warm_rows)
 
-            # removes the old data from clickhouse
+            # removes the warm data from clickhouse
             ch_client.command(f'''
                 ALTER TABLE price_ticks
                 DELETE WHERE timestamp_ms < {cutoff_ms}
             ''')
 
-            remaining_rows = ch_client.query(f'''
+            # get the new hot table
+            hot_rows = ch_client.query(f'''
                 SELECT * FROM price_ticks
             ''').result_rows
 
-            print(f"Moved {len(old_rows)} rows from hot to warm storage. There are {len(remaining_rows)} rows remaining in the hot table.")
+            print(f"Moved {len(warm_rows)} rows from hot to warm storage. There are {len(hot_rows)} rows remaining in the hot table.")
+
+            #export hot rows to parquet file
+            hot_df = pd.DataFrame(hot_rows, columns=['timestamp', 'timestamp_ms', 'symbol', 'price', 'volume', 'received_at'])
+            hot_df.to_parquet("data/hot_data.parquet", index=False)
+
 
         except Exception as e:
             print("[hot_to_warm] Exception:", e)
 
         time.sleep(hot_duration) #pause before moving more data
 
-
-def warm_to_cold(warm_duration=60): #duration in seconds   
-    time.sleep(warm_duration) #pause before beginning the migration
-    while True:
+def warm_to_cold(stop_event,warm_duration=300): #duration in seconds   
+    time.sleep(warm_duration*2) #pause before beginning the migration
+    last_local_file = None
+    while not stop_event.is_set():
         print("Migrating from warm to hot") 
         try:
             # gets the current time and subtracts the warm duration to get the cutoff time
             cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=warm_duration)
-            cutoff_ms = cutoff_time - (warm_duration * 1000)
+            cutoff_ms = int(cutoff_time.timestamp() * 1000)
 
             print("Cutoff timestamp in ms:", cutoff_ms)
 
@@ -65,17 +76,34 @@ def warm_to_cold(warm_duration=60): #duration in seconds
                 SELECT * FROM price_ticks
                 WHERE timestamp_ms < %s
             ''', (cutoff_ms,))
-            old_rows = cursor.fetchall()
+            cold_rows = cursor.fetchall()
 
-            df = pd.DataFrame(old_rows, columns=['timestamp', 'timestamp_ms', 'symbol', 'price', 'volume', 'received_at'])
+            df = pd.DataFrame(cold_rows, columns=['timestamp', 'timestamp_ms', 'symbol', 'price', 'volume', 'received_at'])
 
-            filename = f'cold_storage_until_{cutoff_ms}.parquet'
+            # aggregating to 1 second intervals
+            df['second'] = df['timestamp'].dt.floor('1s')
+            df = df.groupby('second').agg({
+                'timestamp_ms': 'last',
+                'symbol': 'last',
+                'price': 'last',
+                'volume': 'sum',
+                'received_at': 'last'
+            }).reset_index()
+            df.rename(columns={'second': 'timestamp'}, inplace=True)
+
+            filename = f'data/cold_data_until_{cutoff_ms}.parquet'
+            viz_filename = 'data/cold_data.parquet'
             df.to_parquet(filename, index=False)
-            s3_key = f"archived_data/{filename}"
+            df.to_parquet(viz_filename, index=False) #dup cold data for viz
 
-            # upload to cold storage
-            cold_upload(filename, 'cold_storage',s3_key)
-            os.remove(filename)  # remove the local file after uploading
+            #get rid of the of cold file
+            if last_local_file and os.path.exists(last_local_file):
+                s3_key = f"archived_data/{os.path.basename(last_local_file)}"
+                cold_upload(last_local_file, 'cold_data', s3_key)
+                os.remove(last_local_file)
+                print(f"Archived and deleted old local file: {last_local_file}")
+
+            last_local_file = filename
 
             # remove the old rows from warm storage
             cursor.execute(f'''
@@ -83,10 +111,17 @@ def warm_to_cold(warm_duration=60): #duration in seconds
                 WHERE timestamp_ms < %s
             ''', (cutoff_ms,))
 
-            cursor.execute('SELECT COUNT(*) FROM price_ticks')
-            remaining = cursor.fetchone()[0]
+            # get the new warm table
+            cursor.execute('''
+                SELECT * FROM price_ticks
+            ''')
+            warm_rows = cursor.fetchall()
 
-            print(f"Moved {len(old_rows)} rows from warm to cold storage. There are {remaining} rows remaining in the warm table.")
+            print(f"Moved {len(cold_rows)} rows from warm to cold storage. There are {len(warm_rows)} rows remaining in the warm table.")
+
+            #export warm rows to parquet file
+            warm_df = pd.DataFrame(warm_rows, columns=['timestamp', 'timestamp_ms', 'symbol', 'price', 'volume', 'received_at'])
+            warm_df.to_parquet("data/warm_data.parquet", index=False)
 
         except Exception as e:
             print("[warm_to_cold] Exception:", e)
