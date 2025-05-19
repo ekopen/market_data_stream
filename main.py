@@ -3,23 +3,22 @@
 
 from storage_hot import create_clickhouse_table, delete_clickhouse_table
 from storage_warm import create_postgres_table, delete_postgres_table
-from migration import hot_to_warm, warm_to_cold
+from migration import hot_to_warm, warm_to_cold, cold_to_cloud
 from data_ingestion import start_producer
 from data_consumption import start_consumer
-import os, threading, time
+from migration import hot_to_warm, warm_to_cold, cold_to_cloud
+
+from config import SYMBOL, API_KEY, HOT_DURATION, WARM_DURATION, COLD_DURATION
+
+import os, threading, time, sys
 from dotenv import load_dotenv
 load_dotenv()  # Load from .env file
-import sys
-import threading
 
 stop_event = threading.Event()
 
 if "--stop" in sys.argv:
     stop_event.set()
     exit(0)
-
-API_KEY = os.getenv("FINNHUB_API_KEY")
-SYMBOL = 'BINANCE:ETHUSDT'
 
 if __name__ == "__main__":
     try:
@@ -32,8 +31,9 @@ if __name__ == "__main__":
         create_postgres_table()
 
         #start migrating data between tables
-        threading.Thread(target=hot_to_warm, args=(stop_event,), daemon=True).start() #start the hot to warm thread
-        threading.Thread(target=warm_to_cold, args=(stop_event,), daemon=True).start() #start the warm to cold thread
+        threading.Thread(target=hot_to_warm, args=(stop_event,HOT_DURATION), daemon=True).start() #start the hot to warm thread
+        threading.Thread(target=warm_to_cold, args=(stop_event,WARM_DURATION), daemon=True).start() #start the warm to cold thread
+        threading.Thread(target=cold_to_cloud, args=(stop_event,COLD_DURATION), daemon=True).start() #start the cold to cloud thread
 
 
         #start ingesting data from the websocket and feed to kafka
