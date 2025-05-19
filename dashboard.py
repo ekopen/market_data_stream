@@ -67,7 +67,7 @@ def plot_price(df, title, height=350):
 
     min_price = df['price'].min()
     max_price = df['price'].max()
-    y_range = [min_price * 0.9985, max_price * 1.0015]
+    y_range = [min_price * 0.9999, max_price * 1.0001]
 
     fig = go.Figure()
     fig.add_trace(go.Scatter(

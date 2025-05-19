@@ -111,10 +111,8 @@ def cold_to_cloud(stop_event,cold_duration): #duration in seconds
             # loop through every parquet file in the cold_data directory
             for filename in os.listdir('cold_data'):
                 file_ms = int(filename.split('.')[0]) #get the cutoff time the file
-                print(f"Cold file found: {file_ms}")
                 if file_ms < cutoff_ms:
                     full_path = os.path.join('cold_data', filename)
-                    print(f"Full path: {full_path}")
                     s3_key = f"archived_data/{full_path}"
                     cold_upload(full_path, 'cold_storage', s3_key)
                     os.remove(full_path)
