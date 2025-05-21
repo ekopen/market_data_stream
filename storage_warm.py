@@ -13,7 +13,7 @@ conn = psycopg2.connect(
 conn.autocommit = True
 cursor = conn.cursor()
 
-def create_postgres_table():
+def create_warm_table():
     #creating a table if it does not exist
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS price_ticks(
@@ -24,9 +24,3 @@ def create_postgres_table():
         volume FLOAT8,
         received_at TIMESTAMPTZ
     )''')
-
-def delete_postgres_table():
-    #deleting the table if it exists
-    cursor.execute('''
-    DROP TABLE IF EXISTS price_ticks
-    ''')

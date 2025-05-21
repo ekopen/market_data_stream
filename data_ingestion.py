@@ -5,6 +5,26 @@ from kafka import KafkaProducer
 import json, websocket, atexit, time
 from datetime import datetime, timezone
 import threading
+from diagnostics import insert_producer_metric
+from storage_warm import cursor
+
+# queue for producer metrics
+from queue import Queue 
+counter_queue = Queue()
+
+def counter_worker():
+    count = 0
+    last_log_time = time.time()
+
+    while True:
+        item = counter_queue.get()
+        if item is None:
+            break  # Graceful shutdown
+        count += 1
+        if time.time() - last_log_time > 60:
+            print(f"[Producer] Sent {count} messages in last 60s")
+            count = 0
+            last_log_time = time.time()
 
 # producer class
 producer = KafkaProducer(
@@ -19,7 +39,12 @@ def close_producer():
 atexit.register(close_producer) #ensures a complete closing
 
 def start_producer(SYMBOL, API_KEY, stop_event):
+
     print("Producer thread started.")
+
+    # start a thread for the metrics counter
+    metrics_thread = threading.Thread(target=counter_worker, daemon=True)
+    metrics_thread.start()
     
     def on_message(ws, message):
         data = json.loads(message)
@@ -38,6 +63,8 @@ def start_producer(SYMBOL, API_KEY, stop_event):
                 }
                 #print("Sending payload to Kafka:", payload)
                 producer.send('price_ticks', payload) #sends to the Kafka price_ticks topic
+
+                counter_queue.put(1)
 
     #the rest of this code initializes the websocket
     def on_open(ws):
@@ -63,3 +90,7 @@ def start_producer(SYMBOL, API_KEY, stop_event):
     finally:
         print("Shutting down producer WebSocket.")
         ws.close()
+
+        # additionally stop logging thread
+        counter_queue.put(None)
+        metrics_thread.join()

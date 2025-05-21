@@ -67,9 +67,11 @@ def plot_price(df, title, height=350):
 
     min_price = df['price'].min()
     max_price = df['price'].max()
-    y_range = [min_price * 0.9999, max_price * 1.0001]
+    y_price_range = [min_price * 0.9999, max_price * 1.0001]
 
     fig = go.Figure()
+
+    # Price Line
     fig.add_trace(go.Scatter(
         x=df['timestamp'],
         y=df['price'],
@@ -77,31 +79,53 @@ def plot_price(df, title, height=350):
         line=dict(width=2),
         name="Price"
     ))
+
+    # Volume Bar
+    fig.add_trace(go.Bar(
+        x=df['timestamp'],
+        y=df['volume'],
+        name='Volume',
+        opacity=0.4,
+        yaxis='y2'
+    ))
+
     fig.update_layout(
         title=title,
-        xaxis_title="Time",
-        yaxis_title="Price",
         height=height,
         margin=dict(l=40, r=40, t=40, b=40),
-        yaxis=dict(tickformat=".2f", range=y_range)
+        xaxis=dict(title='Time'),
+        yaxis=dict(
+            title='Price',
+            tickformat=".2f",
+            range=y_price_range,
+            side='left'
+        ),
+        yaxis2=dict(
+            title='Volume',
+            overlaying='y',
+            side='right',
+            showgrid=False
+        ),
+        legend=dict(x=0, y=1.1, orientation='h')
     )
+
     return fig
 
-# --- Load & Display Hot Data (every second)
+# Load & Display Hot Data (every second)
 st.subheader("Hot Data")
 hot_df = load_hot_data(HOT_DURATION)
-st.plotly_chart(plot_price(hot_df, "Hot data (up to five minutes old)"), use_container_width=True)
+st.plotly_chart(plot_price(hot_df, f"Hot data (up to {HOT_DURATION/60} minutes old)"), use_container_width=True)
 
-# --- Load & Display Warm Data every WARM_DURATION seconds
+# Load & Display Warm Data every WARM_DURATION seconds
 if refresh_counter % WARM_DURATION == 0:
     st.session_state["warm_df"] = load_warm_data(WARM_DURATION, conn)
 warm_df = st.session_state.get("warm_df", pd.DataFrame())
 st.subheader("Warm Data")
-st.plotly_chart(plot_price(warm_df, "Warm data (up to 30 minutes old)"), use_container_width=True)
+st.plotly_chart(plot_price(warm_df, f"Warm data (up to {WARM_DURATION/60} minutes old)"), use_container_width=True)
 
-# --- Load & Display Cold Data every COLD_DURATION seconds
+# Load & Display Cold Data every COLD_DURATION seconds
 if refresh_counter % COLD_DURATION == 0:
     st.session_state["cold_df"] = load_cold_data(COLD_DURATION)
 cold_df = st.session_state.get("cold_df", pd.DataFrame())
 st.subheader("Cold Data")
-st.plotly_chart(plot_price(cold_df, "Cold data (up to 24 hours old)"), use_container_width=True)
+st.plotly_chart(plot_price(cold_df, f"Cold data (up to {COLD_DURATION/60/60} hours old)"), use_container_width=True)

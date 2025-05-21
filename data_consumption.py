@@ -8,6 +8,8 @@ from storage_hot import get_client
 from storage_warm import cursor, conn
 import threading
 import time
+import statistics
+from diagnostics import insert_consumer_metric
 
 
 def validate_and_parse(data):
@@ -30,6 +32,11 @@ def validate_and_parse(data):
 
 def start_consumer(stop_event):
 
+    # creating variables for consumer metrics
+    message_count = 0
+    lag_list = []
+    last_log_time = time.time()
+
     ch_client = get_client() #get client
 
     consumer = KafkaConsumer(
@@ -46,6 +53,14 @@ def start_consumer(stop_event):
     FLUSH_INTERVAL = 1.5  # seconds
 
     for message in consumer:
+
+        #logging conusmer metrics
+        timestamp_dt = datetime.fromisoformat(message.value['timestamp'])
+        received_at_dt = datetime.now(timezone.utc)
+        lag = (received_at_dt - timestamp_dt).total_seconds()
+        message_count += 1
+        lag_list.append(lag)
+
         if stop_event.is_set():
             print("Stop event received, breaking consumer loop.")
             break
@@ -61,6 +76,17 @@ def start_consumer(stop_event):
 
         except Exception as e:
             print("Full exception:", repr(e), e.args)
+
+        # flush ingestion metrics every 60 seconds
+        if time.time() - last_log_time > 60:
+            avg_lag = statistics.mean(lag_list) if lag_list else 0
+            max_lag = max(lag_list) if lag_list else 0
+
+            insert_consumer_metric(cursor, message_count, avg_lag, max_lag)
+
+            message_count = 0
+            lag_list = []
+            last_log_time = time.time()
 
 
 

@@ -1,12 +1,12 @@
 # main.py
 # controls all sub functions
 
-from storage_hot import create_clickhouse_table, delete_clickhouse_table
-from storage_warm import create_postgres_table, delete_postgres_table
-from migration import hot_to_warm, warm_to_cold, cold_to_cloud
 from data_ingestion import start_producer
 from data_consumption import start_consumer
+from storage_hot import create_hot_table
+from storage_warm import create_warm_table, cursor
 from migration import hot_to_warm, warm_to_cold, cold_to_cloud
+from diagnostics import create_consumer_metrics_table, create_producer_metrics_table, create_system_errors_table
 
 from config import SYMBOL, API_KEY, HOT_DURATION, WARM_DURATION, COLD_DURATION
 
@@ -22,13 +22,12 @@ if "--stop" in sys.argv:
 
 if __name__ == "__main__":
     try:
-        #delete the tables if they exist
-        delete_clickhouse_table()
-        delete_postgres_table()
-        
         #create the tables if they do not exist
-        create_clickhouse_table()
-        create_postgres_table()
+        create_hot_table()
+        create_warm_table()
+        create_consumer_metrics_table(cursor)
+        create_producer_metrics_table(cursor)
+        create_system_errors_table(cursor)
 
         #start migrating data between tables
         threading.Thread(target=hot_to_warm, args=(stop_event,HOT_DURATION), daemon=True).start() #start the hot to warm thread
