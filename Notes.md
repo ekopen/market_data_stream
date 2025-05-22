@@ -12,8 +12,11 @@ Here are some issues I have diagnosed but not figured out how to fix:
 3. Threading. the data stream is heavy and any additionally logging can slow it down, so we need to use threading
 
 # Next steps
--  log size of tables
+
 - finish logging error database
     - may need to add extra try loops and logs across the board
 - show the new loggs on streamlit from diagnostics
+- create a procedure if the websocket goes down... maybe some sort of restart mechanisum?
+    - log downtime too
 - figure out how to run on cloud
+- create flow

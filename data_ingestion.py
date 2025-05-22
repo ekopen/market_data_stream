@@ -23,6 +23,7 @@ def counter_worker():
         count += 1
         if time.time() - last_log_time > 60:
             print(f"[Producer] Sent {count} messages in last 60s")
+            insert_producer_metric(cursor, count) 
             count = 0
             last_log_time = time.time()
 

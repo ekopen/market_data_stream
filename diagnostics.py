@@ -4,6 +4,7 @@
 # Ingestion metrics
 
 def create_consumer_metrics_table(cursor):
+    cursor.execute("DROP TABLE IF EXISTS consumer_metrics")
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS consumer_metrics (
         timestamp TIMESTAMPTZ PRIMARY KEY,
@@ -22,6 +23,7 @@ def insert_consumer_metric(cursor, messages, avg_lag, max_lag, source='kafka_con
     print(f"[Consumer Metrics] {messages} msgs | avg_lag={avg_lag:.2f}s | max_lag={max_lag:.2f}s")
 
 def create_producer_metrics_table(cursor):
+    cursor.execute("DROP TABLE IF EXISTS producer_metrics")
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS producer_metrics (
         timestamp TIMESTAMPTZ PRIMARY KEY,

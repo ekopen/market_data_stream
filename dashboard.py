@@ -5,6 +5,7 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.express as px
 from streamlit_autorefresh import st_autorefresh
 import os
 from datetime import datetime, timedelta, timezone
@@ -95,20 +96,98 @@ def plot_price(df, title, height=350):
 
     return fig
 
-st.title("ETH Price Dashboard")
+def load_consumer_metrics():
+    query = '''
+        SELECT * FROM consumer_metrics
+        ORDER BY timestamp DESC
+        LIMIT 100
+    '''
+    return pd.read_sql(query, conn)
+
+def load_producer_metrics():
+    query = '''
+        SELECT * FROM producer_metrics
+        ORDER BY timestamp DESC
+        LIMIT 100
+    '''
+    return pd.read_sql(query, conn)
+
+
+st.title("Ticker Data Dashboard")
 
 refresh_counter = st_autorefresh(interval=1000, key="refresh_counter")
 
 hot_df, hot_df_display = load_hot_data()
 warm_df, warm_df_display = load_warm_data(conn)
 
-tab1, tab2 = st.tabs(["Hot", "Warm"])
+tab1, tab2, tab3 = st.tabs(["Hot Data", "Warm Data", "Diagnostics"])
 
 with tab1:
     st.subheader("Hot Data")
     st.write(f"Rows: {len(hot_df):,} | Memory: {hot_df.memory_usage(deep=True).sum() / 1_048_576:.2f} MB")
     st.plotly_chart(plot_price(hot_df_display, "Hot Data"), use_container_width=True)
+
 with tab2:
     st.subheader("Warm Data")
     st.write(f"Rows: {len(warm_df):,} | Memory: {warm_df.memory_usage(deep=True).sum() / 1_048_576:.2f} MB")
     st.plotly_chart(plot_price(warm_df_display, "Warm Data"), use_container_width=True)
+
+with tab3:
+    st.subheader("Diagnostics")
+
+    consumer_df = load_consumer_metrics()
+    producer_df = load_producer_metrics()
+
+    # st.markdown("### Kafka Consumer Metrics (Last 100)")
+    # st.dataframe(consumer_df)
+
+    # st.markdown("### WebSocket Producer Metrics (Last 100)")
+    # st.dataframe(producer_df)
+
+    # === Avg Lag Bar Chart ===
+    st.markdown("### Avg Lag Over Time (Consumer)")
+    if not consumer_df.empty:
+        fig = px.bar(
+            consumer_df.sort_values("timestamp"),
+            x="timestamp",
+            y="avg_lag_sec",
+            title="Kafka Consumer - Average Lag (seconds)",
+            labels={"avg_lag_sec": "Average Lag (s)", "timestamp": "Timestamp"},
+        )
+        st.plotly_chart(fig, use_container_width=True)
+
+    st.markdown("### Messages Over Time")
+
+    # Round timestamps to nearest minute for alignment
+    producer_df['timestamp_rounded'] = pd.to_datetime(producer_df['timestamp']).dt.floor('min')
+    consumer_df['timestamp_rounded'] = pd.to_datetime(consumer_df['timestamp']).dt.floor('min')
+
+    # Aggregate messages per minute
+    producer_agg = producer_df.groupby('timestamp_rounded')['messages'].sum().reset_index(name='producer_messages')
+    consumer_agg = consumer_df.groupby('timestamp_rounded')['messages'].sum().reset_index(name='consumer_messages')
+
+    # Merge and compute difference
+    message_diff_df = pd.merge(producer_agg, consumer_agg, on='timestamp_rounded', how='outer').fillna(0)
+    message_diff_df['message_diff'] = message_diff_df['producer_messages'] - message_diff_df['consumer_messages']
+
+    # Line chart: Producer and Consumer messages
+    fig = px.line(
+        message_diff_df.sort_values("timestamp_rounded"),
+        x="timestamp_rounded",
+        y=["producer_messages", "consumer_messages"],
+        title="Producer vs Consumer Message Count (per Minute)",
+        labels={"value": "Messages", "timestamp_rounded": "Timestamp", "variable": "Source"},
+        markers=True
+    )
+    st.plotly_chart(fig, use_container_width=True)
+
+    # Bar chart: Message difference
+    st.markdown("### Message Difference Over Time (Producer - Consumer)")
+    fig_diff = px.bar(
+        message_diff_df.sort_values("timestamp_rounded"),
+        x="timestamp_rounded",
+        y="message_diff",
+        title="Message Count Difference Over Time",
+        labels={"message_diff": "Difference", "timestamp_rounded": "Timestamp"},
+    )
+    st.plotly_chart(fig_diff, use_container_width=True)
