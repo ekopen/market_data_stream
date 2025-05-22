@@ -32,7 +32,8 @@ def create_hot_table():
     ENGINE = MergeTree()
     PARTITION BY toYYYYMMDD(timestamp)
     ORDER BY timestamp_ms
-    TTL timestamp + INTERVAL 5 MINUTE DELETE
+    TTL timestamp + INTERVAL 10 MINUTE DELETE
     ''')
 
-
+def delete_hot_table():
+    client.command("DROP TABLE IF EXISTS price_ticks")

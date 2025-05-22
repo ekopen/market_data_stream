@@ -3,9 +3,9 @@
 
 from data_ingestion import start_producer
 from data_consumption import start_consumer
-from storage_hot import create_hot_table
-from storage_warm import create_warm_table, cursor
-from migration import hot_to_warm, warm_to_cold, cold_to_cloud
+from storage_hot import create_hot_table, delete_hot_table
+from storage_warm import create_warm_table, cursor, delete_warm_table
+from migration import hot_to_warm, warm_to_cold
 from diagnostics import create_consumer_metrics_table, create_producer_metrics_table, create_system_errors_table
 
 from config import SYMBOL, API_KEY, HOT_DURATION, WARM_DURATION, COLD_DURATION
@@ -23,6 +23,9 @@ if "--stop" in sys.argv:
 if __name__ == "__main__":
     try:
         #create the tables if they do not exist
+        delete_hot_table()
+        delete_warm_table()
+
         create_hot_table()
         create_warm_table()
         create_consumer_metrics_table(cursor)
@@ -32,8 +35,6 @@ if __name__ == "__main__":
         #start migrating data between tables
         threading.Thread(target=hot_to_warm, args=(stop_event,HOT_DURATION), daemon=True).start() #start the hot to warm thread
         threading.Thread(target=warm_to_cold, args=(stop_event,WARM_DURATION), daemon=True).start() #start the warm to cold thread
-        threading.Thread(target=cold_to_cloud, args=(stop_event,COLD_DURATION), daemon=True).start() #start the cold to cloud thread
-
 
         #start ingesting data from the websocket and feed to kafka
         producer_thread = threading.Thread(target=start_producer, args=(SYMBOL, API_KEY, stop_event))

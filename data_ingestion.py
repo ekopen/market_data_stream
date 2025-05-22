@@ -91,6 +91,6 @@ def start_producer(SYMBOL, API_KEY, stop_event):
         print("Shutting down producer WebSocket.")
         ws.close()
 
-        # additionally stop logging thread
+        # additional stop logging thread
         counter_queue.put(None)
         metrics_thread.join()

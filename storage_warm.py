@@ -24,3 +24,6 @@ def create_warm_table():
         volume FLOAT8,
         received_at TIMESTAMPTZ
     )''')
+
+def delete_warm_table():
+    cursor.execute("DROP TABLE IF EXISTS price_ticks")

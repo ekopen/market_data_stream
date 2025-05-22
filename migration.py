@@ -43,6 +43,14 @@ def hot_to_warm(stop_event,hot_duration): #duration in seconds
 
             print(f"Moved {len(warm_rows)} rows from hot to warm storage.")
 
+            # Print current row counts in both hot and warm tables
+            hot_count = ch_client.query("SELECT count() FROM price_ticks").result_rows[0][0]
+            cursor.execute("SELECT count(*) FROM price_ticks")
+            warm_count = cursor.fetchone()[0]
+
+            print(f"[HOT_TO_WARM] Current row count — Hot (ClickHouse): {hot_count}, Warm (PostgreSQL): {warm_count}")
+
+
         except Exception as e:
             print("[hot_to_warm] Exception:", e)
 
@@ -83,6 +91,15 @@ def warm_to_cold(stop_event,warm_duration): #duration in seconds
 
             filename = f'cold_data/{cutoff_ms}.parquet'
             df.to_parquet(filename, index=False)
+            s3_key = f"archived_data/{cutoff_ms}"
+            
+            try:
+                # deactivating the actualu upload for now
+                # cold_upload(filename, 'cold_storage', s3_key)
+                os.remove(filename)
+                print(f"Uploaded and removed file: {filename}")
+            except Exception as upload_err:
+                print(f"[warm_to_cold] Upload failed: {upload_err}")
 
             # remove the old rows from warm storage
             cursor.execute(f'''
@@ -97,28 +114,3 @@ def warm_to_cold(stop_event,warm_duration): #duration in seconds
 
         time.sleep(warm_duration) #pause before moving more data
 
-def cold_to_cloud(stop_event,cold_duration): #duration in seconds   
-    time.sleep(cold_duration*2) #pause before beginning the migration
-    
-    while not stop_event.is_set():
-        print("Migrating from cold to cloud") 
-        # upload all cold data older than the cutoff time to cloud
-        try:
-            # find cutoff time
-            cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=cold_duration)
-            cutoff_ms = int(cutoff_time.timestamp() * 1000)
-
-            # loop through every parquet file in the cold_data directory
-            for filename in os.listdir('cold_data'):
-                file_ms = int(filename.split('.')[0]) #get the cutoff time the file
-                if file_ms < cutoff_ms:
-                    full_path = os.path.join('cold_data', filename)
-                    s3_key = f"archived_data/{full_path}"
-                    cold_upload(full_path, 'cold_storage', s3_key)
-                    os.remove(full_path)
-                    print(f"Uploaded and removed file: {filename}")
-
-        except Exception as e:
-            print("[cold_to_cloud] Exception:", e)
-
-        time.sleep(cold_duration)

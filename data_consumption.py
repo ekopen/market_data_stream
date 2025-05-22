@@ -70,7 +70,7 @@ def start_consumer(stop_event):
 
             if len(batch) >= BATCH_SIZE or (time.time() - last_flush) > FLUSH_INTERVAL:
                 ch_client.insert('price_ticks', batch)
-                print(f"Inserted {len(batch)} rows.")
+                # print(f"Inserted {len(batch)} rows.")
                 batch.clear()
                 last_flush = time.time()
 
