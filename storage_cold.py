@@ -17,6 +17,7 @@ s3 = boto3.client(
     aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
 )
 
+# currently not being used for cost purposes
 def cold_upload(file_name=None, bucket=BUCKET_NAME, s3_key=None):
     s3.upload_file(file_name, BUCKET_NAME, s3_key)
     print(f"Uploaded {file_name} to S3 bucket '{BUCKET_NAME}' at '{s3_key}'.")

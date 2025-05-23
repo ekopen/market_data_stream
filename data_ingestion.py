@@ -4,28 +4,37 @@
 from kafka import KafkaProducer
 import json, websocket, atexit, time
 from datetime import datetime, timezone
-import threading
-from diagnostics import insert_producer_metric
-from storage_warm import cursor
+import threading, queue
+from diagnostics import insert_websocket_diagnostics
+from config import DIAGNOSTIC_FREQUENCY
+from statistics import mean
 
-# queue for producer metrics
-from queue import Queue 
-counter_queue = Queue()
+diagnostics_queue = queue.Queue()
 
-def counter_worker():
-    count = 0
-    last_log_time = time.time()
+def diagnostics_worker(cursor, stop_event):
 
-    while True:
-        item = counter_queue.get()
-        if item is None:
-            break  # Graceful shutdown
-        count += 1
-        if time.time() - last_log_time > 60:
-            print(f"[Producer] Sent {count} messages in last 60s")
-            insert_producer_metric(cursor, count) 
-            count = 0
-            last_log_time = time.time()
+    print("Diagnostics worker started.")
+    while not stop_event.is_set():
+        time.sleep(DIAGNOSTIC_FREQUENCY)
+
+        # get all messages from the diagnostic queue
+        messages = []
+        while not diagnostics_queue.empty():
+            try:
+                messages.append(diagnostics_queue.get_nowait())
+            except queue.Empty:
+                break
+
+        if messages:
+            avg_timestamp = mean([datetime.fromisoformat(m['timestamp']) for m in messages])
+            avg_received = mean([datetime.fromisoformat(m['received_at']) for m in messages])
+            message_count = len(messages)
+
+            insert_websocket_diagnostics(cursor, avg_timestamp, avg_received, message_count)
+            print(f"Inserted diagnostics for {message_count} messages.")
+
+    cursor.close()
+    print("Diagnostics worker stopped.")
 
 # producer class
 producer = KafkaProducer(
@@ -43,17 +52,14 @@ def start_producer(SYMBOL, API_KEY, stop_event):
 
     print("Producer thread started.")
 
-    # start a thread for the metrics counter
-    metrics_thread = threading.Thread(target=counter_worker, daemon=True)
-    metrics_thread.start()
-    
     def on_message(ws, message):
         data = json.loads(message)
         if data.get('type') == 'trade': #checks to make sure the data is trade data
             for t in data['data']:
                 trade_time = datetime.fromtimestamp(t['t'] / 1000, tz=timezone.utc)
                 received_at = datetime.now(timezone.utc)
-                # schema for passing to Kafka (even though technically Kafka is schemaless)
+
+                # schema for passing to Kafka (even though technically Kafka is schemless)
                 payload = {
                     'timestamp': trade_time.isoformat(),
                     'timestamp_ms': t['t'],
@@ -63,9 +69,8 @@ def start_producer(SYMBOL, API_KEY, stop_event):
                     'received_at': received_at.isoformat()
                 }
                 #print("Sending payload to Kafka:", payload)
+                diagnostics_queue.put(payload)
                 producer.send('price_ticks', payload) #sends to the Kafka price_ticks topic
-
-                counter_queue.put(1)
 
     #the rest of this code initializes the websocket
     def on_open(ws):
@@ -80,7 +85,7 @@ def start_producer(SYMBOL, API_KEY, stop_event):
                                 on_open=on_open,
                                 on_close=on_close)
 
-    # start the producer in a separate thread
+    # start the producer in thread
     wst = threading.Thread(target=ws.run_forever)
     wst.daemon = True
     wst.start()
@@ -92,6 +97,5 @@ def start_producer(SYMBOL, API_KEY, stop_event):
         print("Shutting down producer WebSocket.")
         ws.close()
 
-        # additional stop logging thread
-        counter_queue.put(None)
-        metrics_thread.join()
+
+    

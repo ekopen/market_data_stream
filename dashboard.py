@@ -54,6 +54,14 @@ def plot_price(df, title, height=350):
     max_price = df['price'].max()
     y_price_range = [min_price * 0.9999, max_price * 1.0001]
 
+    # Set color based on title
+    if "Hot" in title:
+        price_color = "maroon"
+    elif "Warm" in title:
+        price_color = "navy"
+    else:
+        price_color = "black"
+
     fig = go.Figure()
 
     # Price Line
@@ -61,15 +69,16 @@ def plot_price(df, title, height=350):
         x=df['timestamp'],
         y=df['price'],
         mode='lines',
-        line=dict(width=2),
+        line=dict(width=2, color=price_color),
         name="Price"
     ))
 
-    # Volume Bar
+    # Volume Bar — matching color
     fig.add_trace(go.Bar(
         x=df['timestamp'],
         y=df['volume'],
         name='Volume',
+        marker=dict(color=price_color),
         opacity=0.4,
         yaxis='y2'
     ))
@@ -96,24 +105,7 @@ def plot_price(df, title, height=350):
 
     return fig
 
-def load_consumer_metrics():
-    query = '''
-        SELECT * FROM consumer_metrics
-        ORDER BY timestamp DESC
-        LIMIT 100
-    '''
-    return pd.read_sql(query, conn)
-
-def load_producer_metrics():
-    query = '''
-        SELECT * FROM producer_metrics
-        ORDER BY timestamp DESC
-        LIMIT 100
-    '''
-    return pd.read_sql(query, conn)
-
-
-st.title("Ticker Data Dashboard")
+st.title("Real Time Ethereum Price Feed")
 
 refresh_counter = st_autorefresh(interval=1000, key="refresh_counter")
 
@@ -124,70 +116,42 @@ tab1, tab2, tab3 = st.tabs(["Hot Data", "Warm Data", "Diagnostics"])
 
 with tab1:
     st.subheader("Hot Data")
+    st.write("After ingestion from the websocket/Kafka, our data gets staged in Clickhouse, a database management system optimized for speed and real time analytics.")
+    st.write("Data stays in this table for 5 minutes, and then is moved to the warm table.")
+    st.write("A dashboard featuring that data is shown below, with a CSV available for download.")
+    
     st.write(f"Rows: {len(hot_df):,} | Memory: {hot_df.memory_usage(deep=True).sum() / 1_048_576:.2f} MB")
-    st.plotly_chart(plot_price(hot_df_display, "Hot Data"), use_container_width=True)
+    st.plotly_chart(plot_price(hot_df_display, "Live Hot Data Feed"), use_container_width=True)
+
+    csv_hot = hot_df.to_csv(index=False).encode('utf-8')
+    st.download_button(
+        label="Download Hot Data as CSV",
+        data=csv_hot,
+        file_name='hot_data.csv',
+        mime='text/csv'
+    )
+
+    st.markdown("Recent Data Sample")
+    st.dataframe(hot_df.head(10))
 
 with tab2:
     st.subheader("Warm Data")
+    st.write("After 5 minutes in the hot table, data is moved to PostgreSQL for warm storage. PostgreSQL offers reliable, query-friendly access, making it ideal for short-term analysis and dashboards.")
+    st.write("Data stays in this table for 30 minutes before being archived as a parquet, which is then uploaded to cold storage (in this case AWS).")
+    st.write("A dashboard featuring that data is shown below, with a CSV available for download.")
+
     st.write(f"Rows: {len(warm_df):,} | Memory: {warm_df.memory_usage(deep=True).sum() / 1_048_576:.2f} MB")
-    st.plotly_chart(plot_price(warm_df_display, "Warm Data"), use_container_width=True)
+    st.plotly_chart(plot_price(warm_df_display, "Live Warm Data Feed"), use_container_width=True)
+
+    csv_hot = warm_df.to_csv(index=False).encode('utf-8')
+    st.download_button(
+        label="Download Warm Data as CSV",
+        data=csv_hot,
+        file_name='warm_data.csv',
+        mime='text/csv'
+    )
+
+    st.markdown("Recent Data Sample")
+    st.dataframe(warm_df.head(10))
 
 with tab3:
-    st.subheader("Diagnostics")
-
-    consumer_df = load_consumer_metrics()
-    producer_df = load_producer_metrics()
-
-    # st.markdown("### Kafka Consumer Metrics (Last 100)")
-    # st.dataframe(consumer_df)
-
-    # st.markdown("### WebSocket Producer Metrics (Last 100)")
-    # st.dataframe(producer_df)
-
-    # === Avg Lag Bar Chart ===
-    st.markdown("### Avg Lag Over Time (Consumer)")
-    if not consumer_df.empty:
-        fig = px.bar(
-            consumer_df.sort_values("timestamp"),
-            x="timestamp",
-            y="avg_lag_sec",
-            title="Kafka Consumer - Average Lag (seconds)",
-            labels={"avg_lag_sec": "Average Lag (s)", "timestamp": "Timestamp"},
-        )
-        st.plotly_chart(fig, use_container_width=True)
-
-    st.markdown("### Messages Over Time")
-
-    # Round timestamps to nearest minute for alignment
-    producer_df['timestamp_rounded'] = pd.to_datetime(producer_df['timestamp']).dt.floor('min')
-    consumer_df['timestamp_rounded'] = pd.to_datetime(consumer_df['timestamp']).dt.floor('min')
-
-    # Aggregate messages per minute
-    producer_agg = producer_df.groupby('timestamp_rounded')['messages'].sum().reset_index(name='producer_messages')
-    consumer_agg = consumer_df.groupby('timestamp_rounded')['messages'].sum().reset_index(name='consumer_messages')
-
-    # Merge and compute difference
-    message_diff_df = pd.merge(producer_agg, consumer_agg, on='timestamp_rounded', how='outer').fillna(0)
-    message_diff_df['message_diff'] = message_diff_df['producer_messages'] - message_diff_df['consumer_messages']
-
-    # Line chart: Producer and Consumer messages
-    fig = px.line(
-        message_diff_df.sort_values("timestamp_rounded"),
-        x="timestamp_rounded",
-        y=["producer_messages", "consumer_messages"],
-        title="Producer vs Consumer Message Count (per Minute)",
-        labels={"value": "Messages", "timestamp_rounded": "Timestamp", "variable": "Source"},
-        markers=True
-    )
-    st.plotly_chart(fig, use_container_width=True)
-
-    # Bar chart: Message difference
-    st.markdown("### Message Difference Over Time (Producer - Consumer)")
-    fig_diff = px.bar(
-        message_diff_df.sort_values("timestamp_rounded"),
-        x="timestamp_rounded",
-        y="message_diff",
-        title="Message Count Difference Over Time",
-        labels={"message_diff": "Difference", "timestamp_rounded": "Timestamp"},
-    )
-    st.plotly_chart(fig_diff, use_container_width=True)

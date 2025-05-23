@@ -1,52 +1,24 @@
 # Diagnostics.py
-# Conducting  checks to ensure the system is working properly
+# Conducting checks to ensure the system is working properly
 
-# Ingestion metrics
-
-def create_consumer_metrics_table(cursor):
-    cursor.execute("DROP TABLE IF EXISTS consumer_metrics")
+def websocket_diagnostics(cursor):
+    cursor.execute("DROP TABLE IF EXISTS websocket_diagnostics")
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS consumer_metrics (
+    CREATE TABLE IF NOT EXISTS websocket_diagnostics (
         timestamp TIMESTAMPTZ PRIMARY KEY,
-        messages INT,
-        avg_lag_sec FLOAT8,
-        max_lag_sec FLOAT8,
-        source VARCHAR(50)
+        received_at TIMESTAMPTZ,
+        lag FLOAT8,
+        message_count FLOAT8
     )
     ''')
 
-def insert_consumer_metric(cursor, messages, avg_lag, max_lag, source='kafka_consumer'):
-    cursor.execute('''
-        INSERT INTO consumer_metrics (timestamp, messages, avg_lag_sec, max_lag_sec, source)
-        VALUES (now(), %s, %s, %s, %s)
-    ''', (messages, avg_lag, max_lag, source))
-    print(f"[Consumer Metrics] {messages} msgs | avg_lag={avg_lag:.2f}s | max_lag={max_lag:.2f}s")
+def insert_websocket_diagnostics(cursor, timestamp, received_at, message_count):
+    lag_seconds = (received_at - timestamp).total_seconds()
 
-def create_producer_metrics_table(cursor):
-    cursor.execute("DROP TABLE IF EXISTS producer_metrics")
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS producer_metrics (
-        timestamp TIMESTAMPTZ PRIMARY KEY,
-        messages INT,
-        source VARCHAR(50)
+    cursor.execute(
+        '''
+        INSERT INTO websocket_diagnostics (timestamp, received_at, lag, message_count)
+        VALUES (%s, %s, %s, %s)
+        ''',
+        (timestamp, received_at, lag_seconds, message_count)
     )
-    ''')
-
-def insert_producer_metric(cursor, message_count, source='websocket_producer'):
-    cursor.execute('''
-        INSERT INTO producer_metrics (timestamp, messages, source)
-        VALUES (now(), %s, %s)
-    ''', (message_count, source))
-
-# look at message rate mismatches next ebtween the consumer and producer
-# then, finish the system error log
-def create_system_errors_table(cursor):
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS system_errors (
-        timestamp TIMESTAMPTZ DEFAULT now(),
-        component VARCHAR(50),
-        level VARCHAR(10),
-        message TEXT,
-        stack_trace TEXT
-    )
-    ''')

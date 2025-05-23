@@ -1,17 +1,16 @@
 # data_consumption.py
 # Kafka consumer that reads the data and then starts appending it to the hot/warm/cold tables
 # handles moving from hot to warm to cold as well (via batch processes)
+
 from kafka import KafkaConsumer
-import json
+import json, time, statistics
 from datetime import datetime, timezone
 from storage_hot import get_client
-from storage_warm import cursor, conn
-import threading
-import time
-import statistics
+from storage_warm import cursor
 from diagnostics import insert_consumer_metric
+from config import DIAGNOSTIC_FREQUENCY
 
-
+# prepares the data for clickhouse
 def validate_and_parse(data):
 
     timestamp_dt = datetime.fromisoformat(data['timestamp'])
@@ -32,11 +31,6 @@ def validate_and_parse(data):
 
 def start_consumer(stop_event):
 
-    # creating variables for consumer metrics
-    message_count = 0
-    lag_list = []
-    last_log_time = time.time()
-
     ch_client = get_client() #get client
 
     consumer = KafkaConsumer(
@@ -54,13 +48,6 @@ def start_consumer(stop_event):
 
     for message in consumer:
 
-        #logging conusmer metrics
-        timestamp_dt = datetime.fromisoformat(message.value['timestamp'])
-        received_at_dt = datetime.now(timezone.utc)
-        lag = (received_at_dt - timestamp_dt).total_seconds()
-        message_count += 1
-        lag_list.append(lag)
-
         if stop_event.is_set():
             print("Stop event received, breaking consumer loop.")
             break
@@ -70,23 +57,13 @@ def start_consumer(stop_event):
 
             if len(batch) >= BATCH_SIZE or (time.time() - last_flush) > FLUSH_INTERVAL:
                 ch_client.insert('price_ticks', batch)
-                # print(f"Inserted {len(batch)} rows.")
+                print(f"Inserted {len(batch)} rows.")
                 batch.clear()
                 last_flush = time.time()
 
         except Exception as e:
             print("Full exception:", repr(e), e.args)
 
-        # flush ingestion metrics every 60 seconds
-        if time.time() - last_log_time > 60:
-            avg_lag = statistics.mean(lag_list) if lag_list else 0
-            max_lag = max(lag_list) if lag_list else 0
-
-            insert_consumer_metric(cursor, message_count, avg_lag, max_lag)
-
-            message_count = 0
-            lag_list = []
-            last_log_time = time.time()
 
 
 

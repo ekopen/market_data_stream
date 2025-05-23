@@ -19,7 +19,7 @@ client = clickhouse_connect.get_client(
     password='mysecurepassword',) #TEMPORARY PASSWORD
 
 def create_hot_table():
-    #creating a table if it does not exist
+    client.command("DROP TABLE IF EXISTS price_ticks")
     client.command('''
     CREATE TABLE IF NOT EXISTS price_ticks(
         timestamp DateTime,
@@ -35,5 +35,3 @@ def create_hot_table():
     TTL timestamp + INTERVAL 10 MINUTE DELETE
     ''')
 
-def delete_hot_table():
-    client.command("DROP TABLE IF EXISTS price_ticks")
