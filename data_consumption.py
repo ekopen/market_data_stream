@@ -54,11 +54,8 @@ def processing_diagnostics_worker(cursor, stop_event):
 # prepares the data for clickhouse
 def validate_and_parse(data):
 
-    timestamp_dt = datetime.fromisoformat(data['timestamp'])
-    timestamp_dt = timestamp_dt.astimezone(timezone.utc).replace(tzinfo=None)
-
-    received_at_dt = datetime.fromisoformat(data['received_at'])
-    received_at_dt = received_at_dt.astimezone(timezone.utc).replace(tzinfo=None)
+    timestamp_dt = datetime.fromisoformat(data['timestamp']).astimezone(timezone.utc)
+    received_at_dt = datetime.fromisoformat(data['received_at']).astimezone(timezone.utc)
 
     # return a tuple in the exact order of table schema:
     return (

@@ -22,12 +22,12 @@ def create_hot_table():
     client.command("DROP TABLE IF EXISTS price_ticks")
     client.command('''
     CREATE TABLE IF NOT EXISTS price_ticks(
-        timestamp DateTime,
+        timestamp DateTime('UTC'),
         timestamp_ms Int64,
         symbol String,
         price Float64,
         volume Float64,
-        received_at DateTime
+        received_at DateTime('UTC')
     ) 
     ENGINE = MergeTree()
     PARTITION BY toYYYYMMDD(timestamp)

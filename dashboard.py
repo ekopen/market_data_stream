@@ -32,7 +32,7 @@ def load_hot_data():
         SELECT * FROM price_ticks
         ORDER BY timestamp DESC
     ''')
-
+    df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
     df_display = reduceTickFreq(df,"1s")
     return df, df_display.sort_values("timestamp")
 
@@ -42,22 +42,11 @@ def load_warm_data(conn):
         ORDER BY timestamp DESC
     '''
     df = pd.read_sql(query, conn)
+    df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
     df_display = reduceTickFreq(df,"5s")
     return df, df_display.sort_values("timestamp")
 
-def load_websocket_diagnostics(conn):
-    query = '''
-        SELECT * FROM websocket_diagnostics
-    '''
-    df = pd.read_sql(query, conn)
-    return df
 
-def load_processing_diagnostics(conn):
-    query = '''
-        SELECT * FROM processing_diagnostics
-    '''
-    df = pd.read_sql(query, conn)
-    return df
 
 def plot_price(df, title, height=350):
 
@@ -128,8 +117,7 @@ refresh_counter = st_autorefresh(interval=1000, key="refresh_counter")
 
 hot_df, hot_df_display = load_hot_data()
 warm_df, warm_df_display = load_warm_data(conn)
-websocket_diagnostics = load_websocket_diagnostics(conn)
-processing_diagnostics = load_processing_diagnostics(conn)
+
 
 tab1, tab2, tab3 = st.tabs(["Hot Data", "Warm Data", "Diagnostics"])
 
@@ -174,6 +162,33 @@ with tab2:
     st.dataframe(warm_df.head(10))
 
 with tab3:
-        st.subheader("Diagnostics")
-        st.dataframe(websocket_diagnostics.tail(10))
-        st.dataframe(processing_diagnostics.tail(10))
+        
+
+    query = '''
+        SELECT * FROM websocket_diagnostics
+    '''
+    websocket_diagnostics = pd.read_sql(query, conn)
+    websocket_diagnostics['timestamp'] = pd.to_datetime(websocket_diagnostics['timestamp'], utc=True)
+
+
+    query = '''
+        SELECT * FROM processing_diagnostics
+    '''
+    processing_diagnostics = pd.read_sql(query, conn)
+    processing_diagnostics['timestamp'] = pd.to_datetime(processing_diagnostics['timestamp'], utc=True)
+
+    query = '''
+        SELECT * FROM transfer_diagnostics
+    '''
+    transfer_diagnostics = pd.read_sql(query, conn)
+    transfer_diagnostics['transfer_start'] = pd.to_datetime(transfer_diagnostics['transfer_start'], utc=True)
+    transfer_diagnostics['transfer_end'] = pd.to_datetime(transfer_diagnostics['transfer_end'], utc=True)
+
+
+    st.subheader("Diagnostics")
+    st.dataframe(websocket_diagnostics)
+    st.dataframe(processing_diagnostics)
+    st.dataframe(transfer_diagnostics)
+
+
+

@@ -8,6 +8,8 @@ from storage_warm import cursor, conn
 from storage_cold import cold_upload
 import pandas as pd
 import threading
+from diagnostics import insert_transfer_diagnostics
+from pympler import asizeof
 
 stop_event = threading.Event()
 
@@ -22,11 +24,16 @@ def hot_to_warm(stop_event,hot_duration): #duration in seconds
             cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=hot_duration)
             cutoff_ms = int(cutoff_time.timestamp() * 1000)
 
+            transfer_start_time = datetime.now(timezone.utc)
+
             # gets all data past the cutoff time
             warm_rows = ch_client.query(f'''
                 SELECT * FROM price_ticks
                 WHERE timestamp_ms < {cutoff_ms}
             ''').result_rows
+
+            message_count = len(warm_rows)
+            transfer_size = asizeof.asizeof(warm_rows) / (1024 * 1024) # converting to MB
 
             #inserts the old data in postgres
             insert_query = '''
@@ -42,6 +49,10 @@ def hot_to_warm(stop_event,hot_duration): #duration in seconds
             ''')
 
             print(f"Moved {len(warm_rows)} rows from hot to warm storage.")
+
+            transfer_end_time = datetime.now(timezone.utc)
+
+            insert_transfer_diagnostics(cursor, "hot_to_warm", transfer_start_time, transfer_end_time, message_count, transfer_size)
 
             # Print current row counts in both hot and warm tables
             hot_count = ch_client.query("SELECT count() FROM price_ticks").result_rows[0][0]
@@ -78,7 +89,7 @@ def warm_to_cold(stop_event,warm_duration): #duration in seconds
             df = pd.DataFrame(cold_rows, columns=['timestamp', 'timestamp_ms', 'symbol', 'price', 'volume', 'received_at'])
 
             # aggregating to 1 second intervals
-            df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
+            df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce', utc=True)
             df['second'] = df['timestamp'].dt.floor('1s')
             df = df.groupby('second').agg({
                 'timestamp_ms': 'last',
