@@ -10,6 +10,7 @@ Here are some issues I have diagnosed but not figured out how to fix:
 1. Modularity. We can use whatever technology we want for the storage tables and this code can adapt
 2. Speed/Batching. needed for kakfa producer
 3. Threading. the data stream is heavy and any additionally logging can slow it down, so we need to use threading
+4. Queues for diagnostics, so make them threadsafe
 
 # Next steps
 

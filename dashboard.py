@@ -16,11 +16,14 @@ from storage_hot import get_client
 from storage_warm import conn
 
 def reduceTickFreq(df, increment):
+    if 'timestamp' not in df.columns:
+        return pd.DataFrame()  # Return empty if column is missing
+
     df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
     df = df.set_index("timestamp").resample(increment).agg({
-    "price": "mean",
-    "volume": "sum"
-        }).dropna().reset_index()
+        "price": "mean",
+        "volume": "sum"
+    }).dropna().reset_index()
     return df
 
 def load_hot_data():
@@ -41,6 +44,20 @@ def load_warm_data(conn):
     df = pd.read_sql(query, conn)
     df_display = reduceTickFreq(df,"5s")
     return df, df_display.sort_values("timestamp")
+
+def load_websocket_diagnostics(conn):
+    query = '''
+        SELECT * FROM websocket_diagnostics
+    '''
+    df = pd.read_sql(query, conn)
+    return df
+
+def load_processing_diagnostics(conn):
+    query = '''
+        SELECT * FROM processing_diagnostics
+    '''
+    df = pd.read_sql(query, conn)
+    return df
 
 def plot_price(df, title, height=350):
 
@@ -111,6 +128,8 @@ refresh_counter = st_autorefresh(interval=1000, key="refresh_counter")
 
 hot_df, hot_df_display = load_hot_data()
 warm_df, warm_df_display = load_warm_data(conn)
+websocket_diagnostics = load_websocket_diagnostics(conn)
+processing_diagnostics = load_processing_diagnostics(conn)
 
 tab1, tab2, tab3 = st.tabs(["Hot Data", "Warm Data", "Diagnostics"])
 
@@ -155,3 +174,6 @@ with tab2:
     st.dataframe(warm_df.head(10))
 
 with tab3:
+        st.subheader("Diagnostics")
+        st.dataframe(websocket_diagnostics.tail(10))
+        st.dataframe(processing_diagnostics.tail(10))

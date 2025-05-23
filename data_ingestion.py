@@ -9,15 +9,15 @@ from diagnostics import insert_websocket_diagnostics
 from config import DIAGNOSTIC_FREQUENCY
 from statistics import mean
 
+# diagnostics functions
 diagnostics_queue = queue.Queue()
 
-def diagnostics_worker(cursor, stop_event):
-
-    print("Diagnostics worker started.")
+def websocket_diagnostics_worker(cursor, stop_event):
+    print("Websocket diagnostics worker started.")
     while not stop_event.is_set():
         time.sleep(DIAGNOSTIC_FREQUENCY)
 
-        # get all messages from the diagnostic queue
+        # after the sleep, get all messages from the diagnostic queue
         messages = []
         while not diagnostics_queue.empty():
             try:
@@ -25,16 +25,18 @@ def diagnostics_worker(cursor, stop_event):
             except queue.Empty:
                 break
 
-        if messages:
-            avg_timestamp = mean([datetime.fromisoformat(m['timestamp']) for m in messages])
-            avg_received = mean([datetime.fromisoformat(m['received_at']) for m in messages])
-            message_count = len(messages)
+        # gather relevant data for diagnostics
+        timestamps = [datetime.fromisoformat(m['timestamp']) for m in messages]
+        received_times = [datetime.fromisoformat(m['received_at']) for m in messages]
+        avg_timestamp = datetime.fromtimestamp(mean([dt.timestamp() for dt in timestamps]))
+        avg_received = datetime.fromtimestamp(mean([dt.timestamp() for dt in received_times]))
+        message_count = len(messages)
 
-            insert_websocket_diagnostics(cursor, avg_timestamp, avg_received, message_count)
-            print(f"Inserted diagnostics for {message_count} messages.")
+        insert_websocket_diagnostics(cursor, avg_timestamp, avg_received, message_count)
+        print(f"Inserted websocket diagnostics for {message_count} messages.")
 
     cursor.close()
-    print("Diagnostics worker stopped.")
+    print("Websocket diagnostics worker stopped.")
 
 # producer class
 producer = KafkaProducer(

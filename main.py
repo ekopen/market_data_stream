@@ -5,12 +5,13 @@ import threading, time, sys
 from dotenv import load_dotenv
 load_dotenv()  # Load from .env file
 
-from data_ingestion import start_producer, diagnostics_worker
-from data_consumption import start_consumer
+from data_ingestion import start_producer, websocket_diagnostics_worker
+from data_consumption import start_consumer, processing_diagnostics_worker
 from storage_hot import create_hot_table
 from storage_warm import create_warm_table, cursor
+from diagnostics import create_diagnostics_tables
 from migration import hot_to_warm, warm_to_cold
-from diagnostics import websocket_diagnostics, insert_websocket_diagnostics
+
 
 # shutdown functions
 stop_event = threading.Event()
@@ -26,8 +27,12 @@ if __name__ == "__main__":
         create_warm_table()
 
         #start diagnostics
-        diagnostics_thread = threading.Thread(target=diagnostics_worker, args=(stop_event, cursor))
-        diagnostics_thread.start()
+        create_diagnostics_tables(cursor)
+        websocket_diagnostics_thread = threading.Thread(target=websocket_diagnostics_worker, args=(cursor, stop_event))
+        websocket_diagnostics_thread.start()
+
+        kafka_diagnostics_thread = threading.Thread(target=processing_diagnostics_worker, args=(cursor, stop_event))
+        kafka_diagnostics_thread.start()
 
 
         #start ingesting data from the websocket and feed to kafka
@@ -35,7 +40,7 @@ if __name__ == "__main__":
         producer_thread.daemon = True
         producer_thread.start()
 
-        #start processing data from kakfa and store to tables
+        #start processing data from processing and store to tables
         consumer_thread = threading.Thread(target=start_consumer, args=(stop_event,))
         consumer_thread.daemon = True
         consumer_thread.start()
