@@ -11,6 +11,7 @@ Here are some issues I have diagnosed but not figured out how to fix:
 3. Threading. the data stream is heavy and any additionally logging can slow it down, so we need to use threading
 
 # Next steps
+- replace warm with clikchouse and hot with kdb
 - finish logging error database
     - may need to add extra try loops and logs across the board
 - show the new loggs on streamlit from diagnostics

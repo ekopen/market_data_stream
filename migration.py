@@ -3,8 +3,9 @@
 
 import time, os
 from datetime import timedelta, datetime, timezone
-from storage_hot import get_client
-from storage_warm import cursor, conn
+from storage_hot import get_client as get_client_hot
+# from storage_warm import cursor, conn
+from storage_warm import get_client as get_client_warm
 from storage_cold import cold_upload
 import pandas as pd
 import threading
@@ -13,7 +14,9 @@ stop_event = threading.Event()
 
 def hot_to_warm(stop_event,hot_duration): #duration in seconds   
     time.sleep(hot_duration*2) #pause before beginning the migration
-    ch_client = get_client() #initiate a new clickhouse client
+
+    ch_client_hot = get_client_hot() #initiate a new clickhouse client for hot storage
+    ch_client_warm = get_client_warm() #initiate a new clickhouse client for warm storage
 
     while not stop_event.is_set():
         print("Migrating from hot to warm") 
@@ -23,21 +26,17 @@ def hot_to_warm(stop_event,hot_duration): #duration in seconds
             cutoff_ms = int(cutoff_time.timestamp() * 1000)
 
             # gets all data past the cutoff time
-            warm_rows = ch_client.query(f'''
-                SELECT * FROM price_ticks
+            warm_rows = ch_client_hot.query(f'''
+                SELECT * FROM price_ticks_hot
                 WHERE timestamp_ms < {cutoff_ms}
             ''').result_rows
 
-            #inserts the old data in postgres
-            insert_query = '''
-                    INSERT INTO price_ticks (timestamp, timestamp_ms, symbol, price, volume, received_at)
-                    VALUES (%s, %s, %s, %s, %s, %s)
-                '''
-            cursor.executemany(insert_query, warm_rows)
+            # insert the warm rows into the warm storage table
+            ch_client_warm.insert('price_ticks_warm', warm_rows)
 
             # removes the warm data from clickhouse
-            ch_client.command(f'''
-                ALTER TABLE price_ticks
+            ch_client_hot.command(f'''
+                ALTER TABLE price_ticks_hot
                 DELETE WHERE timestamp_ms < {cutoff_ms}
             ''')
 
@@ -51,6 +50,8 @@ def hot_to_warm(stop_event,hot_duration): #duration in seconds
 def warm_to_cold(stop_event,warm_duration): #duration in seconds   
     time.sleep(warm_duration*2) #pause before beginning the migration
 
+    ch_client_warm = get_client_warm() #initiate a new clickhouse client for warm storage
+
     while not stop_event.is_set():
         print("Migrating from warm to cold") 
         try:
@@ -60,14 +61,12 @@ def warm_to_cold(stop_event,warm_duration): #duration in seconds
 
             print("Cutoff timestamp in ms:", cutoff_ms)
 
-            # get rows older than the cutoff
-            cursor.execute('''
-                SELECT * FROM price_ticks
-                WHERE timestamp_ms < %s
-            ''', (cutoff_ms,))
-            cold_rows = cursor.fetchall()
+            cold_rows = ch_client_warm.query(f'''
+                SELECT * FROM price_ticks_warm
+                WHERE timestamp_ms < {cutoff_ms}
+            ''').result_rows
 
-            df = pd.DataFrame(cold_rows, columns=['timestamp', 'timestamp_ms', 'symbol', 'price', 'volume', 'received_at'])
+            df = pd.DataFrame(cold_rows)
 
             # aggregating to 1 second intervals
             df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
@@ -85,10 +84,10 @@ def warm_to_cold(stop_event,warm_duration): #duration in seconds
             df.to_parquet(filename, index=False)
 
             # remove the old rows from warm storage
-            cursor.execute(f'''
-                DELETE FROM price_ticks
-                WHERE timestamp_ms < %s
-            ''', (cutoff_ms,))
+            ch_client_warm.command(f'''
+                ALTER TABLE price_ticks_warm
+                DELETE WHERE timestamp_ms < {cutoff_ms}
+            ''')
 
             print(f"Moved {len(cold_rows)} rows from warm to cold storage.")
 

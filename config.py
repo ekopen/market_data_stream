@@ -5,6 +5,6 @@ import os
 
 API_KEY = os.getenv("FINNHUB_API_KEY")
 SYMBOL = 'BINANCE:ETHUSDT'
-HOT_DURATION = 300  # seconds
-WARM_DURATION = 1800  # seconds
+HOT_DURATION = 15  # seconds
+WARM_DURATION = 60  # seconds
 COLD_DURATION = 3600  # seconds

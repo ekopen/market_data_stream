@@ -6,7 +6,6 @@ import json, websocket, atexit, time
 from datetime import datetime, timezone
 import threading
 from diagnostics import insert_producer_metric
-from storage_warm import cursor
 
 # queue for producer metrics
 from queue import Queue 

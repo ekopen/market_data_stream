@@ -9,8 +9,8 @@ from streamlit_autorefresh import st_autorefresh
 import os
 from datetime import datetime, timedelta, timezone
 
-from storage_hot import get_client
-from storage_warm import conn
+from storage_hot import get_client as get_client_hot
+from storage_warm import get_client as get_client_warm
 
 from config import HOT_DURATION, WARM_DURATION, COLD_DURATION
 
@@ -22,24 +22,24 @@ def load_hot_data(HOT_DURATION):
     cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=HOT_DURATION)
     cutoff_ms = int(cutoff_time.timestamp() * 1000)
 
-    ch_client = get_client()
-    df = ch_client.query_df(f'''
-        SELECT * FROM price_ticks
+    ch_client_hot = get_client_hot()
+    df = ch_client_hot.query_df(f'''
+        SELECT * FROM price_ticks_hot
         WHERE timestamp_ms >= {cutoff_ms}
         ORDER BY timestamp DESC
     ''')
     return df.sort_values("timestamp")
 
-def load_warm_data(WARM_DURATION, conn):
+def load_warm_data(WARM_DURATION):
     cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=WARM_DURATION)
     cutoff_ms = int(cutoff_time.timestamp() * 1000)
 
-    query = '''
-        SELECT * FROM price_ticks
-        WHERE timestamp_ms >= %s
+    ch_client_warm = get_client_warm()
+    df = ch_client_warm.query_df(f'''
+        SELECT * FROM price_ticks_warm
+        WHERE timestamp_ms >= {cutoff_ms}
         ORDER BY timestamp DESC
-    '''
-    df = pd.read_sql(query, conn, params=(cutoff_ms,))
+    ''')
     return df.sort_values("timestamp")
 
 def load_cold_data(COLD_DURATION):
@@ -118,7 +118,7 @@ st.plotly_chart(plot_price(hot_df, f"Hot data (up to {HOT_DURATION/60} minutes o
 
 # Load & Display Warm Data every WARM_DURATION seconds
 if refresh_counter % WARM_DURATION == 0:
-    st.session_state["warm_df"] = load_warm_data(WARM_DURATION, conn)
+    st.session_state["warm_df"] = load_warm_data(WARM_DURATION)
 warm_df = st.session_state.get("warm_df", pd.DataFrame())
 st.subheader("Warm Data")
 st.plotly_chart(plot_price(warm_df, f"Warm data (up to {WARM_DURATION/60} minutes old)"), use_container_width=True)

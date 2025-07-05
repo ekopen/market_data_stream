@@ -5,11 +5,10 @@ from kafka import KafkaConsumer
 import json
 from datetime import datetime, timezone
 from storage_hot import get_client
-from storage_warm import cursor, conn
 import threading
 import time
 import statistics
-from diagnostics import insert_consumer_metric
+from diagnostics import insert_consumer_metric, cursor
 
 
 def validate_and_parse(data):
@@ -69,7 +68,7 @@ def start_consumer(stop_event):
             batch.append(validated_row)
 
             if len(batch) >= BATCH_SIZE or (time.time() - last_flush) > FLUSH_INTERVAL:
-                ch_client.insert('price_ticks', batch)
+                ch_client.insert('price_ticks_hot', batch)
                 print(f"Inserted {len(batch)} rows.")
                 batch.clear()
                 last_flush = time.time()

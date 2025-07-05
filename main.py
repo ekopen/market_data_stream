@@ -4,9 +4,9 @@
 from data_ingestion import start_producer
 from data_consumption import start_consumer
 from storage_hot import create_hot_table
-from storage_warm import create_warm_table, cursor
+from storage_warm import create_warm_table
 from migration import hot_to_warm, warm_to_cold, cold_to_cloud
-from diagnostics import create_consumer_metrics_table, create_producer_metrics_table, create_system_errors_table
+from diagnostics import cursor, create_consumer_metrics_table, create_producer_metrics_table, create_system_errors_table
 
 from config import SYMBOL, API_KEY, HOT_DURATION, WARM_DURATION, COLD_DURATION
 

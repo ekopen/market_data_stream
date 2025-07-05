@@ -21,7 +21,7 @@ client = clickhouse_connect.get_client(
 def create_hot_table():
     #creating a table if it does not exist
     client.command('''
-    CREATE TABLE IF NOT EXISTS price_ticks(
+    CREATE TABLE IF NOT EXISTS price_ticks_hot(
         timestamp DateTime,
         timestamp_ms Int64,
         symbol String,
