@@ -19,7 +19,7 @@ client = clickhouse_connect.get_client(
     password='mysecurepassword',) #TEMPORARY PASSWORD
 
 def create_hot_table():
-    #creating a table if it does not exist
+    client.command("DROP TABLE IF EXISTS price_ticks")
     client.command('''
     CREATE TABLE IF NOT EXISTS price_ticks_hot(
         timestamp DateTime,
@@ -27,12 +27,11 @@ def create_hot_table():
         symbol String,
         price Float64,
         volume Float64,
-        received_at DateTime
+        received_at DateTime('UTC')
     ) 
     ENGINE = MergeTree()
     PARTITION BY toYYYYMMDD(timestamp)
     ORDER BY timestamp_ms
-    TTL timestamp + INTERVAL 5 MINUTE DELETE
+    TTL timestamp + INTERVAL 10 MINUTE DELETE
     ''')
-
 

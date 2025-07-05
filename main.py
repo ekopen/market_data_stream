@@ -4,9 +4,9 @@
 from data_ingestion import start_producer
 from data_consumption import start_consumer
 from storage_hot import create_hot_table
-from storage_warm import create_warm_table
+from storage_warm import create_warm_table, cursor
 from migration import hot_to_warm, warm_to_cold, cold_to_cloud
-from diagnostics import cursor, create_consumer_metrics_table, create_producer_metrics_table, create_system_errors_table
+from diagnostics import create_consumer_metrics_table, create_producer_metrics_table, create_system_errors_table
 
 from config import SYMBOL, API_KEY, HOT_DURATION, WARM_DURATION, COLD_DURATION
 
@@ -14,6 +14,15 @@ import os, threading, time, sys
 from dotenv import load_dotenv
 load_dotenv()  # Load from .env file
 
+from data_ingestion import start_producer, websocket_diagnostics_worker
+from data_consumption import start_consumer, processing_diagnostics_worker
+from storage_hot import create_hot_table
+from storage_warm import create_warm_table, cursor
+from diagnostics import create_diagnostics_tables
+from migration import hot_to_warm, warm_to_cold
+
+
+# shutdown functions
 stop_event = threading.Event()
 
 if "--stop" in sys.argv:
@@ -22,17 +31,17 @@ if "--stop" in sys.argv:
 
 if __name__ == "__main__":
     try:
-        #create the tables if they do not exist
+        #create hot warm/tables
         create_hot_table()
         create_warm_table()
-        create_consumer_metrics_table(cursor)
-        create_producer_metrics_table(cursor)
-        create_system_errors_table(cursor)
 
-        #start migrating data between tables
-        threading.Thread(target=hot_to_warm, args=(stop_event,HOT_DURATION), daemon=True).start() #start the hot to warm thread
-        threading.Thread(target=warm_to_cold, args=(stop_event,WARM_DURATION), daemon=True).start() #start the warm to cold thread
-        threading.Thread(target=cold_to_cloud, args=(stop_event,COLD_DURATION), daemon=True).start() #start the cold to cloud thread
+        #start diagnostics
+        create_diagnostics_tables(cursor)
+        websocket_diagnostics_thread = threading.Thread(target=websocket_diagnostics_worker, args=(cursor, stop_event))
+        websocket_diagnostics_thread.start()
+
+        kafka_diagnostics_thread = threading.Thread(target=processing_diagnostics_worker, args=(cursor, stop_event))
+        kafka_diagnostics_thread.start()
 
 
         #start ingesting data from the websocket and feed to kafka
@@ -40,10 +49,15 @@ if __name__ == "__main__":
         producer_thread.daemon = True
         producer_thread.start()
 
-        #start processing data from kakfa and store to tables
+        #start processing data from processing and store to tables
         consumer_thread = threading.Thread(target=start_consumer, args=(stop_event,))
         consumer_thread.daemon = True
         consumer_thread.start()
+
+        #start migrating data between tables
+        threading.Thread(target=hot_to_warm, args=(stop_event,HOT_DURATION), daemon=True).start() 
+        threading.Thread(target=warm_to_cold, args=(stop_event,WARM_DURATION), daemon=True).start()
+
 
         while not stop_event.is_set():
             time.sleep(1)

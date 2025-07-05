@@ -1,23 +1,61 @@
 # data_consumption.py
 # Kafka consumer that reads the data and then starts appending it to the hot/warm/cold tables
 # handles moving from hot to warm to cold as well (via batch processes)
+
 from kafka import KafkaConsumer
-import json
+import json, time, statistics
 from datetime import datetime, timezone
 from storage_hot import get_client
-import threading
-import time
-import statistics
-from diagnostics import insert_consumer_metric, cursor
+from diagnostics import insert_processing_diagnostics
+from config import DIAGNOSTIC_FREQUENCY
+import queue
+from statistics import mean
 
+#diagnostics tools
+diagnostics_queue = queue.Queue()
 
+def processing_diagnostics_worker(cursor, stop_event):
+    print("Processing diagnostics worker started.")
+    while not stop_event.is_set():
+        time.sleep(DIAGNOSTIC_FREQUENCY)
+
+        all_rows = []
+        insert_times = []
+
+        while not diagnostics_queue.empty():
+            try:
+                batch, insert_time = diagnostics_queue.get_nowait()
+                all_rows.extend(batch)  # Flatten all rows from each batch
+                insert_times.append(insert_time)
+            except queue.Empty:
+                break
+
+        if not all_rows or not insert_times:
+            continue
+
+        received_times = [row[5] for row in all_rows]
+        timestamps = [row[0] for row in all_rows]
+
+        avg_timestamp = datetime.fromtimestamp(mean([dt.timestamp() for dt in timestamps]))
+        avg_received = datetime.fromtimestamp(mean([dt.timestamp() for dt in received_times]))
+        avg_insert_time = datetime.fromtimestamp(mean([dt.timestamp() for dt in insert_times]))
+        message_count = len(all_rows)
+
+        insert_processing_diagnostics(
+            cursor,
+            avg_timestamp,
+            avg_received,
+            avg_insert_time,
+            message_count
+        )
+
+        print(f"Inserted processing diagnostics for {message_count} messages.")
+
+# prepares the data for clickhouse
 def validate_and_parse(data):
 
-    timestamp_dt = datetime.fromisoformat(data['timestamp'])
-    timestamp_dt = timestamp_dt.astimezone(timezone.utc).replace(tzinfo=None)
-
-    received_at_dt = datetime.fromisoformat(data['received_at'])
-    received_at_dt = received_at_dt.astimezone(timezone.utc).replace(tzinfo=None)
+    timestamp_dt = datetime.fromisoformat(data['timestamp']).astimezone(timezone.utc)
+    received_at_dt = datetime.fromisoformat(data['received_at']).astimezone(timezone.utc)
 
     # return a tuple in the exact order of table schema:
     return (
@@ -30,11 +68,6 @@ def validate_and_parse(data):
     )
 
 def start_consumer(stop_event):
-
-    # creating variables for consumer metrics
-    message_count = 0
-    lag_list = []
-    last_log_time = time.time()
 
     ch_client = get_client() #get client
 
@@ -53,13 +86,6 @@ def start_consumer(stop_event):
 
     for message in consumer:
 
-        #logging conusmer metrics
-        timestamp_dt = datetime.fromisoformat(message.value['timestamp'])
-        received_at_dt = datetime.now(timezone.utc)
-        lag = (received_at_dt - timestamp_dt).total_seconds()
-        message_count += 1
-        lag_list.append(lag)
-
         if stop_event.is_set():
             print("Stop event received, breaking consumer loop.")
             break
@@ -68,24 +94,20 @@ def start_consumer(stop_event):
             batch.append(validated_row)
 
             if len(batch) >= BATCH_SIZE or (time.time() - last_flush) > FLUSH_INTERVAL:
-                ch_client.insert('price_ticks_hot', batch)
+                ch_client.insert('price_ticks', batch)
+                insert_time = datetime.utcnow()
+
                 print(f"Inserted {len(batch)} rows.")
+
+                #insert for diagnostics
+                diagnostics_queue.put((batch.copy(), insert_time))
+                
                 batch.clear()
                 last_flush = time.time()
 
         except Exception as e:
             print("Full exception:", repr(e), e.args)
 
-        # flush ingestion metrics every 60 seconds
-        if time.time() - last_log_time > 60:
-            avg_lag = statistics.mean(lag_list) if lag_list else 0
-            max_lag = max(lag_list) if lag_list else 0
-
-            insert_consumer_metric(cursor, message_count, avg_lag, max_lag)
-
-            message_count = 0
-            lag_list = []
-            last_log_time = time.time()
 
 
 

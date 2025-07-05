@@ -5,57 +5,48 @@
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.express as px
 from streamlit_autorefresh import st_autorefresh
 import os
 from datetime import datetime, timedelta, timezone
+import warnings
+warnings.filterwarnings("ignore", message="pandas only supports SQLAlchemy connectable")
 
 from storage_hot import get_client as get_client_hot
 from storage_warm import get_client as get_client_warm
 
-from config import HOT_DURATION, WARM_DURATION, COLD_DURATION
+def reduceTickFreq(df, increment):
+    if 'timestamp' not in df.columns:
+        return pd.DataFrame()  # Return empty if column is missing
 
-refresh_counter = st_autorefresh(interval=1000, key="refresh_counter")
+    df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
+    df = df.set_index("timestamp").resample(increment).agg({
+        "price": "mean",
+        "volume": "sum"
+    }).dropna().reset_index()
+    return df
 
-st.title("ETH Price Dashboard")
-
-def load_hot_data(HOT_DURATION):
-    cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=HOT_DURATION)
-    cutoff_ms = int(cutoff_time.timestamp() * 1000)
-
-    ch_client_hot = get_client_hot()
-    df = ch_client_hot.query_df(f'''
-        SELECT * FROM price_ticks_hot
-        WHERE timestamp_ms >= {cutoff_ms}
+def load_hot_data():
+    ch_client = get_client()
+    df = ch_client.query_df(f'''
+        SELECT * FROM price_ticks
         ORDER BY timestamp DESC
     ''')
-    return df.sort_values("timestamp")
+    df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
+    df_display = reduceTickFreq(df,"1s")
+    return df, df_display.sort_values("timestamp")
 
-def load_warm_data(WARM_DURATION):
-    cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=WARM_DURATION)
-    cutoff_ms = int(cutoff_time.timestamp() * 1000)
-
-    ch_client_warm = get_client_warm()
-    df = ch_client_warm.query_df(f'''
-        SELECT * FROM price_ticks_warm
-        WHERE timestamp_ms >= {cutoff_ms}
+def load_warm_data(conn):
+    query = '''
+        SELECT * FROM price_ticks
         ORDER BY timestamp DESC
-    ''')
-    return df.sort_values("timestamp")
+    '''
+    df = pd.read_sql(query, conn)
+    df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
+    df_display = reduceTickFreq(df,"5s")
+    return df, df_display.sort_values("timestamp")
 
-def load_cold_data(COLD_DURATION):
-    cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=COLD_DURATION)
-    cutoff_ms = int(cutoff_time.timestamp() * 1000)
 
-    df = pd.DataFrame()
-
-    for filename in os.listdir('cold_data'):
-        file_ms = int(filename.split('.')[0]) #get the cutoff time the file
-        if file_ms >= cutoff_ms:
-            file_path = os.path.join('cold_data', filename)
-            temp_df = pd.read_parquet(file_path)
-            df = pd.concat([df, temp_df], ignore_index=True)
-
-    return df.sort_values("timestamp")
 
 def plot_price(df, title, height=350):
 
@@ -69,6 +60,14 @@ def plot_price(df, title, height=350):
     max_price = df['price'].max()
     y_price_range = [min_price * 0.9999, max_price * 1.0001]
 
+    # Set color based on title
+    if "Hot" in title:
+        price_color = "maroon"
+    elif "Warm" in title:
+        price_color = "navy"
+    else:
+        price_color = "black"
+
     fig = go.Figure()
 
     # Price Line
@@ -76,15 +75,16 @@ def plot_price(df, title, height=350):
         x=df['timestamp'],
         y=df['price'],
         mode='lines',
-        line=dict(width=2),
+        line=dict(width=2, color=price_color),
         name="Price"
     ))
 
-    # Volume Bar
+    # Volume Bar — matching color
     fig.add_trace(go.Bar(
         x=df['timestamp'],
         y=df['volume'],
         name='Volume',
+        marker=dict(color=price_color),
         opacity=0.4,
         yaxis='y2'
     ))
@@ -111,21 +111,84 @@ def plot_price(df, title, height=350):
 
     return fig
 
-# Load & Display Hot Data (every second)
-st.subheader("Hot Data")
-hot_df = load_hot_data(HOT_DURATION)
-st.plotly_chart(plot_price(hot_df, f"Hot data (up to {HOT_DURATION/60} minutes old)"), use_container_width=True)
+st.title("Real Time Ethereum Price Feed")
 
-# Load & Display Warm Data every WARM_DURATION seconds
-if refresh_counter % WARM_DURATION == 0:
-    st.session_state["warm_df"] = load_warm_data(WARM_DURATION)
-warm_df = st.session_state.get("warm_df", pd.DataFrame())
-st.subheader("Warm Data")
-st.plotly_chart(plot_price(warm_df, f"Warm data (up to {WARM_DURATION/60} minutes old)"), use_container_width=True)
+refresh_counter = st_autorefresh(interval=1000, key="refresh_counter")
 
-# Load & Display Cold Data every COLD_DURATION seconds
-if refresh_counter % COLD_DURATION == 0:
-    st.session_state["cold_df"] = load_cold_data(COLD_DURATION)
-cold_df = st.session_state.get("cold_df", pd.DataFrame())
-st.subheader("Cold Data")
-st.plotly_chart(plot_price(cold_df, f"Cold data (up to {COLD_DURATION/60/60} hours old)"), use_container_width=True)
+hot_df, hot_df_display = load_hot_data()
+warm_df, warm_df_display = load_warm_data(conn)
+
+
+tab1, tab2, tab3 = st.tabs(["Hot Data", "Warm Data", "Diagnostics"])
+
+with tab1:
+    st.subheader("Hot Data")
+    st.write("After ingestion from the websocket/Kafka, our data gets staged in Clickhouse, a database management system optimized for speed and real time analytics.")
+    st.write("Data stays in this table for 5 minutes, and then is moved to the warm table.")
+    st.write("A dashboard featuring that data is shown below, with a CSV available for download.")
+    
+    st.write(f"Rows: {len(hot_df):,} | Memory: {hot_df.memory_usage(deep=True).sum() / 1_048_576:.2f} MB")
+    st.plotly_chart(plot_price(hot_df_display, "Live Hot Data Feed"), use_container_width=True)
+
+    csv_hot = hot_df.to_csv(index=False).encode('utf-8')
+    st.download_button(
+        label="Download Hot Data as CSV",
+        data=csv_hot,
+        file_name='hot_data.csv',
+        mime='text/csv'
+    )
+
+    st.markdown("Recent Data Sample")
+    st.dataframe(hot_df.head(10))
+
+with tab2:
+    st.subheader("Warm Data")
+    st.write("After 5 minutes in the hot table, data is moved to PostgreSQL for warm storage. PostgreSQL offers reliable, query-friendly access, making it ideal for short-term analysis and dashboards.")
+    st.write("Data stays in this table for 30 minutes before being archived as a parquet, which is then uploaded to cold storage (in this case AWS).")
+    st.write("A dashboard featuring that data is shown below, with a CSV available for download.")
+
+    st.write(f"Rows: {len(warm_df):,} | Memory: {warm_df.memory_usage(deep=True).sum() / 1_048_576:.2f} MB")
+    st.plotly_chart(plot_price(warm_df_display, "Live Warm Data Feed"), use_container_width=True)
+
+    csv_hot = warm_df.to_csv(index=False).encode('utf-8')
+    st.download_button(
+        label="Download Warm Data as CSV",
+        data=csv_hot,
+        file_name='warm_data.csv',
+        mime='text/csv'
+    )
+
+    st.markdown("Recent Data Sample")
+    st.dataframe(warm_df.head(10))
+
+with tab3:
+        
+
+    query = '''
+        SELECT * FROM websocket_diagnostics
+    '''
+    websocket_diagnostics = pd.read_sql(query, conn)
+    websocket_diagnostics['timestamp'] = pd.to_datetime(websocket_diagnostics['timestamp'], utc=True)
+
+
+    query = '''
+        SELECT * FROM processing_diagnostics
+    '''
+    processing_diagnostics = pd.read_sql(query, conn)
+    processing_diagnostics['timestamp'] = pd.to_datetime(processing_diagnostics['timestamp'], utc=True)
+
+    query = '''
+        SELECT * FROM transfer_diagnostics
+    '''
+    transfer_diagnostics = pd.read_sql(query, conn)
+    transfer_diagnostics['transfer_start'] = pd.to_datetime(transfer_diagnostics['transfer_start'], utc=True)
+    transfer_diagnostics['transfer_end'] = pd.to_datetime(transfer_diagnostics['transfer_end'], utc=True)
+
+
+    st.subheader("Diagnostics")
+    st.dataframe(websocket_diagnostics)
+    st.dataframe(processing_diagnostics)
+    st.dataframe(transfer_diagnostics)
+
+
+

@@ -1,61 +1,92 @@
 # Diagnostics.py
-# Conducting  checks to ensure the system is working properly
+# Conducting checks to ensure the system is working properly
 
-import psycopg2
-
-#setting up the connection to postgres
-conn = psycopg2.connect(
-    dbname='price_data',
-    user='postgres',
-    password='mypgpassword',
-    host='localhost',
-    port=5432
-)
-conn.autocommit = True
-cursor = conn.cursor()
-
-def create_consumer_metrics_table(cursor):
+def create_diagnostics_tables(cursor):
+    
+    # websocket diagnostics
+    cursor.execute("DROP TABLE IF EXISTS websocket_diagnostics")
     cursor.execute('''
-    CREATE TABLE IF NOT EXISTS consumer_metrics (
+    CREATE TABLE IF NOT EXISTS websocket_diagnostics (
         timestamp TIMESTAMPTZ PRIMARY KEY,
-        messages INT,
-        avg_lag_sec FLOAT8,
-        max_lag_sec FLOAT8,
-        source VARCHAR(50)
+        received_at TIMESTAMPTZ,
+        websocket_lag FLOAT8,
+        message_count FLOAT8
     )
     ''')
 
-def insert_consumer_metric(cursor, messages, avg_lag, max_lag, source='kafka_consumer'):
+    # processing diagnostics
+    cursor.execute("DROP TABLE IF EXISTS processing_diagnostics")
     cursor.execute('''
-        INSERT INTO consumer_metrics (timestamp, messages, avg_lag_sec, max_lag_sec, source)
-        VALUES (now(), %s, %s, %s, %s)
-    ''', (messages, avg_lag, max_lag, source))
-    print(f"[Consumer Metrics] {messages} msgs | avg_lag={avg_lag:.2f}s | max_lag={max_lag:.2f}s")
-
-def create_producer_metrics_table(cursor):
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS producer_metrics (
-        timestamp TIMESTAMPTZ PRIMARY KEY,
-        messages INT,
-        source VARCHAR(50)
+    CREATE TABLE IF NOT EXISTS processing_diagnostics (
+        timestamp TIMESTAMPTZ,
+        received_at TIMESTAMPTZ,
+        processed_timestamp TIMESTAMPTZ,
+        processing_lag FLOAT8,
+        message_count FLOAT8
     )
     ''')
 
-def insert_producer_metric(cursor, message_count, source='websocket_producer'):
+    cursor.execute("DROP TABLE IF EXISTS transfer_diagnostics")
     cursor.execute('''
-        INSERT INTO producer_metrics (timestamp, messages, source)
-        VALUES (now(), %s, %s)
-    ''', (message_count, source))
-
-# look at message rate mismatches next ebtween the consumer and producer
-# then, finish the system error log
-def create_system_errors_table(cursor):
-    cursor.execute('''
-    CREATE TABLE IF NOT EXISTS system_errors (
-        timestamp TIMESTAMPTZ DEFAULT now(),
-        component VARCHAR(50),
-        level VARCHAR(10),
-        message TEXT,
-        stack_trace TEXT
+    CREATE TABLE IF NOT EXISTS transfer_diagnostics (
+        transfer_type TEXT,
+        transfer_start TIMESTAMPTZ,
+        transfer_end TIMESTAMPTZ,
+        transfer_lag FLOAT8,
+        message_count FLOAT8,
+        transfer_size FLOAT8
     )
     ''')
+
+def insert_websocket_diagnostics(cursor, timestamp, received_at, message_count):
+    
+    # cursor.execute("""
+    #     DELETE FROM websocket_diagnostics
+    #     WHERE received_at < NOW() - INTERVAL '1 hour'
+    # """)
+
+    lag_seconds = (received_at - timestamp).total_seconds()
+
+    cursor.execute(
+        '''
+        INSERT INTO websocket_diagnostics (timestamp, received_at, websocket_lag, message_count)
+        VALUES (%s, %s, %s, %s)
+        ''',
+        (timestamp, received_at, lag_seconds, message_count)
+    )
+
+def insert_processing_diagnostics(cursor, timestamp, received_at, processed_timestamp, message_count):
+    
+    # cursor.execute("""
+    #     DELETE FROM processing_diagnostics
+    #     WHERE received_at < NOW() - INTERVAL '1 hour'
+    #     """)
+    
+    processing_lag = (processed_timestamp - received_at).total_seconds()
+
+    cursor.execute(
+        '''
+        INSERT INTO processing_diagnostics (timestamp, received_at, processed_timestamp, processing_lag, message_count)
+        VALUES (%s, %s, %s, %s, %s)
+        ''',
+        (timestamp, received_at, processed_timestamp, processing_lag, message_count)
+    )
+
+def insert_transfer_diagnostics(cursor, transfer_type, transfer_start, transfer_end, message_count, transfer_size):
+    
+    cursor.execute("""
+        DELETE FROM transfer_diagnostics
+        WHERE received_at < NOW() - INTERVAL '1 hour'
+        """)
+    
+    transfer_lag = (transfer_end - transfer_start).total_seconds()
+
+    cursor.execute(
+        '''
+        INSERT INTO transfer_diagnostics (transfer_type, transfer_start, transfer_end, transfer_lag, message_count, transfer_size)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        ''',
+        (transfer_type, transfer_start, transfer_end, transfer_lag, message_count, transfer_size)
+    )
+
+
