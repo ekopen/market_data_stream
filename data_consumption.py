@@ -5,7 +5,7 @@
 from kafka import KafkaConsumer
 import json, time, statistics
 from datetime import datetime, timezone
-from storage_hot import get_client
+from storage_hot import get_client as get_client_hot
 from diagnostics import insert_processing_diagnostics
 from config import DIAGNOSTIC_FREQUENCY
 import queue
@@ -69,7 +69,7 @@ def validate_and_parse(data):
 
 def start_consumer(stop_event):
 
-    ch_client = get_client() #get client
+    ch_client_hot = get_client_hot()
 
     consumer = KafkaConsumer(
         'price_ticks', #connecting to our price ticks topic
@@ -94,7 +94,7 @@ def start_consumer(stop_event):
             batch.append(validated_row)
 
             if len(batch) >= BATCH_SIZE or (time.time() - last_flush) > FLUSH_INTERVAL:
-                ch_client.insert('price_ticks', batch)
+                ch_client_hot.insert('price_ticks_hot', batch)
                 insert_time = datetime.utcnow()
 
                 print(f"Inserted {len(batch)} rows.")

@@ -3,18 +3,6 @@
 
 import clickhouse_connect
 
-# def create_warm_table():
-#     #creating a table if it does not exist
-#     cursor.execute('''
-#     CREATE TABLE IF NOT EXISTS price_ticks(
-#         timestamp TIMESTAMPTZ,
-#         timestamp_ms BIGINT,
-#         symbol VARCHAR(255),
-#         price FLOAT8,
-#         volume FLOAT8,
-#         received_at TIMESTAMPTZ
-#     )''')
-
 #calling concurrent client function
 def get_client():
     return clickhouse_connect.get_client(

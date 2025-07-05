@@ -14,6 +14,7 @@ warnings.filterwarnings("ignore", message="pandas only supports SQLAlchemy conne
 
 from storage_hot import get_client as get_client_hot
 from storage_warm import get_client as get_client_warm
+from diagnostics import conn
 
 def reduceTickFreq(df, increment):
     if 'timestamp' not in df.columns:
@@ -27,26 +28,24 @@ def reduceTickFreq(df, increment):
     return df
 
 def load_hot_data():
-    ch_client = get_client()
+    ch_client = get_client_hot()
     df = ch_client.query_df(f'''
-        SELECT * FROM price_ticks
+        SELECT * FROM price_ticks_hot
         ORDER BY timestamp DESC
     ''')
     df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
     df_display = reduceTickFreq(df,"1s")
     return df, df_display.sort_values("timestamp")
 
-def load_warm_data(conn):
-    query = '''
-        SELECT * FROM price_ticks
+def load_warm_data():
+    ch_client = get_client_warm()
+    df = ch_client.query_df(f'''
+        SELECT * FROM price_ticks_warm
         ORDER BY timestamp DESC
-    '''
-    df = pd.read_sql(query, conn)
+    ''')
     df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
     df_display = reduceTickFreq(df,"5s")
     return df, df_display.sort_values("timestamp")
-
-
 
 def plot_price(df, title, height=350):
 
@@ -116,7 +115,7 @@ st.title("Real Time Ethereum Price Feed")
 refresh_counter = st_autorefresh(interval=1000, key="refresh_counter")
 
 hot_df, hot_df_display = load_hot_data()
-warm_df, warm_df_display = load_warm_data(conn)
+warm_df, warm_df_display = load_warm_data()
 
 
 tab1, tab2, tab3 = st.tabs(["Hot Data", "Warm Data", "Diagnostics"])
@@ -163,7 +162,6 @@ with tab2:
 
 with tab3:
         
-
     query = '''
         SELECT * FROM websocket_diagnostics
     '''

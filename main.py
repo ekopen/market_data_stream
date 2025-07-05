@@ -1,24 +1,15 @@
 # main.py
 # controls all sub functions
-
-from data_ingestion import start_producer
-from data_consumption import start_consumer
-from storage_hot import create_hot_table
-from storage_warm import create_warm_table, cursor
-from migration import hot_to_warm, warm_to_cold, cold_to_cloud
-from diagnostics import create_consumer_metrics_table, create_producer_metrics_table, create_system_errors_table
-
-from config import SYMBOL, API_KEY, HOT_DURATION, WARM_DURATION, COLD_DURATION
-
-import os, threading, time, sys
+from config import SYMBOL, API_KEY, HOT_DURATION, WARM_DURATION
+import threading, time, sys
 from dotenv import load_dotenv
 load_dotenv()  # Load from .env file
 
 from data_ingestion import start_producer, websocket_diagnostics_worker
 from data_consumption import start_consumer, processing_diagnostics_worker
 from storage_hot import create_hot_table
-from storage_warm import create_warm_table, cursor
-from diagnostics import create_diagnostics_tables
+from storage_warm import create_warm_table
+from diagnostics import create_diagnostics_tables, cursor
 from migration import hot_to_warm, warm_to_cold
 
 
@@ -43,7 +34,6 @@ if __name__ == "__main__":
         kafka_diagnostics_thread = threading.Thread(target=processing_diagnostics_worker, args=(cursor, stop_event))
         kafka_diagnostics_thread.start()
 
-
         #start ingesting data from the websocket and feed to kafka
         producer_thread = threading.Thread(target=start_producer, args=(SYMBOL, API_KEY, stop_event))
         producer_thread.daemon = True
@@ -66,4 +56,3 @@ if __name__ == "__main__":
         print("Keyboard interrupt received. Exiting...")
     # Let atexit handle closing Kafka producer
         stop_event.set()
-

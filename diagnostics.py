@@ -1,5 +1,17 @@
 # Diagnostics.py
 # Conducting checks to ensure the system is working properly
+import psycopg2
+
+#setting up the connection to postgres
+conn = psycopg2.connect(
+    dbname='price_data',
+    user='postgres',
+    password='mypgpassword',
+    host='localhost',
+    port=5432
+)
+conn.autocommit = True
+cursor = conn.cursor()
 
 def create_diagnostics_tables(cursor):
     

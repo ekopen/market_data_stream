@@ -9,7 +9,7 @@ from storage_warm import get_client as get_client_warm
 from storage_cold import cold_upload
 import pandas as pd
 import threading
-from diagnostics import insert_transfer_diagnostics
+from diagnostics import insert_transfer_diagnostics, cursor
 from pympler import asizeof
 
 stop_event = threading.Event()
@@ -47,16 +47,10 @@ def hot_to_warm(stop_event,hot_duration): #duration in seconds
             print(f"Moved {len(warm_rows)} rows from hot to warm storage.")
 
             transfer_end_time = datetime.now(timezone.utc)
+            message_count = len(warm_rows)
+            transfer_size = asizeof.asizeof(warm_rows) / (1024 * 1024) # converting to MB
 
             insert_transfer_diagnostics(cursor, "hot_to_warm", transfer_start_time, transfer_end_time, message_count, transfer_size)
-
-            # Print current row counts in both hot and warm tables
-            hot_count = ch_client.query("SELECT count() FROM price_ticks").result_rows[0][0]
-            cursor.execute("SELECT count(*) FROM price_ticks")
-            warm_count = cursor.fetchone()[0]
-
-            print(f"[HOT_TO_WARM] Current row count — Hot (ClickHouse): {hot_count}, Warm (PostgreSQL): {warm_count}")
-
 
         except Exception as e:
             print("[hot_to_warm] Exception:", e)
