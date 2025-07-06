@@ -2,6 +2,8 @@
 # creating a streamlit dashboard to visualize the data
 # streamlit run dashboard.py
 
+from config import DIAGNOSTIC_FREQUENCY
+
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
@@ -33,6 +35,10 @@ def load_hot_data():
         SELECT * FROM price_ticks_hot
         ORDER BY timestamp DESC
     ''')
+
+    if df.empty or 'timestamp' not in df.columns:
+        return df, pd.DataFrame()
+
     df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
     df_display = reduceTickFreq(df,"1s")
     return df, df_display.sort_values("timestamp")
@@ -43,6 +49,10 @@ def load_warm_data():
         SELECT * FROM price_ticks_warm
         ORDER BY timestamp DESC
     ''')
+
+    if df.empty or 'timestamp' not in df.columns:
+        return df, pd.DataFrame()
+
     df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
     df_display = reduceTickFreq(df,"5s")
     return df, df_display.sort_values("timestamp")
@@ -162,8 +172,23 @@ with tab2:
 
 with tab3:
         
+    avg_websocket_lag_query = '''
+        SELECT AVG(websocket_lag) AS avg_websocket_lag
+        FROM websocket_diagnostics
+    '''
+    avg_websocket_lag = pd.read_sql(avg_websocket_lag_query, conn).iloc[0]['avg_websocket_lag']
+
+    ticks_per_sec_query = '''
+        SELECT AVG(message_count) AS avg_message_count
+        FROM websocket_diagnostics 
+    '''
+
+    ticks_per_sec = pd.read_sql(ticks_per_sec_query, conn).iloc[0]['avg_message_count'] / DIAGNOSTIC_FREQUENCY
+
     query = '''
         SELECT * FROM websocket_diagnostics
+        ORDER BY received_at DESC
+        LIMIT 5
     '''
     websocket_diagnostics = pd.read_sql(query, conn)
     websocket_diagnostics['timestamp'] = pd.to_datetime(websocket_diagnostics['timestamp'], utc=True)
@@ -171,12 +196,16 @@ with tab3:
 
     query = '''
         SELECT * FROM processing_diagnostics
+        ORDER BY processed_timestamp DESC
+        LIMIT 5
     '''
     processing_diagnostics = pd.read_sql(query, conn)
     processing_diagnostics['timestamp'] = pd.to_datetime(processing_diagnostics['timestamp'], utc=True)
 
     query = '''
         SELECT * FROM transfer_diagnostics
+        ORDER BY transfer_end DESC
+        LIMIT 5
     '''
     transfer_diagnostics = pd.read_sql(query, conn)
     transfer_diagnostics['transfer_start'] = pd.to_datetime(transfer_diagnostics['transfer_start'], utc=True)
@@ -184,8 +213,20 @@ with tab3:
 
 
     st.subheader("Diagnostics")
+    
+    st.markdown("##### Websocket Diagnostics")
+    st.write("Measures how delayed the information is from the websocket in seconds.")
     st.dataframe(websocket_diagnostics)
+    st.metric(label="Websocket Lag: ", value=avg_websocket_lag)
+    st.metric(label="Ticks per Second: ", value=ticks_per_sec)
+
+
+    st.markdown("##### Processing Diagnostics")
+    st.write("Measures how long data takes to process through Kafka and reach the database tables.")
     st.dataframe(processing_diagnostics)
+    
+    st.markdown("##### Transfer Diagnostics")
+    st.write("Monitors the transfers between hot and warm databases.")
     st.dataframe(transfer_diagnostics)
 
 

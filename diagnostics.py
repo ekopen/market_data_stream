@@ -50,12 +50,8 @@ def create_diagnostics_tables(cursor):
     )
     ''')
 
+# calculate the average lag between the websocket time stamp and when we start ingesting into Kafka
 def insert_websocket_diagnostics(cursor, timestamp, received_at, message_count):
-    
-    # cursor.execute("""
-    #     DELETE FROM websocket_diagnostics
-    #     WHERE received_at < NOW() - INTERVAL '1 hour'
-    # """)
 
     lag_seconds = (received_at - timestamp).total_seconds()
 
@@ -67,12 +63,8 @@ def insert_websocket_diagnostics(cursor, timestamp, received_at, message_count):
         (timestamp, received_at, lag_seconds, message_count)
     )
 
+# calculate the average lag between the time we receive the message to when its added to our database
 def insert_processing_diagnostics(cursor, timestamp, received_at, processed_timestamp, message_count):
-    
-    # cursor.execute("""
-    #     DELETE FROM processing_diagnostics
-    #     WHERE received_at < NOW() - INTERVAL '1 hour'
-    #     """)
     
     processing_lag = (processed_timestamp - received_at).total_seconds()
 
@@ -84,12 +76,13 @@ def insert_processing_diagnostics(cursor, timestamp, received_at, processed_time
         (timestamp, received_at, processed_timestamp, processing_lag, message_count)
     )
 
+# measures the latency of data migrations
 def insert_transfer_diagnostics(cursor, transfer_type, transfer_start, transfer_end, message_count, transfer_size):
     
     cursor.execute("""
         DELETE FROM transfer_diagnostics
-        WHERE received_at < NOW() - INTERVAL '1 hour'
-        """)
+        WHERE transfer_start < NOW() - INTERVAL '1 hour'
+    """)
     
     transfer_lag = (transfer_end - transfer_start).total_seconds()
 

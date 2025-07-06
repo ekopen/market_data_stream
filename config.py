@@ -5,6 +5,6 @@ import os
 
 API_KEY = os.getenv("FINNHUB_API_KEY")
 SYMBOL = 'BINANCE:ETHUSDT'
-HOT_DURATION = 300  # seconds
-WARM_DURATION = 3600  # seconds
-DIAGNOSTIC_FREQUENCY = 5 #seconds per diagnostic update
+HOT_DURATION = 60  # seconds
+WARM_DURATION = 300  # seconds, make sure to adjust clickhouse TTL to match this duration
+DIAGNOSTIC_FREQUENCY = 15 #seconds per diagnostic update

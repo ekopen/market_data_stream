@@ -19,7 +19,7 @@ client = clickhouse_connect.get_client(
     password='mysecurepassword',) #TEMPORARY PASSWORD
 
 def create_hot_table():
-    client.command("DROP TABLE IF EXISTS price_ticks")
+    client.command("DROP TABLE IF EXISTS price_ticks_hot")
     client.command('''
     CREATE TABLE IF NOT EXISTS price_ticks_hot(
         timestamp DateTime,

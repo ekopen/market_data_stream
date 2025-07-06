@@ -21,6 +21,7 @@ client = clickhouse_connect.get_client(
 
 def create_warm_table():
     #creating a table if it does not exist
+    client.command("DROP TABLE IF EXISTS price_ticks_warm")
     client.command('''
     CREATE TABLE IF NOT EXISTS price_ticks_warm(
         timestamp DateTime,

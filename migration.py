@@ -76,7 +76,9 @@ def warm_to_cold(stop_event,warm_duration): #duration in seconds
                 WHERE timestamp_ms < {cutoff_ms}
             ''').result_rows
 
-            df = pd.DataFrame(cold_rows)
+            df = pd.DataFrame(cold_rows, columns=[
+                'timestamp', 'timestamp_ms', 'symbol', 'price', 'volume', 'received_at'
+                ])
 
             # aggregating to 1 second intervals
             df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce', utc=True)
