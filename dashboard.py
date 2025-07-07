@@ -171,20 +171,28 @@ with tab2:
     st.dataframe(warm_df.head(10))
 
 with tab3:
-        
-    avg_websocket_lag_query = '''
-        SELECT AVG(websocket_lag) AS avg_websocket_lag
-        FROM websocket_diagnostics
-    '''
-    avg_websocket_lag = pd.read_sql(avg_websocket_lag_query, conn).iloc[0]['avg_websocket_lag']
+
+    st.subheader("Diagnostics")
+
+
+
+    st.markdown("##### General Diagnostics")
 
     ticks_per_sec_query = '''
         SELECT AVG(message_count) AS avg_message_count
         FROM websocket_diagnostics 
     '''
-
     ticks_per_sec = pd.read_sql(ticks_per_sec_query, conn).iloc[0]['avg_message_count'] / DIAGNOSTIC_FREQUENCY
+    st.metric(label="Incoming ticks per Second: ", value=round(ticks_per_sec,2))
 
+    st.write("ADD A TICKS PER SECOND GRAPH HERE!")
+
+
+    
+    st.markdown("##### Websocket Diagnostics")
+
+    st.write("Is there a delay between when the websocket gets data vs when it enters our data pipeline?") 
+    st.write("Sample of diagnostics data:")      
     query = '''
         SELECT * FROM websocket_diagnostics
         ORDER BY received_at DESC
@@ -192,7 +200,19 @@ with tab3:
     '''
     websocket_diagnostics = pd.read_sql(query, conn)
     websocket_diagnostics['timestamp'] = pd.to_datetime(websocket_diagnostics['timestamp'], utc=True)
+    st.dataframe(websocket_diagnostics)
 
+    avg_websocket_lag_query = '''
+        SELECT AVG(websocket_lag) AS avg_websocket_lag
+        FROM websocket_diagnostics
+    '''
+    avg_websocket_lag = pd.read_sql(avg_websocket_lag_query, conn).iloc[0]['avg_websocket_lag']
+    st.metric(label="Average Lag (in seconds): ", value=round(avg_websocket_lag,2))
+
+    st.write("ADD A LAG GRAPH HERE!")
+
+    st.markdown("##### Processing Diagnostics")
+    st.write("How long does our pipeline take to process data before it reaches the database?")
 
     query = '''
         SELECT * FROM processing_diagnostics
@@ -201,6 +221,12 @@ with tab3:
     '''
     processing_diagnostics = pd.read_sql(query, conn)
     processing_diagnostics['timestamp'] = pd.to_datetime(processing_diagnostics['timestamp'], utc=True)
+    st.dataframe(processing_diagnostics)
+    
+
+
+    st.markdown("##### Transfer Diagnostics")
+    st.write("Is the data transferring correctly between tables?")
 
     query = '''
         SELECT * FROM transfer_diagnostics
@@ -211,22 +237,6 @@ with tab3:
     transfer_diagnostics['transfer_start'] = pd.to_datetime(transfer_diagnostics['transfer_start'], utc=True)
     transfer_diagnostics['transfer_end'] = pd.to_datetime(transfer_diagnostics['transfer_end'], utc=True)
 
-
-    st.subheader("Diagnostics")
-    
-    st.markdown("##### Websocket Diagnostics")
-    st.write("Measures how delayed the information is from the websocket in seconds.")
-    st.dataframe(websocket_diagnostics)
-    st.metric(label="Websocket Lag: ", value=avg_websocket_lag)
-    st.metric(label="Ticks per Second: ", value=ticks_per_sec)
-
-
-    st.markdown("##### Processing Diagnostics")
-    st.write("Measures how long data takes to process through Kafka and reach the database tables.")
-    st.dataframe(processing_diagnostics)
-    
-    st.markdown("##### Transfer Diagnostics")
-    st.write("Monitors the transfers between hot and warm databases.")
     st.dataframe(transfer_diagnostics)
 
 
