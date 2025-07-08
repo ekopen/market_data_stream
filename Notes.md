@@ -17,11 +17,17 @@ Here are some issues I have diagnosed but not figured out how to fix:
 # Next steps
 
 - debug time zones
-- finish diganostics for migrations
+- finish diganostics
+- create catches for abnormal diagnostics behaviors with restarts included
 - finish logging error database/ all logs
     - may need to add extra try loops and logs across the board
-- show the new loggs on streamlit from diagnostics
-- create a procedure if the websocket goes down... maybe some sort of restart mechanisum?
-    - log downtime too
+    - restart for errors if needed
+- log downtime too
 - figure out how to run on cloud
-- create flow
+- create flow chart
+- implement a strategies tab
+
+- next next steps:
+    - reconfigure for bid/ask with binance data
+    - add a trading strategies setction
+        - maybe do automatic arbitrage strategies, and then discretionary strategies

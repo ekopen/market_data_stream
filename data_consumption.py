@@ -95,7 +95,7 @@ def start_consumer(stop_event):
 
             if len(batch) >= BATCH_SIZE or (time.time() - last_flush) > FLUSH_INTERVAL:
                 ch_client_hot.insert('price_ticks_hot', batch)
-                insert_time = datetime.utcnow()
+                insert_time = datetime.utcnow().replace(tzinfo=timezone.utc)
 
                 print(f"Inserted {len(batch)} rows.")
 

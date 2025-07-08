@@ -6,132 +6,25 @@ from config import DIAGNOSTIC_FREQUENCY
 
 import streamlit as st
 import pandas as pd
-import plotly.graph_objects as go
-import plotly.express as px
 from streamlit_autorefresh import st_autorefresh
-import os
-from datetime import datetime, timedelta, timezone
 import warnings
 warnings.filterwarnings("ignore", message="pandas only supports SQLAlchemy connectable")
 
-from storage_hot import get_client as get_client_hot
-from storage_warm import get_client as get_client_warm
 from diagnostics import conn
-
-def reduceTickFreq(df, increment):
-    if 'timestamp' not in df.columns:
-        return pd.DataFrame()  # Return empty if column is missing
-
-    df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
-    df = df.set_index("timestamp").resample(increment).agg({
-        "price": "mean",
-        "volume": "sum"
-    }).dropna().reset_index()
-    return df
-
-def load_hot_data():
-    ch_client = get_client_hot()
-    df = ch_client.query_df(f'''
-        SELECT * FROM price_ticks_hot
-        ORDER BY timestamp DESC
-    ''')
-
-    if df.empty or 'timestamp' not in df.columns:
-        return df, pd.DataFrame()
-
-    df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
-    df_display = reduceTickFreq(df,"1s")
-    return df, df_display.sort_values("timestamp")
-
-def load_warm_data():
-    ch_client = get_client_warm()
-    df = ch_client.query_df(f'''
-        SELECT * FROM price_ticks_warm
-        ORDER BY timestamp DESC
-    ''')
-
-    if df.empty or 'timestamp' not in df.columns:
-        return df, pd.DataFrame()
-
-    df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
-    df_display = reduceTickFreq(df,"5s")
-    return df, df_display.sort_values("timestamp")
-
-def plot_price(df, title, height=350):
-
-    if df.empty or 'timestamp' not in df.columns or 'price' not in df.columns:
-        st.warning(f"No data available for {title}")
-        return go.Figure().update_layout(title=title, height=height)
-
-    df = df.sort_values("timestamp")
-
-    min_price = df['price'].min()
-    max_price = df['price'].max()
-    y_price_range = [min_price * 0.9999, max_price * 1.0001]
-
-    # Set color based on title
-    if "Hot" in title:
-        price_color = "maroon"
-    elif "Warm" in title:
-        price_color = "navy"
-    else:
-        price_color = "black"
-
-    fig = go.Figure()
-
-    # Price Line
-    fig.add_trace(go.Scatter(
-        x=df['timestamp'],
-        y=df['price'],
-        mode='lines',
-        line=dict(width=2, color=price_color),
-        name="Price"
-    ))
-
-    # Volume Bar — matching color
-    fig.add_trace(go.Bar(
-        x=df['timestamp'],
-        y=df['volume'],
-        name='Volume',
-        marker=dict(color=price_color),
-        opacity=0.4,
-        yaxis='y2'
-    ))
-
-    fig.update_layout(
-        title=title,
-        height=height,
-        margin=dict(l=40, r=40, t=40, b=40),
-        xaxis=dict(title='Time'),
-        yaxis=dict(
-            title='Price',
-            tickformat=".2f",
-            range=y_price_range,
-            side='left'
-        ),
-        yaxis2=dict(
-            title='Volume',
-            overlaying='y',
-            side='right',
-            showgrid=False
-        ),
-        legend=dict(x=0, y=1.1, orientation='h')
-    )
-
-    return fig
+from dashboard_func import load_hot_data, load_warm_data, plot_price, plot_ticks_per_second, plot_websocket_lag
 
 st.title("Real Time Ethereum Price Feed")
 
-refresh_counter = st_autorefresh(interval=1000, key="refresh_counter")
-
-hot_df, hot_df_display = load_hot_data()
-warm_df, warm_df_display = load_warm_data()
-
+refresh_counter = st_autorefresh(interval=5000, key="refresh_counter") #refresh every 5 seconds
 
 tab1, tab2, tab3 = st.tabs(["Hot Data", "Warm Data", "Diagnostics"])
 
 with tab1:
+
     st.subheader("Hot Data")
+
+    hot_df, hot_df_display = load_hot_data()
+
     st.write("After ingestion from the websocket/Kafka, our data gets staged in Clickhouse, a database management system optimized for speed and real time analytics.")
     st.write("Data stays in this table for 5 minutes, and then is moved to the warm table.")
     st.write("A dashboard featuring that data is shown below, with a CSV available for download.")
@@ -151,7 +44,11 @@ with tab1:
     st.dataframe(hot_df.head(10))
 
 with tab2:
+
     st.subheader("Warm Data")
+
+    warm_df, warm_df_display = load_warm_data()
+
     st.write("After 5 minutes in the hot table, data is moved to PostgreSQL for warm storage. PostgreSQL offers reliable, query-friendly access, making it ideal for short-term analysis and dashboards.")
     st.write("Data stays in this table for 30 minutes before being archived as a parquet, which is then uploaded to cold storage (in this case AWS).")
     st.write("A dashboard featuring that data is shown below, with a CSV available for download.")
@@ -174,42 +71,47 @@ with tab3:
 
     st.subheader("Diagnostics")
 
-
-
     st.markdown("##### General Diagnostics")
+    st.write("How much data are we recieving?")
 
-    ticks_per_sec_query = '''
+    query = '''
         SELECT AVG(message_count) AS avg_message_count
         FROM websocket_diagnostics 
+        LIMIT 100
     '''
-    ticks_per_sec = pd.read_sql(ticks_per_sec_query, conn).iloc[0]['avg_message_count'] / DIAGNOSTIC_FREQUENCY
-    st.metric(label="Incoming ticks per Second: ", value=round(ticks_per_sec,2))
+    ticks_per_sec = pd.read_sql(query, conn).iloc[0]['avg_message_count'] / DIAGNOSTIC_FREQUENCY
+    st.metric(label="Average Ticks per Second: ", value=round(ticks_per_sec,2))
 
-    st.write("ADD A TICKS PER SECOND GRAPH HERE!")
-
-
+    query = ''' 
+    SELECT timestamp, message_count
+    FROM websocket_diagnostics
+    ORDER BY timestamp DESC
+    LIMIT 100
+    '''
+    df = pd.read_sql(query, conn)
+    fig = plot_ticks_per_second(df, "Average Ticks per Second", height=350, freq=DIAGNOSTIC_FREQUENCY)
+    st.plotly_chart(fig, use_container_width=True)
     
+
+
     st.markdown("##### Websocket Diagnostics")
-
-    st.write("Is there a delay between when the websocket gets data vs when it enters our data pipeline?") 
-    st.write("Sample of diagnostics data:")      
+    st.write("How delayed is the websocket data on arrival?") 
+    
     query = '''
-        SELECT * FROM websocket_diagnostics
-        ORDER BY received_at DESC
-        LIMIT 5
-    '''
-    websocket_diagnostics = pd.read_sql(query, conn)
-    websocket_diagnostics['timestamp'] = pd.to_datetime(websocket_diagnostics['timestamp'], utc=True)
-    st.dataframe(websocket_diagnostics)
-
-    avg_websocket_lag_query = '''
         SELECT AVG(websocket_lag) AS avg_websocket_lag
         FROM websocket_diagnostics
     '''
-    avg_websocket_lag = pd.read_sql(avg_websocket_lag_query, conn).iloc[0]['avg_websocket_lag']
-    st.metric(label="Average Lag (in seconds): ", value=round(avg_websocket_lag,2))
+    avg_websocket_lag = pd.read_sql(query, conn).iloc[0]['avg_websocket_lag']
+    st.metric(label="Average Lag (in Seconds): ", value=round(avg_websocket_lag,2))
 
-    st.write("ADD A LAG GRAPH HERE!")
+    query = '''
+    SELECT timestamp, websocket_lag
+    FROM websocket_diagnostics
+    ORDER BY timestamp DESC
+    LIMIT 100
+    '''
+    df = pd.read_sql(query, conn)
+    st.plotly_chart(plot_websocket_lag(df, "Average WebSocket Lag (in Seconds)"), use_container_width=True)
 
     st.markdown("##### Processing Diagnostics")
     st.write("How long does our pipeline take to process data before it reaches the database?")
@@ -223,8 +125,6 @@ with tab3:
     processing_diagnostics['timestamp'] = pd.to_datetime(processing_diagnostics['timestamp'], utc=True)
     st.dataframe(processing_diagnostics)
     
-
-
     st.markdown("##### Transfer Diagnostics")
     st.write("Is the data transferring correctly between tables?")
 
@@ -238,6 +138,17 @@ with tab3:
     transfer_diagnostics['transfer_end'] = pd.to_datetime(transfer_diagnostics['transfer_end'], utc=True)
 
     st.dataframe(transfer_diagnostics)
+
+
+     # st.write("Sample of diagnostics data:")      
+    # query = '''
+    #     SELECT * FROM websocket_diagnostics
+    #     ORDER BY received_at DESC
+    #     LIMIT 5
+    # '''
+    # websocket_diagnostics = pd.read_sql(query, conn)
+    # websocket_diagnostics['timestamp'] = pd.to_datetime(websocket_diagnostics['timestamp'], utc=True)
+    # st.dataframe(websocket_diagnostics)
 
 
 

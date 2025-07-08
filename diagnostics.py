@@ -16,7 +16,7 @@ cursor = conn.cursor()
 def create_diagnostics_tables(cursor):
     
     # websocket diagnostics
-    cursor.execute("DROP TABLE IF EXISTS websocket_diagnostics")
+    # cursor.execute("DROP TABLE IF EXISTS websocket_diagnostics")
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS websocket_diagnostics (
         timestamp TIMESTAMPTZ PRIMARY KEY,
@@ -27,7 +27,7 @@ def create_diagnostics_tables(cursor):
     ''')
 
     # processing diagnostics
-    cursor.execute("DROP TABLE IF EXISTS processing_diagnostics")
+    # cursor.execute("DROP TABLE IF EXISTS processing_diagnostics")
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS processing_diagnostics (
         timestamp TIMESTAMPTZ,
@@ -38,7 +38,7 @@ def create_diagnostics_tables(cursor):
     )
     ''')
 
-    cursor.execute("DROP TABLE IF EXISTS transfer_diagnostics")
+    # cursor.execute("DROP TABLE IF EXISTS transfer_diagnostics")
     cursor.execute('''
     CREATE TABLE IF NOT EXISTS transfer_diagnostics (
         transfer_type TEXT,
