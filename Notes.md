@@ -1,11 +1,3 @@
-# Potential Issues
-Here are some issues I have diagnosed but not figured out how to fix:
-1. The transfer between hot and warm has an irregular rate per batch. This could be due to some bottle neck in the code. It cold also be due to Binance or Finhub having some sort of batching system.
-2. no data to fetch error in warm to cold?
-3. TIMEZONE ISSUE!
-
-
-# Improvement Ideas
 
 # Standout Engineering Features
 1. Modularity. We can use whatever technology we want for the storage tables and this code can adapt
@@ -16,9 +8,8 @@ Here are some issues I have diagnosed but not figured out how to fix:
 
 # Next steps
 
-- debug time zones
-- finish diganostics
-- create catches for abnormal diagnostics behaviors with restarts included
+- fix diagnostics with simplified approach
+
 - finish logging error database/ all logs
     - may need to add extra try loops and logs across the board
     - restart for errors if needed
