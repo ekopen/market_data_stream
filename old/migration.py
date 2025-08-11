@@ -5,7 +5,7 @@ import time, os
 from datetime import timedelta, datetime, timezone
 from storage_hot import get_client as get_client_hot
 from storage_warm import get_client as get_client_warm
-from storage_cold import cold_upload
+from old.storage_cold import cold_upload
 import pandas as pd
 import threading
 from diagnostics import insert_transfer_diagnostics

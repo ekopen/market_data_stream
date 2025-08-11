@@ -4,38 +4,7 @@
 from kafka import KafkaProducer
 import json, websocket, atexit, time
 from datetime import datetime, timezone
-import threading, queue
-from diagnostics import insert_websocket_diagnostics
-from config import DIAGNOSTIC_FREQUENCY
-from statistics import mean
-
-# diagnostics functions
-diagnostics_queue = queue.Queue()
-
-def websocket_diagnostics_worker(stop_event):
-    print("Websocket diagnostics worker started.")
-    while not stop_event.is_set():
-        time.sleep(DIAGNOSTIC_FREQUENCY)
-
-        # after the sleep, get all messages from the diagnostic queue
-        messages = []
-        while not diagnostics_queue.empty():
-            try:
-                messages.append(diagnostics_queue.get_nowait())
-            except queue.Empty:
-                break
-
-        # gather relevant data for diagnostics
-        timestamps = [datetime.fromisoformat(m['timestamp']) for m in messages]
-        received_times = [datetime.fromisoformat(m['received_at']) for m in messages]
-        avg_timestamp = datetime.fromtimestamp(mean([dt.timestamp() for dt in timestamps]))
-        avg_received = datetime.fromtimestamp(mean([dt.timestamp() for dt in received_times]))
-        message_count = len(messages)
-
-        insert_websocket_diagnostics(avg_timestamp, avg_received, message_count)
-        print(f"Inserted websocket diagnostics for {message_count} messages.")
-
-    print("Websocket diagnostics worker stopped.")
+import threading
 
 # producer class
 producer = KafkaProducer(
@@ -70,7 +39,6 @@ def start_producer(SYMBOL, API_KEY, stop_event):
                     'received_at': received_at.isoformat()
                 }
                 #print("Sending payload to Kafka:", payload)
-                diagnostics_queue.put(payload)
                 producer.send('price_ticks', payload) #sends to the Kafka price_ticks topic
 
     #the rest of this code initializes the websocket
@@ -93,7 +61,7 @@ def start_producer(SYMBOL, API_KEY, stop_event):
 
     try:
         while not stop_event.is_set():
-            time.sleep(0.5)
+            time.sleep(0.1)
     finally:
         print("Shutting down producer WebSocket.")
         ws.close()

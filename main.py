@@ -4,15 +4,13 @@
 import threading, time, sys
 from dotenv import load_dotenv
 load_dotenv()  # Load from .env file
-from config import SYMBOL, API_KEY, HOT_DURATION, WARM_DURATION
+from config import SYMBOL, API_KEY, DURATION
 
-from data_ingestion import start_producer, websocket_diagnostics_worker
-from data_consumption import start_consumer, processing_diagnostics_worker
-from storage_hot import create_hot_table
-from storage_warm import create_warm_table
-from diagnostics import create_diagnostics_tables
-from migration import hot_to_warm, warm_to_cold
+from market_ticks import create_ticks_db, cold_storage
+from diagnostics import create_diagnostics_db
 
+from kafka_producer import start_producer
+from kafka_consumer import start_consumer
 
 # shutdown functions
 stop_event = threading.Event()
@@ -24,17 +22,8 @@ if "--stop" in sys.argv:
 if __name__ == "__main__":
     try:
 
-        #create hot warm/tables
-        create_hot_table()
-        create_warm_table()
-
-        #start diagnostics
-        create_diagnostics_tables()
-        websocket_diagnostics_thread = threading.Thread(target=websocket_diagnostics_worker, args=(stop_event,))
-        websocket_diagnostics_thread.start()
-
-        kafka_diagnostics_thread = threading.Thread(target=processing_diagnostics_worker, args=(stop_event,))
-        kafka_diagnostics_thread.start()
+        create_ticks_db()
+        create_diagnostics_db()
 
         #start ingesting data from the websocket and feed to kafka
         producer_thread = threading.Thread(target=start_producer, args=(SYMBOL, API_KEY, stop_event))
@@ -47,8 +36,7 @@ if __name__ == "__main__":
         consumer_thread.start()
 
         #start migrating data between tables
-        threading.Thread(target=hot_to_warm, args=(stop_event,HOT_DURATION), daemon=True).start() 
-        threading.Thread(target=warm_to_cold, args=(stop_event,WARM_DURATION), daemon=True).start()
+        threading.Thread(target=cold_storage, args=(stop_event,DURATION), daemon=True).start() 
 
 
         while not stop_event.is_set():

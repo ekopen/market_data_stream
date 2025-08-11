@@ -41,7 +41,5 @@ services:
     depends_on:
       - kafka
 
-
-
 volumes:
   clickhouse_data:

@@ -8,8 +8,7 @@ import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
 
-from storage_hot import get_client as get_client_hot
-from storage_warm import get_client as get_client_warm
+from market_ticks import new_client
 import clickhouse_connect
 
 def get_client_diagnostics():
@@ -31,22 +30,14 @@ def reduceTickFreq(df, increment):
     }).dropna().reset_index()
     return df
 
-def load_hot_data():
-    ch_client = get_client_hot()
-    df = ch_client.query_df("SELECT * FROM price_ticks_hot ORDER BY timestamp DESC")
+def load_ticks_db():
+    ch_client = new_client()
+    df = ch_client.query_df("SELECT * FROM ticks_db ORDER BY timestamp DESC")
     if df.empty or 'timestamp' not in df.columns:
         return df, pd.DataFrame()
     df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
     
     return df, reduceTickFreq(df, "1s").sort_values("timestamp")
-
-def load_warm_data():
-    ch_client = get_client_warm()
-    df = ch_client.query_df("SELECT * FROM price_ticks_warm ORDER BY timestamp DESC")
-    if df.empty or 'timestamp' not in df.columns:
-        return df, pd.DataFrame()
-    df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True).dt.tz_convert('America/Chicago') #this seems to be some sort of weird glitch i have to fix when running locally
-    return df, reduceTickFreq(df, "5s").sort_values("timestamp")
 
 def load_diagnostics(table, limit=100, order_col="timestamp"):
     ch_client = get_client_diagnostics()
@@ -72,15 +63,8 @@ def plot_price(df, title, height=350):
 
     min_price = df['price'].min()
     max_price = df['price'].max()
-    y_price_range = [min_price * 0.9999, max_price * 1.0001]
+    y_price_range = [min_price * .9999, max_price * 1.0001]
 
-    # Set color based on title
-    if "Hot" in title:
-        price_color = "maroon"
-    elif "Warm" in title:
-        price_color = "navy"
-    else:
-        price_color = "black"
 
     fig = go.Figure()
 
@@ -89,7 +73,7 @@ def plot_price(df, title, height=350):
         x=df['timestamp'],
         y=df['price'],
         mode='lines',
-        line=dict(width=2, color=price_color),
+        line=dict(width=2, color="maroon"),
         name="Price"
     ))
 
@@ -98,7 +82,7 @@ def plot_price(df, title, height=350):
         x=df['timestamp'],
         y=df['volume'],
         name='Volume',
-        marker=dict(color=price_color),
+        marker=dict(color="maroon"),
         opacity=0.4,
         yaxis='y2'
     ))
@@ -135,7 +119,7 @@ def plot_ticks_per_second(df, title, height=350, freq=15):
 
     min_tps = df['ticks_per_second'].min()
     max_tps = df['ticks_per_second'].max()
-    y_range = [min_tps * 0.95, max_tps * 1.05]
+    y_range = [min_tps * .95, max_tps * 1.05]
 
     fig = go.Figure()
 
@@ -172,7 +156,7 @@ def plot_websocket_lag(df, title, height=350):
 
     min_lag = df['websocket_lag'].min()
     max_lag = df['websocket_lag'].max()
-    y_range = [min_lag * 0.95, max_lag * 1.05]
+    y_range = [min_lag * 1.05, max_lag * 1.05]
 
     fig = go.Figure()
 
@@ -199,3 +183,41 @@ def plot_websocket_lag(df, title, height=350):
     )
 
     return fig
+
+def plot_processing_lag(df, title, height=350):
+    if df.empty or 'timestamp' not in df.columns or 'processing_lag' not in df.columns:
+        st.warning(f"No diagnostics data available for {title}")
+        return go.Figure().update_layout(title=title, height=height)
+
+    df = df.sort_values("timestamp").copy()
+
+    min_lag = df['processing_lag'].min()
+    max_lag = df['processing_lag'].max()
+    y_range = [min_lag * 1.05, max_lag * 1.05]
+
+    fig = go.Figure()
+
+    fig.add_trace(go.Scatter(
+        x=df['timestamp'],
+        y=df['processing_lag'],
+        mode='lines+markers',
+        line=dict(width=2, color="darkred"),
+        name="Processing Lag (s)"
+    ))
+
+    fig.update_layout(
+        title=title,
+        height=height,
+        margin=dict(l=40, r=40, t=40, b=40),
+        xaxis=dict(title='Time'),
+        yaxis=dict(
+            title='Processing Lag (seconds)',
+            tickformat=".2f",
+            range=y_range,
+            side='left'
+        ),
+        legend=dict(x=0, y=1.1, orientation='h')
+    )
+
+    return fig
+

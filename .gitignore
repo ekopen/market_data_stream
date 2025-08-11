@@ -2,5 +2,4 @@ test.py
 __pycache__/clickhouse.cpython-312.pyc
 __pycache__/data_consumption.cpython-312.pyc
 __pycache__/data_ingestion.cpython-312.pyc
-__pycache__/migration.cpython-312.pyc
 .env
