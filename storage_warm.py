@@ -13,26 +13,21 @@ def get_client():
     )
 
 #initialize clickhouse
-client = clickhouse_connect.get_client(
-    host='localhost',
-    port=8123,
-    username='default',
-    password='mysecurepassword',) #TEMPORARY PASSWORD
+client = get_client()
 
 def create_warm_table():
-    #creating a table if it does not exist
     client.command("DROP TABLE IF EXISTS price_ticks_warm")
     client.command('''
     CREATE TABLE IF NOT EXISTS price_ticks_warm(
-        timestamp DateTime,
-        timestamp_ms Int64,
-        symbol String,
-        price Float64,
-        volume Float64,
-        received_at DateTime
+        timestamp       DateTime64(3, 'UTC'),
+        timestamp_ms    Int64,
+        symbol          String,
+        price           Float64,
+        volume          Float64,
+        received_at     DateTime64(3, 'UTC')
     ) 
     ENGINE = MergeTree()
     PARTITION BY toYYYYMMDD(timestamp)
     ORDER BY timestamp_ms
-    TTL timestamp + INTERVAL 560 MINUTE DELETE
+    TTL toDateTime(timestamp) + INTERVAL 560 MINUTE DELETE
     ''')

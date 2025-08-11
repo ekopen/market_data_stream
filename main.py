@@ -1,15 +1,16 @@
 # main.py
 # controls all sub functions
-from config import SYMBOL, API_KEY, HOT_DURATION, WARM_DURATION
+
 import threading, time, sys
 from dotenv import load_dotenv
 load_dotenv()  # Load from .env file
+from config import SYMBOL, API_KEY, HOT_DURATION, WARM_DURATION
 
 from data_ingestion import start_producer, websocket_diagnostics_worker
 from data_consumption import start_consumer, processing_diagnostics_worker
 from storage_hot import create_hot_table
 from storage_warm import create_warm_table
-from diagnostics import create_diagnostics_tables, cursor
+from diagnostics import create_diagnostics_tables
 from migration import hot_to_warm, warm_to_cold
 
 
@@ -22,16 +23,17 @@ if "--stop" in sys.argv:
 
 if __name__ == "__main__":
     try:
+
         #create hot warm/tables
         create_hot_table()
         create_warm_table()
 
         #start diagnostics
-        create_diagnostics_tables(cursor)
-        websocket_diagnostics_thread = threading.Thread(target=websocket_diagnostics_worker, args=(cursor, stop_event))
+        create_diagnostics_tables()
+        websocket_diagnostics_thread = threading.Thread(target=websocket_diagnostics_worker, args=(stop_event,))
         websocket_diagnostics_thread.start()
 
-        kafka_diagnostics_thread = threading.Thread(target=processing_diagnostics_worker, args=(cursor, stop_event))
+        kafka_diagnostics_thread = threading.Thread(target=processing_diagnostics_worker, args=(stop_event,))
         kafka_diagnostics_thread.start()
 
         #start ingesting data from the websocket and feed to kafka

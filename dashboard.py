@@ -7,17 +7,20 @@ from config import DIAGNOSTIC_FREQUENCY
 import streamlit as st
 import pandas as pd
 from streamlit_autorefresh import st_autorefresh
+
 import warnings
 warnings.filterwarnings("ignore", message="pandas only supports SQLAlchemy connectable")
 
-from diagnostics import conn
-from dashboard_func import load_hot_data, load_warm_data, plot_price, plot_ticks_per_second, plot_websocket_lag
+from clickhouse_connect import get_client
+client = get_client(host='localhost', port=8123, username='default', password='mysecurepassword')
+
+from dashboard_func import load_hot_data, load_warm_data, load_diagnostics, plot_price, plot_ticks_per_second, plot_websocket_lag
 
 st.title("Real Time Ethereum Price Feed")
 
 refresh_counter = st_autorefresh(interval=5000, key="refresh_counter") #refresh every 5 seconds
 
-tab1, tab2, tab3 = st.tabs(["Hot Data", "Warm Data", "Diagnostics"])
+tab1, tab2, tab3, tab4 = st.tabs(["Hot Data", "Warm Data", "Diagnostics", "Combined Data"])
 
 with tab1:
 
@@ -32,10 +35,9 @@ with tab1:
     st.write(f"Rows: {len(hot_df):,} | Memory: {hot_df.memory_usage(deep=True).sum() / 1_048_576:.2f} MB")
     st.plotly_chart(plot_price(hot_df_display, "Live Hot Data Feed"), use_container_width=True)
 
-    csv_hot = hot_df.to_csv(index=False).encode('utf-8')
     st.download_button(
         label="Download Hot Data as CSV",
-        data=csv_hot,
+        data=hot_df.to_csv(index=False).encode('utf-8'),
         file_name='hot_data.csv',
         mime='text/csv'
     )
@@ -56,10 +58,9 @@ with tab2:
     st.write(f"Rows: {len(warm_df):,} | Memory: {warm_df.memory_usage(deep=True).sum() / 1_048_576:.2f} MB")
     st.plotly_chart(plot_price(warm_df_display, "Live Warm Data Feed"), use_container_width=True)
 
-    csv_hot = warm_df.to_csv(index=False).encode('utf-8')
     st.download_button(
         label="Download Warm Data as CSV",
-        data=csv_hot,
+        data=warm_df.to_csv(index=False).encode('utf-8'),
         file_name='warm_data.csv',
         mime='text/csv'
     )
@@ -71,84 +72,39 @@ with tab3:
 
     st.subheader("Diagnostics")
 
+    # General Diagnostics
     st.markdown("##### General Diagnostics")
-    st.write("How much data are we recieving?")
+    st.write("How much data are we receiving?")
+    websocket_avg_df = load_diagnostics("websocket_diagnostics", limit=100, order_col="timestamp")
+    if not websocket_avg_df.empty:
+        ticks_per_sec = websocket_avg_df['message_count'].mean() / DIAGNOSTIC_FREQUENCY
+        st.metric(label="Average Ticks per Second:", value=round(ticks_per_sec, 2))
+        st.plotly_chart(plot_ticks_per_second(websocket_avg_df, "Average Ticks per Second", height=350, freq=DIAGNOSTIC_FREQUENCY), use_container_width=True)
+    else:
+        st.warning("No websocket diagnostics data available.")
 
-    query = '''
-        SELECT AVG(message_count) AS avg_message_count
-        FROM websocket_diagnostics 
-        LIMIT 100
-    '''
-    ticks_per_sec = pd.read_sql(query, conn).iloc[0]['avg_message_count'] / DIAGNOSTIC_FREQUENCY
-    st.metric(label="Average Ticks per Second: ", value=round(ticks_per_sec,2))
-
-    query = ''' 
-    SELECT timestamp, message_count
-    FROM websocket_diagnostics
-    ORDER BY timestamp DESC
-    LIMIT 100
-    '''
-    df = pd.read_sql(query, conn)
-    fig = plot_ticks_per_second(df, "Average Ticks per Second", height=350, freq=DIAGNOSTIC_FREQUENCY)
-    st.plotly_chart(fig, use_container_width=True)
-    
-
-
+    # WebSocket Lag
     st.markdown("##### Websocket Diagnostics")
-    st.write("How delayed is the websocket data on arrival?") 
-    
-    query = '''
-        SELECT AVG(websocket_lag) AS avg_websocket_lag
-        FROM websocket_diagnostics
-    '''
-    avg_websocket_lag = pd.read_sql(query, conn).iloc[0]['avg_websocket_lag']
-    st.metric(label="Average Lag (in Seconds): ", value=round(avg_websocket_lag,2))
+    st.write("How delayed is the websocket data on arrival?")
+    if not websocket_avg_df.empty:
+        avg_websocket_lag = websocket_avg_df['websocket_lag'].mean()
+        st.metric(label="Average Lag (in Seconds):", value=round(avg_websocket_lag, 2))
+        st.plotly_chart(plot_websocket_lag(websocket_avg_df, "Average WebSocket Lag (in Seconds)"), use_container_width=True)
 
-    query = '''
-    SELECT timestamp, websocket_lag
-    FROM websocket_diagnostics
-    ORDER BY timestamp DESC
-    LIMIT 100
-    '''
-    df = pd.read_sql(query, conn)
-    st.plotly_chart(plot_websocket_lag(df, "Average WebSocket Lag (in Seconds)"), use_container_width=True)
-
+    # Processing Diagnostics
     st.markdown("##### Processing Diagnostics")
     st.write("How long does our pipeline take to process data before it reaches the database?")
+    processing_df = load_diagnostics("processing_diagnostics", limit=5, order_col="processed_timestamp")
+    st.dataframe(processing_df)
 
-    query = '''
-        SELECT * FROM processing_diagnostics
-        ORDER BY processed_timestamp DESC
-        LIMIT 5
-    '''
-    processing_diagnostics = pd.read_sql(query, conn)
-    processing_diagnostics['timestamp'] = pd.to_datetime(processing_diagnostics['timestamp'], utc=True)
-    st.dataframe(processing_diagnostics)
-    
+    # Transfer Diagnostics
     st.markdown("##### Transfer Diagnostics")
     st.write("Is the data transferring correctly between tables?")
+    transfer_df = load_diagnostics("transfer_diagnostics", limit=5, order_col="transfer_end")
+    st.dataframe(transfer_df)
 
-    query = '''
-        SELECT * FROM transfer_diagnostics
-        ORDER BY transfer_end DESC
-        LIMIT 5
-    '''
-    transfer_diagnostics = pd.read_sql(query, conn)
-    transfer_diagnostics['transfer_start'] = pd.to_datetime(transfer_diagnostics['transfer_start'], utc=True)
-    transfer_diagnostics['transfer_end'] = pd.to_datetime(transfer_diagnostics['transfer_end'], utc=True)
+with tab4:
 
-    st.dataframe(transfer_diagnostics)
-
-
-     # st.write("Sample of diagnostics data:")      
-    # query = '''
-    #     SELECT * FROM websocket_diagnostics
-    #     ORDER BY received_at DESC
-    #     LIMIT 5
-    # '''
-    # websocket_diagnostics = pd.read_sql(query, conn)
-    # websocket_diagnostics['timestamp'] = pd.to_datetime(websocket_diagnostics['timestamp'], utc=True)
-    # st.dataframe(websocket_diagnostics)
-
+        st.subheader("Combined View")
 
 

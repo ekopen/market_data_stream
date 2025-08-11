@@ -25,7 +25,6 @@ Here are some issues I have diagnosed but not figured out how to fix:
 - log downtime too
 - figure out how to run on cloud
 - create flow chart
-- implement a strategies tab
 
 - next next steps:
     - reconfigure for bid/ask with binance data

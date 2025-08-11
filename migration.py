@@ -4,12 +4,11 @@
 import time, os
 from datetime import timedelta, datetime, timezone
 from storage_hot import get_client as get_client_hot
-# from storage_warm import cursor, conn
 from storage_warm import get_client as get_client_warm
 from storage_cold import cold_upload
 import pandas as pd
 import threading
-from diagnostics import insert_transfer_diagnostics, cursor
+from diagnostics import insert_transfer_diagnostics
 from pympler import asizeof
 
 stop_event = threading.Event()
@@ -50,7 +49,7 @@ def hot_to_warm(stop_event,hot_duration): #duration in seconds
             message_count = len(warm_rows)
             transfer_size = asizeof.asizeof(warm_rows) / (1024 * 1024) # converting to MB
 
-            insert_transfer_diagnostics(cursor, "hot_to_warm", transfer_start_time, transfer_end_time, message_count, transfer_size)
+            insert_transfer_diagnostics("hot_to_warm", transfer_start_time, transfer_end_time, message_count, transfer_size)
 
         except Exception as e:
             print("[hot_to_warm] Exception:", e)

@@ -1,5 +1,5 @@
 # storage_hot.py
-# enables storing hot data to clikhouse
+# enables storing hot data
 import clickhouse_connect
 
 #calling concurrent client function
@@ -22,16 +22,16 @@ def create_hot_table():
     client.command("DROP TABLE IF EXISTS price_ticks_hot")
     client.command('''
     CREATE TABLE IF NOT EXISTS price_ticks_hot(
-        timestamp DateTime,
-        timestamp_ms Int64,
-        symbol String,
-        price Float64,
-        volume Float64,
-        received_at DateTime('UTC')
+        timestamp       DateTime64(3, 'UTC'),
+        timestamp_ms    Int64,
+        symbol          String,
+        price           Float64,
+        volume          Float64,
+        received_at     DateTime64(3, 'UTC')
     ) 
     ENGINE = MergeTree()
     PARTITION BY toYYYYMMDD(timestamp)
     ORDER BY timestamp_ms
-    TTL timestamp + INTERVAL 10 MINUTE DELETE
+    TTL toDateTime(timestamp) + INTERVAL 10 MINUTE DELETE
     ''')
 

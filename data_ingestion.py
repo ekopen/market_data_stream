@@ -12,7 +12,7 @@ from statistics import mean
 # diagnostics functions
 diagnostics_queue = queue.Queue()
 
-def websocket_diagnostics_worker(cursor, stop_event):
+def websocket_diagnostics_worker(stop_event):
     print("Websocket diagnostics worker started.")
     while not stop_event.is_set():
         time.sleep(DIAGNOSTIC_FREQUENCY)
@@ -32,10 +32,9 @@ def websocket_diagnostics_worker(cursor, stop_event):
         avg_received = datetime.fromtimestamp(mean([dt.timestamp() for dt in received_times]))
         message_count = len(messages)
 
-        insert_websocket_diagnostics(cursor, avg_timestamp, avg_received, message_count)
+        insert_websocket_diagnostics(avg_timestamp, avg_received, message_count)
         print(f"Inserted websocket diagnostics for {message_count} messages.")
 
-    cursor.close()
     print("Websocket diagnostics worker stopped.")
 
 # producer class

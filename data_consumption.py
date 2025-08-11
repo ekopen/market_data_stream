@@ -14,7 +14,7 @@ from statistics import mean
 #diagnostics tools
 diagnostics_queue = queue.Queue()
 
-def processing_diagnostics_worker(cursor, stop_event):
+def processing_diagnostics_worker(stop_event):
     print("Processing diagnostics worker started.")
     while not stop_event.is_set():
         time.sleep(DIAGNOSTIC_FREQUENCY)
@@ -26,7 +26,8 @@ def processing_diagnostics_worker(cursor, stop_event):
             try:
                 batch, insert_time = diagnostics_queue.get_nowait()
                 all_rows.extend(batch)  # Flatten all rows from each batch
-                insert_times.append(insert_time)
+                for _ in batch:
+                    insert_times.append(insert_time)
             except queue.Empty:
                 break
 
@@ -36,13 +37,12 @@ def processing_diagnostics_worker(cursor, stop_event):
         received_times = [row[5] for row in all_rows]
         timestamps = [row[0] for row in all_rows]
 
-        avg_timestamp = datetime.fromtimestamp(mean([dt.timestamp() for dt in timestamps]))
-        avg_received = datetime.fromtimestamp(mean([dt.timestamp() for dt in received_times]))
-        avg_insert_time = datetime.fromtimestamp(mean([dt.timestamp() for dt in insert_times]))
+        avg_timestamp   = datetime.fromtimestamp(mean([dt.timestamp() for dt in timestamps]), tz=timezone.utc)
+        avg_received    = datetime.fromtimestamp(mean([dt.timestamp() for dt in received_times]), tz=timezone.utc)
+        avg_insert_time = datetime.fromtimestamp(mean([dt.timestamp() for dt in insert_times]), tz=timezone.utc)
         message_count = len(all_rows)
 
         insert_processing_diagnostics(
-            cursor,
             avg_timestamp,
             avg_received,
             avg_insert_time,

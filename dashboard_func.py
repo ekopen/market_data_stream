@@ -1,22 +1,24 @@
 # dashboard func.py
 # all the functions for dashboard.py to improve readability
 
-
 from config import DIAGNOSTIC_FREQUENCY
 
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
-from streamlit_autorefresh import st_autorefresh
-import os
-from datetime import datetime, timedelta, timezone
-import warnings
-warnings.filterwarnings("ignore", message="pandas only supports SQLAlchemy connectable")
 
 from storage_hot import get_client as get_client_hot
 from storage_warm import get_client as get_client_warm
-from diagnostics import conn
+import clickhouse_connect
+
+def get_client_diagnostics():
+    return clickhouse_connect.get_client(
+        host='localhost',
+        port=8123,
+        username='default',
+        password='mysecurepassword'
+    )
 
 def reduceTickFreq(df, increment):
     if 'timestamp' not in df.columns:
@@ -31,31 +33,34 @@ def reduceTickFreq(df, increment):
 
 def load_hot_data():
     ch_client = get_client_hot()
-    df = ch_client.query_df(f'''
-        SELECT * FROM price_ticks_hot
-        ORDER BY timestamp DESC
-    ''')
-
+    df = ch_client.query_df("SELECT * FROM price_ticks_hot ORDER BY timestamp DESC")
     if df.empty or 'timestamp' not in df.columns:
         return df, pd.DataFrame()
-
     df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
-    df_display = reduceTickFreq(df,"1s")
-    return df, df_display.sort_values("timestamp")
+    
+    return df, reduceTickFreq(df, "1s").sort_values("timestamp")
 
 def load_warm_data():
     ch_client = get_client_warm()
-    df = ch_client.query_df(f'''
-        SELECT * FROM price_ticks_warm
-        ORDER BY timestamp DESC
-    ''')
-
+    df = ch_client.query_df("SELECT * FROM price_ticks_warm ORDER BY timestamp DESC")
     if df.empty or 'timestamp' not in df.columns:
         return df, pd.DataFrame()
+    df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True).dt.tz_convert('America/Chicago') #this seems to be some sort of weird glitch i have to fix when running locally
+    return df, reduceTickFreq(df, "5s").sort_values("timestamp")
 
-    df['timestamp'] = pd.to_datetime(df['timestamp'], utc=True)
-    df_display = reduceTickFreq(df,"5s")
-    return df, df_display.sort_values("timestamp")
+def load_diagnostics(table, limit=100, order_col="timestamp"):
+    ch_client = get_client_diagnostics()
+    query = f"""
+        SELECT *
+        FROM {table}
+        ORDER BY {order_col} DESC
+        LIMIT {limit}
+    """
+    df = ch_client.query_df(query)
+    for col in ['timestamp', 'received_at', 'processed_timestamp', 'transfer_start', 'transfer_end']:
+        if col in df.columns:
+            df[col] = pd.to_datetime(df[col], utc=True)
+    return df
 
 def plot_price(df, title, height=350):
 
