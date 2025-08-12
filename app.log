@@ -116,3 +116,94 @@
 2025-08-12 15:45:11,700 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
 2025-08-12 15:45:11,700 | INFO | kafka.consumer.fetcher | Fetch to node 1 failed: Cancelled: <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>
 2025-08-12 15:45:11,700 | INFO | main | Shutdown complete.
+2025-08-12 17:28:37,034 | INFO | main | Application starting.
+2025-08-12 17:28:37,695 | INFO | producer | Producer thread started.
+2025-08-12 17:28:37,858 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-12 17:28:37,866 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <checking_api_versions_recv> [IPv6 ('::1', 9092, 0, 0)]>: Broker version identified as 2.6
+2025-08-12 17:28:37,866 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-12 17:28:37,868 | WARNING | kafka.coordinator.consumer | group_id is None: disabling auto-commit.
+2025-08-12 17:28:37,868 | INFO | kafka.consumer.subscription_state | Updating subscribed topics to: ('price_ticks',)
+2025-08-12 17:28:37,868 | INFO | consumer | Kafka consumer started.
+2025-08-12 17:28:37,874 | INFO | kafka.consumer.subscription_state | Updated partition assignment: [TopicPartition(topic='price_ticks', partition=0)]
+2025-08-12 17:28:37,876 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-12 17:28:37,876 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-12 17:28:37,876 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-12 17:28:37,883 | INFO | kafka.consumer.fetcher | Resetting offset for partition TopicPartition(topic='price_ticks', partition=0) to offset 3071206.
+2025-08-12 17:28:38,206 | INFO | websocket | Websocket connected
+2025-08-12 17:28:38,206 | INFO | producer | WebSocket connected.
+2025-08-12 17:28:39,210 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-12 17:28:39,210 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-12 17:28:39,212 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-12 17:28:41,344 | INFO | consumer | Inserted 4 rows.
+2025-08-12 17:28:43,337 | INFO | consumer | Inserted 14 rows.
+2025-08-12 17:28:45,329 | INFO | consumer | Inserted 2 rows.
+2025-08-12 17:28:47,322 | INFO | consumer | Inserted 208 rows.
+2025-08-12 17:28:49,345 | INFO | consumer | Inserted 5 rows.
+2025-08-12 17:28:51,329 | INFO | consumer | Inserted 28 rows.
+2025-08-12 17:28:53,342 | INFO | consumer | Inserted 11 rows.
+2025-08-12 17:28:55,353 | INFO | consumer | Inserted 88 rows.
+2025-08-12 17:28:57,339 | INFO | consumer | Inserted 17 rows.
+2025-08-12 17:28:59,374 | INFO | consumer | Inserted 31 rows.
+2025-08-12 17:29:01,366 | INFO | consumer | Inserted 2 rows.
+2025-08-12 17:29:03,357 | INFO | consumer | Inserted 128 rows.
+2025-08-12 17:29:05,359 | INFO | consumer | Inserted 57 rows.
+2025-08-12 17:29:07,370 | INFO | consumer | Inserted 88 rows.
+2025-08-12 17:29:09,344 | INFO | consumer | Inserted 54 rows.
+2025-08-12 17:29:11,345 | INFO | consumer | Inserted 58 rows.
+2025-08-12 17:29:13,358 | INFO | consumer | Inserted 188 rows.
+2025-08-12 17:29:15,361 | INFO | consumer | Inserted 18 rows.
+2025-08-12 17:29:17,354 | INFO | consumer | Inserted 7 rows.
+2025-08-12 17:29:19,347 | INFO | consumer | Inserted 12 rows.
+2025-08-12 17:29:21,353 | INFO | consumer | Inserted 4 rows.
+2025-08-12 17:29:23,370 | INFO | consumer | Inserted 14 rows.
+2025-08-12 17:29:25,316 | INFO | consumer | Inserted 15 rows.
+2025-08-12 17:29:27,372 | INFO | consumer | Inserted 5 rows.
+2025-08-12 17:29:29,353 | INFO | consumer | Inserted 6 rows.
+2025-08-12 17:29:31,358 | INFO | consumer | Inserted 7 rows.
+2025-08-12 17:29:33,368 | INFO | consumer | Inserted 5 rows.
+2025-08-12 17:29:35,370 | INFO | consumer | Inserted 9 rows.
+2025-08-12 17:29:37,386 | INFO | consumer | Inserted 129 rows.
+2025-08-12 17:29:38,442 | INFO | consumer | Inserted 300 rows.
+2025-08-12 17:29:40,373 | INFO | consumer | Inserted 25 rows.
+2025-08-12 17:29:40,980 | INFO | main | Stopping application via KeyboardInterrupt.
+2025-08-12 17:29:41,021 | INFO | producer | Shutting down producer.
+2025-08-12 17:29:41,054 | INFO | kafka.producer.kafka | <KafkaProducer client_id=kafka-python-producer-1 transactional_id=None>: Closing the Kafka producer with 2 secs timeout.
+2025-08-12 17:29:41,066 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-12 17:29:41,477 | INFO | consumer | Inserted final 3 rows.
+2025-08-12 17:29:41,477 | INFO | consumer | Closing consumer.
+2025-08-12 17:29:41,477 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-12 17:29:41,478 | INFO | kafka.consumer.fetcher | Fetch to node 1 failed: Cancelled: <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>
+2025-08-12 17:29:41,478 | INFO | main | Application shutdown complete.
+2025-08-12 17:33:37,586 | INFO | main | Application starting.
+2025-08-12 17:33:38,222 | INFO | producer | Producer thread started.
+2025-08-12 17:33:38,372 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-12 17:33:38,377 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <checking_api_versions_recv> [IPv6 ('::1', 9092, 0, 0)]>: Broker version identified as 2.6
+2025-08-12 17:33:38,377 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-12 17:33:38,378 | WARNING | kafka.coordinator.consumer | group_id is None: disabling auto-commit.
+2025-08-12 17:33:38,378 | INFO | kafka.consumer.subscription_state | Updating subscribed topics to: ('price_ticks',)
+2025-08-12 17:33:38,378 | INFO | consumer | Kafka consumer started.
+2025-08-12 17:33:38,381 | INFO | kafka.consumer.subscription_state | Updated partition assignment: [TopicPartition(topic='price_ticks', partition=0)]
+2025-08-12 17:33:38,382 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-12 17:33:38,383 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-12 17:33:38,383 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-12 17:33:38,387 | INFO | kafka.consumer.fetcher | Resetting offset for partition TopicPartition(topic='price_ticks', partition=0) to offset 3072748.
+2025-08-12 17:33:38,739 | INFO | websocket | Websocket connected
+2025-08-12 17:33:38,740 | INFO | producer | WebSocket connected.
+2025-08-12 17:33:38,740 | INFO | producer | Subscribing to BINANCE:ETHUSDT
+2025-08-12 17:33:39,743 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-12 17:33:39,744 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-12 17:33:39,745 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-12 17:33:40,865 | INFO | consumer | Inserted 98 rows.
+2025-08-12 17:33:42,857 | INFO | consumer | Inserted 196 rows.
+2025-08-12 17:33:44,880 | INFO | consumer | Inserted 11 rows.
+2025-08-12 17:33:46,873 | INFO | consumer | Inserted 169 rows.
+2025-08-12 17:33:48,816 | INFO | consumer | Inserted 75 rows.
+2025-08-12 17:33:50,870 | INFO | consumer | Inserted 216 rows.
+2025-08-12 17:33:52,873 | INFO | consumer | Inserted 173 rows.
+2025-08-12 17:33:53,332 | INFO | main | Stopping application via KeyboardInterrupt.
+2025-08-12 17:33:53,375 | INFO | consumer | Closing consumer.
+2025-08-12 17:33:53,377 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-12 17:33:53,381 | INFO | producer | Shutting down producer.
+2025-08-12 17:33:53,422 | INFO | kafka.producer.kafka | <KafkaProducer client_id=kafka-python-producer-1 transactional_id=None>: Closing the Kafka producer with 2 secs timeout.
+2025-08-12 17:33:53,429 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-12 17:33:53,430 | INFO | main | Application shutdown complete.
