@@ -10,6 +10,8 @@ import boto3, os
 from dotenv import load_dotenv
 load_dotenv()  # Load from .env file
 
+
+
 stop_event = threading.Event()
 
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')

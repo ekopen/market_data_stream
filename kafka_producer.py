@@ -6,21 +6,24 @@ import json, websocket, atexit, time
 from datetime import datetime, timezone
 import threading
 
+
+import logging
+logger = logging.getLogger("producer")
+
 # producer class
 producer = KafkaProducer(
     bootstrap_servers='localhost:9092',
-    value_serializer=lambda v: json.dumps(v).encode('utf-8')
+    value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+    linger_ms=5,
+    retries=1,
+    request_timeout_ms=2000,
+    max_block_ms=2000
 )
 
-# producer close function
-def close_producer():
-    print("Closing Kafka producer...")
-    producer.close()
-atexit.register(close_producer) #ensures a complete closing
 
 def start_producer(SYMBOL, API_KEY, stop_event):
 
-    print("Producer thread started.")
+    logger.info("Producer thread started.")
 
     def on_message(ws, message):
         data = json.loads(message)
@@ -43,11 +46,14 @@ def start_producer(SYMBOL, API_KEY, stop_event):
 
     #the rest of this code initializes the websocket
     def on_open(ws):
-        print("WebSocket connected")
+        logger.info("WebSocket connected")
         ws.send(json.dumps({"type": "subscribe", "symbol": SYMBOL}))
 
     def on_close(ws, close_status_code, close_msg):
-        print("WebSocket closed:", close_status_code, close_msg)
+        logger.info("WebSocket closed:", close_status_code, close_msg)
+
+    def on_error(ws, err):
+        logger.exception(f"WebSocket error: {err}")
 
     ws = websocket.WebSocketApp(f"wss://ws.finnhub.io?token={API_KEY}",
                                 on_message=on_message,
@@ -63,8 +69,18 @@ def start_producer(SYMBOL, API_KEY, stop_event):
         while not stop_event.is_set():
             time.sleep(0.1)
     finally:
-        print("Shutting down producer WebSocket.")
-        ws.close()
-
+        logger.info("Shutting down producer.")
+        try:
+            ws.close()
+        except Exception:
+            pass
+        try:
+            producer.flush(timeout=2)
+        except Exception:
+            pass
+        try:
+            producer.close(timeout=2)
+        except Exception:
+            pass
 
     
