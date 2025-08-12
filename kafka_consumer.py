@@ -50,11 +50,8 @@ def start_consumer(stop_event):
 
             if len(batch) >= BATCH_SIZE or (time.time() - last_flush) > FLUSH_INTERVAL:
                 ch_client.insert('ticks_db', batch, column_names=['timestamp', 'timestamp_ms', 'symbol', 'price', 'volume', 'received_at'])
-                insert_time = datetime.utcnow().replace(tzinfo=timezone.utc)
 
                 print(f"Inserted {len(batch)} rows.")
-
-                #insert for diagnostics
                 
                 batch.clear()
                 last_flush = time.time()

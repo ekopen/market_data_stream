@@ -54,7 +54,8 @@ def cold_upload(file_name=None, bucket=BUCKET_NAME, s3_key=None):
     s3.upload_file(file_name, BUCKET_NAME, s3_key)
     print(f"Uploaded {file_name} to S3 bucket '{BUCKET_NAME}' at '{s3_key}'.")
 
-def cold_storage(stop_event,duration): #duration in seconds   
+def cold_storage(stop_event,duration): #duration in seconds 
+
     time.sleep(duration*2) #pause before beginning the migration
 
     ch_client = new_client() 
@@ -65,8 +66,6 @@ def cold_storage(stop_event,duration): #duration in seconds
             # gets the current time and subtracts the  duration to get the cutoff time
             cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=duration)
             cutoff_ms = int(cutoff_time.timestamp() * 1000)
-
-            print("Cutoff timestamp in ms:", cutoff_ms)
 
             cold_rows = ch_client.query(f'''
                 SELECT * FROM ticks_db

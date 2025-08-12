@@ -2,22 +2,11 @@
 # all the functions for dashboard.py to improve readability
 
 from config import DIAGNOSTIC_FREQUENCY
-
+from market_ticks import new_client
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
-
-from market_ticks import new_client
-import clickhouse_connect
-
-def get_client_diagnostics():
-    return clickhouse_connect.get_client(
-        host='localhost',
-        port=8123,
-        username='default',
-        password='mysecurepassword'
-    )
 
 def reduceTickFreq(df, increment):
     if 'timestamp' not in df.columns:
@@ -39,8 +28,8 @@ def load_ticks_db():
     
     return df, reduceTickFreq(df, "1s").sort_values("timestamp")
 
-def load_diagnostics(table, limit=100, order_col="timestamp"):
-    ch_client = get_client_diagnostics()
+def load_diagnostics(table, limit=100, order_col="avg_timestamp"):
+    ch_client = new_client()
     query = f"""
         SELECT *
         FROM {table}
@@ -48,9 +37,7 @@ def load_diagnostics(table, limit=100, order_col="timestamp"):
         LIMIT {limit}
     """
     df = ch_client.query_df(query)
-    for col in ['timestamp', 'received_at', 'processed_timestamp', 'transfer_start', 'transfer_end']:
-        if col in df.columns:
-            df[col] = pd.to_datetime(df[col], utc=True)
+
     return df
 
 def plot_price(df, title, height=350):
@@ -110,11 +97,11 @@ def plot_price(df, title, height=350):
     return fig
 
 def plot_ticks_per_second(df, title, height=350, freq=15):
-    if df.empty or 'timestamp' not in df.columns or 'message_count' not in df.columns:
+    if df.empty or 'avg_timestamp' not in df.columns or 'message_count' not in df.columns:
         st.warning(f"No diagnostics data available for {title}")
         return go.Figure().update_layout(title=title, height=height)
 
-    df = df.sort_values("timestamp").copy()
+    df = df.sort_values("avg_timestamp").copy()
     df['ticks_per_second'] = df['message_count'] / freq
 
     min_tps = df['ticks_per_second'].min()
@@ -124,7 +111,7 @@ def plot_ticks_per_second(df, title, height=350, freq=15):
     fig = go.Figure()
 
     fig.add_trace(go.Scatter(
-        x=df['timestamp'],
+        x=df['avg_timestamp'],
         y=df['ticks_per_second'],
         mode='lines+markers',
         line=dict(width=2, color="darkgreen"),
@@ -148,21 +135,21 @@ def plot_ticks_per_second(df, title, height=350, freq=15):
     return fig
 
 def plot_websocket_lag(df, title, height=350):
-    if df.empty or 'timestamp' not in df.columns or 'websocket_lag' not in df.columns:
+    if df.empty or 'avg_timestamp' not in df.columns or 'avg_websocket_lag' not in df.columns:
         st.warning(f"No diagnostics data available for {title}")
         return go.Figure().update_layout(title=title, height=height)
 
-    df = df.sort_values("timestamp").copy()
+    df = df.sort_values("avg_timestamp").copy()
 
-    min_lag = df['websocket_lag'].min()
-    max_lag = df['websocket_lag'].max()
+    min_lag = df['avg_websocket_lag'].min()
+    max_lag = df['avg_websocket_lag'].max()
     y_range = [min_lag * 1.05, max_lag * 1.05]
 
     fig = go.Figure()
 
     fig.add_trace(go.Scatter(
-        x=df['timestamp'],
-        y=df['websocket_lag'],
+        x=df['avg_timestamp'],
+        y=df['avg_websocket_lag'],
         mode='lines+markers',
         line=dict(width=2, color="darkred"),
         name="WebSocket Lag (s)"
@@ -185,23 +172,23 @@ def plot_websocket_lag(df, title, height=350):
     return fig
 
 def plot_processing_lag(df, title, height=350):
-    if df.empty or 'timestamp' not in df.columns or 'processing_lag' not in df.columns:
+    if df.empty or 'avg_timestamp' not in df.columns or 'avg_processing_lag' not in df.columns:
         st.warning(f"No diagnostics data available for {title}")
         return go.Figure().update_layout(title=title, height=height)
 
-    df = df.sort_values("timestamp").copy()
+    df = df.sort_values("avg_timestamp").copy()
 
-    min_lag = df['processing_lag'].min()
-    max_lag = df['processing_lag'].max()
+    min_lag = df['avg_processing_lag'].min()
+    max_lag = df['avg_processing_lag'].max()
     y_range = [min_lag * 1.05, max_lag * 1.05]
 
     fig = go.Figure()
 
     fig.add_trace(go.Scatter(
-        x=df['timestamp'],
-        y=df['processing_lag'],
+        x=df['avg_timestamp'],
+        y=df['avg_processing_lag'],
         mode='lines+markers',
-        line=dict(width=2, color="darkred"),
+        line=dict(width=2, color="darkblue"),
         name="Processing Lag (s)"
     ))
 
