@@ -8,4 +8,5 @@ SYMBOL = 'BINANCE:ETHUSDT'
 
 CLICKHOUSE_DURATION = 10  # seconds before moving data to cold storage
 
+
 DIAGNOSTIC_FREQUENCY = 5 #seconds per diagnostic update

@@ -7,7 +7,7 @@ load_dotenv()  # Load from .env file
 from config import SYMBOL, API_KEY, CLICKHOUSE_DURATION, DIAGNOSTIC_FREQUENCY
 
 from clickhouse import create_ticks_db, create_diagnostics_db, insert_diagnostics
-from db_storage import ticks_to_storage, diagnostics_to_storage
+from db_storage import clickhouse_to_cloud
 
 from kafka_producer import start_producer
 from kafka_consumer import start_consumer
@@ -39,8 +39,7 @@ if __name__ == "__main__":
         threading.Thread(target=insert_diagnostics, args=(stop_event,DIAGNOSTIC_FREQUENCY), daemon=True).start()
 
         #start moving data to cold storage
-        threading.Thread(target=ticks_to_storage, args=(stop_event,CLICKHOUSE_DURATION), daemon=True).start() 
-        threading.Thread(target=diagnostics_to_storage, args=(stop_event,CLICKHOUSE_DURATION), daemon=True).start() 
+        threading.Thread(target=clickhouse_to_cloud, args=(stop_event,CLICKHOUSE_DURATION), daemon=True).start() 
 
         while not stop_event.is_set():
             time.sleep(1)
