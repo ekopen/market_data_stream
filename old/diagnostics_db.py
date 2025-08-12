@@ -1,7 +1,7 @@
 # Diagnostics.py
 # Conducting checks to ensure the system is working properly, implemented with Clickhouse
 
-from market_ticks import new_client
+from clickhouse import new_client
 from datetime import timedelta, datetime, timezone
 import pandas as pd
 import time

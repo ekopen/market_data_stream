@@ -2,7 +2,7 @@
 # all the functions for dashboard.py to improve readability
 
 from config import DIAGNOSTIC_FREQUENCY
-from market_ticks import new_client
+from clickhouse import new_client
 import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go

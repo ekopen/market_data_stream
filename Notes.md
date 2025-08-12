@@ -8,8 +8,6 @@
 
 # Next steps
 
-- fix diagnostics with simplified approach
-
 - finish logging error database/ all logs
     - may need to add extra try loops and logs across the board
     - restart for errors if needed

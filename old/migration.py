@@ -8,7 +8,7 @@ from storage_warm import get_client as get_client_warm
 from old.storage_cold import cold_upload
 import pandas as pd
 import threading
-from diagnostics import insert_transfer_diagnostics
+from old.diagnostics_db import insert_transfer_diagnostics
 from pympler import asizeof
 
 stop_event = threading.Event()

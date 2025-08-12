@@ -4,7 +4,7 @@
 from kafka import KafkaConsumer
 import json, time
 from datetime import datetime, timezone
-from market_ticks import new_client
+from clickhouse import new_client
 
 # prepares the data for clickhouse
 def validate_and_parse(data):
