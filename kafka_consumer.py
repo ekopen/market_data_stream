@@ -1,5 +1,5 @@
-# data_consumption.py
-# Kafka consumer that reads the data and then starts appending it to the ticks db
+# kakfa_consumer.py
+# kafka consumer that reads from the price_ticks topic and inserts into clickhouse
 
 from kafka import KafkaConsumer
 import json, time
@@ -30,27 +30,27 @@ def start_consumer(stop_event):
     ch_client = new_client()
 
     consumer = KafkaConsumer(
-        'price_ticks', #connecting to our price ticks topic
+        'price_ticks', # subscribe to the topic
         bootstrap_servers='localhost:9092',
         value_deserializer=lambda m: json.loads(m.decode('utf-8')),
-        enable_auto_commit=True,
-        consumer_timeout_ms=1000  # makes poll() return periodically
+        enable_auto_commit=True, #auto commit offsets
+        consumer_timeout_ms=1000  # controls how long to wait if no messages
     )
+
     logger.info("Kafka consumer started.")
 
     #using batching to improve performance
     batch = []
     last_flush = time.time()
-    BATCH_SIZE = 300
-    FLUSH_INTERVAL = 1.5  # seconds
+    BATCH_SIZE = 1000
+    FLUSH_INTERVAL = .5  # seconds
 
     try:
         while not stop_event.is_set():
-            records = consumer.poll(timeout_ms=500)
+            records = consumer.poll(timeout_ms=500) # wait for messages
             if not records:
-                continue
-
-            for tp, messages in records.items():
+                continue # if not records, continue to next iteration
+            for tp, messages in records.items(): # get messages from each partition
                 for message in messages:
                     try:
                         validated_row = validate_and_parse(message.value)
@@ -82,7 +82,7 @@ def start_consumer(stop_event):
         try:
             consumer.close()
         except Exception:
-            pass
+            logger.exception(f"Error closing consumer during shutdown")
 
 
 

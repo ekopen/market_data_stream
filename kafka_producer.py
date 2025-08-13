@@ -1,4 +1,4 @@
-# kafka_rpoducer.py
+# kafka_producer.py
 # starts the kafka producer and integrates it with Finnhub's API/Websocket
 
 from kafka import KafkaProducer
@@ -19,7 +19,6 @@ producer = KafkaProducer(
     max_block_ms=2000  # max time to block on send
 )
 
-
 def start_producer(SYMBOL, API_KEY, stop_event):
 
     logger.info("Producer thread started.")
@@ -39,7 +38,7 @@ def start_producer(SYMBOL, API_KEY, stop_event):
                     'volume': t['v'],
                     'received_at': received_at.isoformat()
                 }
-                producer.send('price_ticks', payload) #sends to the Kafka price_ticks topic
+                producer.send('price_ticks', payload) #sends to the Kafka topic
                 logger.debug(f"Sent to Kafka: {payload}")
 
     # WebSocket event handlers
@@ -48,7 +47,7 @@ def start_producer(SYMBOL, API_KEY, stop_event):
         ws.send(json.dumps({"type": "subscribe", "symbol": SYMBOL}))
         logger.info(f"Subscribing to {SYMBOL}")
     def on_close(ws, close_status_code, close_msg):
-        logger.info("WebSocket closed.", close_status_code, close_msg)
+        logger.info("WebSocket closed: code=%s msg=%s", close_status_code, close_msg)
     def on_error(ws, err):
         logger.exception(f"WebSocket error: {err}")
     ws = websocket.WebSocketApp(f"wss://ws.finnhub.io?token={API_KEY}",
