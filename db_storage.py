@@ -62,9 +62,10 @@ def clickhouse_to_cloud(stop_event,duration):
             }).reset_index()
             old_ticks_df.rename(columns={'second': 'timestamp'}, inplace=True)
 
-            filename = f'parquet_data/ticks_{cutoff_ms}.parquet'
+            filename = f'clickhouse_parquet_data/ticks_{cutoff_ms}.parquet'
             logger.info(f"Written Parquet file: {filename}")
             old_ticks_df.to_parquet(filename, index=False)
+            old_ticks_df.to_parquet("temp_parquet_data/ticks.parquet", index=False)
             ch_client.command(f'''
                 ALTER TABLE ticks_db
                 DELETE WHERE timestamp_ms < {cutoff_ms}
@@ -81,8 +82,9 @@ def clickhouse_to_cloud(stop_event,duration):
             ws_df = pd.DataFrame(old_ws, columns=[
                 'avg_timestamp', 'avg_received_at', 'avg_websocket_lag', 'message_count', 'diagnostics_timestamp'
                 ])
-            filename = f'parquet_data/ws_diagnostics_{cutoff_ms}.parquet'
+            filename = f'clickhouse_parquet_data/ws_diagnostics_{cutoff_ms}.parquet'
             ws_df.to_parquet(filename, index=False)
+            ws_df.to_parquet("temp_parquet_data/ws_diagnostics.parquet", index=False)            
             logger.info(f"Written Parquet file: {filename}")
             ch_client.command(f'''
                 ALTER TABLE websocket_diagnostics
@@ -98,24 +100,48 @@ def clickhouse_to_cloud(stop_event,duration):
             proc_df = pd.DataFrame(old_proc, columns=[
                 'avg_timestamp', 'avg_received_at', 'avg_processed_timestamp', 'avg_processing_lag', 'message_count', 'diagnostics_timestamp'
                 ])
-            filename = f'parquet_data/proc_diagnostics_{cutoff_ms}.parquet'
+            filename = f'clickhouse_parquet_data/proc_diagnostics_{cutoff_ms}.parquet'
             logger.info(f"Written Parquet file: {filename}")
             proc_df.to_parquet(filename, index=False)
+            proc_df.to_parquet("temp_parquet_data/proc_diagnostics.parquet", index=False)
             ch_client.command(f'''
                 ALTER TABLE processing_diagnostics
                 DELETE WHERE toUnixTimestamp64Milli(diagnostics_timestamp) < {cutoff_ms}
             ''')
             logger.debug("Deleted migrated records from processing_diagnostics.")
 
+            #--------------------------monitoring--------------------------#
+
+            # monitoring data
+            old_mon = ch_client.query(f'''
+                SELECT * FROM monitoring_db
+                WHERE toUnixTimestamp64Milli(monitoring_timestamp) < {cutoff_ms}
+            ''').result_rows
+            mon_df = pd.DataFrame(old_mon, columns=[
+                'monitoring_timestamp', 'message'
+                ])
+            filename = f'clickhouse_parquet_data/monitoring_{cutoff_ms}.parquet'
+            mon_df.to_parquet(filename, index=False)
+            mon_df.to_parquet("temp_parquet_data/monitoring.parquet", index=False)
+            logger.info(f"Written Parquet file: {filename}")
+            ch_client.command(f'''
+                ALTER TABLE monitoring_db
+                DELETE WHERE toUnixTimestamp64Milli(monitoring_timestamp) < {cutoff_ms}
+            ''')
+            logger.debug("Deleted migrated records from monitoring.")
+
+
             #--------------------------cloud upload--------------------------#
 
-            for parquet in os.listdir('parquet_data/'):
-                file_name = os.path.join('parquet_data/', parquet)
+            for parquet in os.listdir('clickhouse_parquet_data/'):
+                file_name = os.path.join('clickhouse_parquet_data/', parquet)
                 s3_key = f"archived_data/{parquet}"
                 s3.upload_file(file_name, BUCKET_NAME, s3_key)
                 print(f"Uploaded {file_name} to S3 bucket '{BUCKET_NAME}' at '{s3_key}'.")
                 os.remove(file_name)
                 logger.info(f"Uploaded {file_name} to S3 bucket {BUCKET_NAME} as {s3_key} and removed local file.")
+
+
 
         except Exception as e:
             logger.exception("Error during clickhouse_to_cloud")
@@ -159,6 +185,7 @@ def logs_to_cloud(stop_event, duration):
                         ts = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')
                         parquet_file = f"{parquet_dir}/logs_{ts}.parquet"
                         df_old.to_parquet(parquet_file, index=False)
+                        df_old.to_parquet("temp_parquet_data/logs.parquet", index=False)                        
                         logger.info(f"Migrated {len(df_old)} log rows to {parquet_file}")
 
                     # overwrite original file with only recent entries
@@ -171,7 +198,7 @@ def logs_to_cloud(stop_event, duration):
                 file_name = os.path.join(parquet_dir, parquet)
                 s3_key = f"logs/{parquet}"
                 s3.upload_file(file_name, BUCKET_NAME, s3_key)
-                #os.remove(file_name)
+                os.remove(file_name)
                 logger.info(f"Uploaded {file_name} to S3 bucket {BUCKET_NAME} as {s3_key} and removed local file.")
 
         except Exception:

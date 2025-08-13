@@ -8,14 +8,13 @@
 
 # Next steps
 
-- finish logging error database/ all logs
-    - may need to add extra try loops and logs across the board
-    - restart for errors if needed
-- log downtime too
+- potentially get rid of the monitoring db and just use logger?
+- creat visualizations/breakdowns of all logged/tracked data
+
 - figure out how to run on cloud
 - create flow chart
 
-- next next steps:
+-  next steps:
     - reconfigure for bid/ask with binance data
     - add a trading strategies setction
         - maybe do automatic arbitrage strategies, and then discretionary strategies
