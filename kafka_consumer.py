@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 from clickhouse import new_client
 
 import logging
-logger = logging.getLogger("consumer")
+logger = logging.getLogger(__name__)
 
 # prepares the data for clickhouse
 def validate_and_parse(data):
@@ -32,6 +32,7 @@ def start_consumer(stop_event):
     consumer = KafkaConsumer(
         'price_ticks', # subscribe to the topic
         bootstrap_servers='localhost:9092',
+        group_id='ticks_ingestor',
         value_deserializer=lambda m: json.loads(m.decode('utf-8')),
         enable_auto_commit=True, #auto commit offsets
         consumer_timeout_ms=1000  # controls how long to wait if no messages
@@ -42,7 +43,7 @@ def start_consumer(stop_event):
     #using batching to improve performance
     batch = []
     last_flush = time.time()
-    BATCH_SIZE = 1000
+    BATCH_SIZE = 300
     FLUSH_INTERVAL = .5  # seconds
 
     try:

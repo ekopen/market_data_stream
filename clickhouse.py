@@ -11,6 +11,9 @@ import boto3, os
 from dotenv import load_dotenv
 load_dotenv()  # Load from .env file
 
+import logging
+logger = logging.getLogger(__name__)
+
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
 AWS_REGION = os.getenv('AWS_REGION')
@@ -33,8 +36,9 @@ def new_client():
     )
 
 def create_ticks_db():
+    logger.info("Creating ticks_db table.")
     ch = new_client()
-    ch.command("DROP TABLE IF EXISTS ticks_db")
+    ch.command('''DROP TABLE IF EXISTS ticks_db''')  # drop if exists to ensure fresh creation
     ch.command('''
     CREATE TABLE IF NOT EXISTS ticks_db(
         timestamp       DateTime64(3, 'UTC'),
@@ -49,79 +53,103 @@ def create_ticks_db():
     PARTITION BY toYYYYMMDD(timestamp)
     ORDER BY timestamp_ms
     ''')
+    logger.info("ticks_db table created successfully.")
 
 def create_diagnostics_db():
-
-    ch_client = new_client()
-
-    ch_client.command("DROP TABLE IF EXISTS websocket_diagnostics")
-    ch_client.command(f"""
+    logger.info("Creating websocket_diagnostics table.")
+    ch = new_client()
+    ch.command('''DROP TABLE IF EXISTS websocket_diagnostics''')  # drop if exists to ensure fresh creation
+    ch.command(f"""
     CREATE TABLE IF NOT EXISTS websocket_diagnostics (
-        avg_timestamp DateTime64(3, 'UTC'),
-        avg_received_at DateTime64(3, 'UTC'),
+        avg_timestamp Nullable(DateTime64(3, 'UTC')),
+        avg_received_at Nullable(DateTime64(3, 'UTC')),
         avg_websocket_lag Float64,
         message_count Float64,
         diagnostics_timestamp    DateTime64(3, 'UTC') DEFAULT now64(3)
     )
     ENGINE = MergeTree()
-    PARTITION BY toYYYYMMDD(toDate(avg_timestamp))
-    ORDER BY avg_timestamp
+    PARTITION BY toYYYYMMDD(toDate(diagnostics_timestamp))
+    ORDER BY diagnostics_timestamp
     """)
+    logger.info("websocket_diagnostics table created successfully.")
 
-    ch_client.command("DROP TABLE IF EXISTS processing_diagnostics")
-    ch_client.command(f"""
+    logger.info("Creating processing_diagnostics table.")
+    ch.command('''DROP TABLE IF EXISTS processing_diagnostics''')  # drop if exists to ensure fresh creation
+    ch.command(f"""
     CREATE TABLE IF NOT EXISTS processing_diagnostics (
-        avg_timestamp DateTime64(3, 'UTC'),
-        avg_received_at DateTime64(3, 'UTC'),
-        avg_processed_timestamp DateTime64(3, 'UTC'),
+        avg_timestamp Nullable(DateTime64(3, 'UTC')),
+        avg_received_at Nullable(DateTime64(3, 'UTC')),
+        avg_processed_timestamp Nullable(DateTime64(3, 'UTC')),
         avg_processing_lag Float64,
         message_count Float64,
         diagnostics_timestamp    DateTime64(3, 'UTC') DEFAULT now64(3)
     )
     ENGINE = MergeTree()
-    PARTITION BY toYYYYMMDD(toDate(avg_timestamp))
-    ORDER BY avg_timestamp
+    PARTITION BY toYYYYMMDD(toDate(diagnostics_timestamp))
+    ORDER BY diagnostics_timestamp
     """)
+    logger.info("processing_diagnostics table created successfully.")
 
 def insert_diagnostics(stop_event,duration):
 
     time.sleep(duration)
-
-    ch_client = new_client()
+    ch = new_client()
+    empty_streak_s = 0.0
 
     while not stop_event.is_set():
-        print("Inserting diagnostics")
+        logger.debug("Starting diagnostics insert cycle.")
         try:
+            current_time = datetime.now(timezone.utc)
+            current_time_ms = int(current_time.timestamp() * 1000)
             cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=duration)
-            cutoff_ms = int(cutoff_time.timestamp() * 1000)
+            cutoff_time_ms = int(cutoff_time.timestamp() * 1000)
 
-            diagnostic_rows = ch_client.query(f'''
+            diagnostic_rows = ch.query(f'''
                 SELECT * FROM ticks_db
-                WHERE timestamp_ms > {cutoff_ms}
+                WHERE toUnixTimestamp64Milli(insert_time) > {cutoff_time_ms} AND toUnixTimestamp64Milli(insert_time) <= {current_time_ms}
             ''').result_rows
 
             df = pd.DataFrame(diagnostic_rows, columns=[
                 'timestamp', 'timestamp_ms', 'symbol', 'price', 'volume', 'received_at', 'insert_time'
                 ])
             
-            df['timestamp'] = pd.to_datetime(df['timestamp'])
-            df['received_at'] = pd.to_datetime(df['received_at'])
-            df['insert_time'] = pd.to_datetime(df['insert_time'])
+            #if the system is down, we still want to record diagnostics data to show lag
+            if df.empty:
 
-            avg_timestamp = df['timestamp'].mean()
-            avg_received_at = df['received_at'].mean()
-            avg_insert_time = df['insert_time'].mean()
-            message_count = len(df)
+                avg_timestamp = None
+                avg_received_at = None
+                avg_insert_time = cutoff_time + (current_time - cutoff_time) / 2
+                message_count = 0
 
-            ch_client.insert('websocket_diagnostics',
-                [(avg_timestamp, avg_received_at, (avg_received_at - avg_timestamp).total_seconds(), message_count)],
+                empty_streak_s += float(duration)
+                ws_lag += empty_streak_s
+                proc_lag += empty_streak_s
+            
+            else:
+                df['timestamp'] = pd.to_datetime(df['timestamp'])
+                df['received_at'] = pd.to_datetime(df['received_at'])
+                df['insert_time'] = pd.to_datetime(df['insert_time'])
+
+                avg_timestamp = df['timestamp'].mean()
+                avg_received_at = df['received_at'].mean()
+                avg_insert_time = df['insert_time'].mean()
+                ws_lag = (avg_received_at - avg_timestamp).total_seconds()
+                proc_lag = (avg_insert_time - avg_received_at).total_seconds()
+                message_count = len(df)
+                
+                empty_streak_s = 0.0
+
+            ch.insert('websocket_diagnostics',
+                [(avg_timestamp, avg_received_at, ws_lag, message_count)],
                 column_names=['avg_timestamp', 'avg_received_at', 'avg_websocket_lag', 'message_count'])
             
-            ch_client.insert('processing_diagnostics',
-                [(avg_timestamp, avg_received_at, avg_insert_time, (avg_insert_time - avg_received_at).total_seconds(), message_count)],
+            ch.insert('processing_diagnostics',
+                [(avg_timestamp, avg_received_at, avg_insert_time, proc_lag, message_count)],
                 column_names=['avg_timestamp', 'avg_received_at', 'avg_processed_timestamp', 'avg_processing_lag', 'message_count'])
         
+            logger.info(f"Inserted diagnostics for {message_count} messages.")
+
         except Exception as e:
-            print("[websocket_diagnostics] Exception:", e)
+            logger.exception(f"Error inserting diagnostics.")
 
         time.sleep(duration)

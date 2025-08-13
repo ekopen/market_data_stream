@@ -6,7 +6,6 @@ import streamlit as st
 import pandas as pd
 from streamlit_autorefresh import st_autorefresh
 from dashboard_func import load_ticks_db, load_diagnostics, plot_price, plot_ticks_per_second, plot_websocket_lag, plot_processing_lag
-
 from config import DIAGNOSTIC_FREQUENCY
 
 st.title("Real Time Ethereum Price Feed")
@@ -42,13 +41,13 @@ with tab2:
 
     st.subheader("Diagnostics")
 
-    websocket_avg_df = load_diagnostics("websocket_diagnostics", limit=100, order_col="avg_timestamp")
+    websocket_avg_df = load_diagnostics("websocket_diagnostics", limit=100, order_col="diagnostics_timestamp")
     
     st.write("How much data are we receiving?")
     if not websocket_avg_df.empty:
         ticks_per_sec = websocket_avg_df['message_count'].mean() / DIAGNOSTIC_FREQUENCY
         st.metric(label="Average Ticks per Second:", value=round(ticks_per_sec, 2))
-        st.plotly_chart(plot_ticks_per_second(websocket_avg_df, "Average Ticks per Second", height=350, freq=DIAGNOSTIC_FREQUENCY), use_container_width=True)
+        st.plotly_chart(plot_ticks_per_second(websocket_avg_df, "Average Ticks per Second"), use_container_width=True)
 
     st.write("How delayed is the websocket data on arrival?")
     if not websocket_avg_df.empty:
@@ -56,7 +55,7 @@ with tab2:
         st.metric(label="Average Websocket Lag (in Seconds):", value=round(avg_websocket_lag, 2))
         st.plotly_chart(plot_websocket_lag(websocket_avg_df, "Average WebSocket Lag (in Seconds)"), use_container_width=True)
 
-    processing_df = load_diagnostics("processing_diagnostics", limit=100, order_col="avg_processed_timestamp")
+    processing_df = load_diagnostics("processing_diagnostics", limit=100, order_col="diagnostics_timestamp")
 
     st.write("How long does our pipeline take to process data before it reaches the database?")
     if not processing_df.empty:

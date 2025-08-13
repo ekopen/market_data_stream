@@ -22,7 +22,8 @@ fh = logging.FileHandler("app.log", encoding="utf-8")
 fh.setLevel(logging.INFO)
 fh.setFormatter(logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s"))
 logging.getLogger().addHandler(fh)
-logger = logging.getLogger("main")
+
+logger = logging.getLogger(__name__)
 
 # shutdown setup if we want to pass python main.py --stop
 stop_event = threading.Event()

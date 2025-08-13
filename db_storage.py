@@ -10,9 +10,8 @@ import boto3, os
 from dotenv import load_dotenv
 load_dotenv()  # Load from .env file
 
-
-
-stop_event = threading.Event()
+import logging
+logger = logging.getLogger(__name__)
 
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
 AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
@@ -33,7 +32,7 @@ def clickhouse_to_cloud(stop_event,duration):
     ch_client = new_client() 
 
     while not stop_event.is_set():
-        print("Migrating clickhouse data to parquet") 
+        logger.debug("Starting migration cycle.") 
         try:          
 
             cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=duration)
@@ -64,11 +63,13 @@ def clickhouse_to_cloud(stop_event,duration):
             old_ticks_df.rename(columns={'second': 'timestamp'}, inplace=True)
 
             filename = f'parquet_data/ticks_{cutoff_ms}.parquet'
+            logger.info(f"Written Parquet file: {filename}")
             old_ticks_df.to_parquet(filename, index=False)
             ch_client.command(f'''
                 ALTER TABLE ticks_db
                 DELETE WHERE timestamp_ms < {cutoff_ms}
             ''')
+            logger.debug("Deleted migrated records from ticks_db.")
 
             #--------------------------diagnostics_db--------------------------#
 
@@ -82,10 +83,12 @@ def clickhouse_to_cloud(stop_event,duration):
                 ])
             filename = f'parquet_data/ws_diagnostics_{cutoff_ms}.parquet'
             ws_df.to_parquet(filename, index=False)
+            logger.info(f"Written Parquet file: {filename}")
             ch_client.command(f'''
                 ALTER TABLE websocket_diagnostics
                 DELETE WHERE toUnixTimestamp64Milli(diagnostics_timestamp) < {cutoff_ms}
             ''')
+            logger.debug("Deleted migrated records from websocket_diagnostics.")
 
             # processing diagnostics data
             old_proc = ch_client.query(f'''
@@ -96,13 +99,13 @@ def clickhouse_to_cloud(stop_event,duration):
                 'avg_timestamp', 'avg_received_at', 'avg_processed_timestamp', 'avg_processing_lag', 'message_count', 'diagnostics_timestamp'
                 ])
             filename = f'parquet_data/proc_diagnostics_{cutoff_ms}.parquet'
+            logger.info(f"Written Parquet file: {filename}")
             proc_df.to_parquet(filename, index=False)
             ch_client.command(f'''
                 ALTER TABLE processing_diagnostics
                 DELETE WHERE toUnixTimestamp64Milli(diagnostics_timestamp) < {cutoff_ms}
             ''')
-
-            print(f"Moved clickhouse data to parquets.")
+            logger.debug("Deleted migrated records from processing_diagnostics.")
 
             #--------------------------cloud upload--------------------------#
 
@@ -111,9 +114,10 @@ def clickhouse_to_cloud(stop_event,duration):
                 s3_key = f"archived_data/{parquet}"
                 s3.upload_file(file_name, BUCKET_NAME, s3_key)
                 print(f"Uploaded {file_name} to S3 bucket '{BUCKET_NAME}' at '{s3_key}'.")
-                os.remove(file_name) 
+                os.remove(file_name)
+                logger.info(f"Uploaded {file_name} to S3 bucket {BUCKET_NAME} as {s3_key} and removed local file.")
 
         except Exception as e:
-            print("[clickhouse_to_cloud] Exception:", e)
+            logger.exception("Error during clickhouse_to_cloud")
 
         time.sleep(duration) #pause before rerunning

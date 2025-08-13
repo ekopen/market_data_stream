@@ -7,7 +7,7 @@ from datetime import datetime, timezone
 import threading
 
 import logging
-logger = logging.getLogger("producer")
+logger = logging.getLogger(__name__)
 
 # producer class
 producer = KafkaProducer(

@@ -28,7 +28,7 @@ def load_ticks_db():
     
     return df, reduceTickFreq(df, "1s").sort_values("timestamp")
 
-def load_diagnostics(table, limit=100, order_col="avg_timestamp"):
+def load_diagnostics(table, limit=100, order_col="diagnostics_timestamp"):
     ch_client = new_client()
     query = f"""
         SELECT *
@@ -97,11 +97,11 @@ def plot_price(df, title, height=350):
     return fig
 
 def plot_ticks_per_second(df, title, height=350, freq=15):
-    if df.empty or 'avg_timestamp' not in df.columns or 'message_count' not in df.columns:
+    if df.empty or 'diagnostics_timestamp' not in df.columns or 'message_count' not in df.columns:
         st.warning(f"No diagnostics data available for {title}")
         return go.Figure().update_layout(title=title, height=height)
 
-    df = df.sort_values("avg_timestamp").copy()
+    df = df.sort_values("diagnostics_timestamp").copy()
     df['ticks_per_second'] = df['message_count'] / freq
 
     min_tps = df['ticks_per_second'].min()
@@ -111,7 +111,7 @@ def plot_ticks_per_second(df, title, height=350, freq=15):
     fig = go.Figure()
 
     fig.add_trace(go.Scatter(
-        x=df['avg_timestamp'],
+        x=df['diagnostics_timestamp'],
         y=df['ticks_per_second'],
         mode='lines+markers',
         line=dict(width=2, color="darkgreen"),

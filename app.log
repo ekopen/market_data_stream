@@ -2166,3 +2166,2352 @@ ValueError: NaTType does not support timestamp
 2025-08-12 21:41:53,169 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
 2025-08-12 21:41:53,169 | INFO | kafka.consumer.fetcher | Fetch to node 1 failed: Cancelled: <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>
 2025-08-12 21:41:53,169 | INFO | main | Application shutdown complete.
+2025-08-13 11:40:07,622 | INFO | __main__ | Application starting.
+2025-08-13 11:40:08,308 | INFO | kafka_producer | Producer thread started.
+2025-08-13 11:40:08,471 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 11:40:08,479 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <checking_api_versions_recv> [IPv6 ('::1', 9092, 0, 0)]>: Broker version identified as 2.6
+2025-08-13 11:40:08,479 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 11:40:08,480 | INFO | kafka.consumer.subscription_state | Updating subscribed topics to: ('price_ticks',)
+2025-08-13 11:40:08,480 | INFO | kafka_consumer | Kafka consumer started.
+2025-08-13 11:40:08,486 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 11:40:08,487 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 11:40:08,487 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 11:40:08,583 | INFO | websocket | Websocket connected
+2025-08-13 11:40:08,583 | INFO | kafka_producer | WebSocket connected.
+2025-08-13 11:40:08,583 | INFO | kafka_producer | Subscribing to BINANCE:ETHUSDT
+2025-08-13 11:40:09,664 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 11:40:09,665 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 11:40:09,665 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 11:40:09,809 | INFO | kafka.cluster | Coordinator for group/ticks_ingestor is BrokerMetadata(nodeId='coordinator-1', host='localhost', port=9092, rack=None)
+2025-08-13 11:40:09,809 | INFO | kafka.coordinator | Discovered coordinator coordinator-1 for group ticks_ingestor
+2025-08-13 11:40:09,810 | INFO | kafka.coordinator | Starting new heartbeat thread
+2025-08-13 11:40:09,811 | INFO | kafka.coordinator.consumer | Revoking previously assigned partitions set() for group ticks_ingestor
+2025-08-13 11:40:09,811 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 11:40:09,812 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 11:40:09,913 | INFO | kafka.coordinator | (Re-)joining group ticks_ingestor
+2025-08-13 11:40:09,925 | INFO | kafka.coordinator | (Re-)joining group ticks_ingestor
+2025-08-13 11:40:12,951 | INFO | kafka.coordinator | Elected group leader -- performing partition assignments using range
+2025-08-13 11:40:12,992 | INFO | kafka.coordinator | Successfully joined group ticks_ingestor with generation 1
+2025-08-13 11:40:12,992 | INFO | kafka.consumer.subscription_state | Updated partition assignment: [TopicPartition(topic='price_ticks', partition=0)]
+2025-08-13 11:40:12,994 | INFO | kafka.coordinator.consumer | Setting newly assigned partitions {TopicPartition(topic='price_ticks', partition=0)} for group ticks_ingestor
+2025-08-13 11:40:13,013 | INFO | kafka.consumer.fetcher | Resetting offset for partition TopicPartition(topic='price_ticks', partition=0) to offset 3157624.
+2025-08-13 11:40:13,596 | ERROR | clickhouse_connect.driver.transform | Error serializing column `avg_timestamp` into data type `DateTime64(3, 'UTC')`
+Traceback (most recent call last):
+  File "C:\Users\erict\anaconda3\Lib\site-packages\clickhouse_connect\driver\transform.py", line 99, in chunk_gen
+    col_type.write_column(data, output, context)
+  File "C:\Users\erict\anaconda3\Lib\site-packages\clickhouse_connect\datatypes\base.py", line 214, in write_column
+    self.write_column_data(column, dest, ctx)
+  File "C:\Users\erict\anaconda3\Lib\site-packages\clickhouse_connect\datatypes\base.py", line 229, in write_column_data
+    self._write_column_binary(column, dest, ctx)
+  File "C:\Users\erict\anaconda3\Lib\site-packages\clickhouse_connect\datatypes\temporal.py", line 223, in _write_column_binary
+    column = [((int(x.timestamp()) * 1000000 + x.microsecond) * prec) // 1000000 for x in column]
+                    ^^^^^^^^^^^^^
+  File "nattype.pyx", line 54, in pandas._libs.tslibs.nattype._make_error_func.f
+ValueError: NaTType does not support timestamp
+2025-08-13 11:40:14,082 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 11:40:15,102 | INFO | kafka_consumer | Inserted 174 rows.
+2025-08-13 11:40:16,093 | INFO | kafka_consumer | Inserted 519 rows.
+2025-08-13 11:40:17,163 | INFO | kafka_consumer | Inserted 54 rows.
+2025-08-13 11:40:18,233 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 11:40:19,655 | INFO | kafka_consumer | Inserted 116 rows.
+2025-08-13 11:40:20,666 | INFO | kafka_consumer | Inserted 10 rows.
+2025-08-13 11:40:21,737 | INFO | kafka_consumer | Inserted 216 rows.
+2025-08-13 11:40:22,758 | INFO | kafka_consumer | Inserted 85 rows.
+2025-08-13 11:40:23,739 | INFO | kafka_consumer | Inserted 82 rows.
+2025-08-13 11:40:24,771 | INFO | kafka_consumer | Inserted 30 rows.
+2025-08-13 11:40:25,822 | INFO | kafka_consumer | Inserted 332 rows.
+2025-08-13 11:40:26,833 | INFO | kafka_consumer | Inserted 382 rows.
+2025-08-13 11:40:27,864 | INFO | kafka_consumer | Inserted 13 rows.
+2025-08-13 11:40:28,926 | INFO | kafka_consumer | Inserted 199 rows.
+2025-08-13 11:40:30,027 | INFO | kafka_consumer | Inserted 466 rows.
+2025-08-13 11:40:31,078 | INFO | kafka_consumer | Inserted 21 rows.
+2025-08-13 11:40:32,109 | INFO | kafka_consumer | Inserted 458 rows.
+2025-08-13 11:40:33,158 | INFO | kafka_consumer | Inserted 208 rows.
+2025-08-13 11:40:34,155 | INFO | kafka_consumer | Inserted 324 rows.
+2025-08-13 11:40:35,153 | INFO | kafka_consumer | Inserted 66 rows.
+2025-08-13 11:40:36,182 | INFO | kafka_consumer | Inserted 86 rows.
+2025-08-13 11:40:37,280 | INFO | kafka_consumer | Inserted 196 rows.
+2025-08-13 11:40:37,631 | INFO | __main__ | Stopping application via KeyboardInterrupt.
+2025-08-13 11:40:37,648 | INFO | kafka_producer | Shutting down producer.
+2025-08-13 11:40:37,713 | INFO | kafka_producer | WebSocket closed: code=None msg=None
+2025-08-13 11:40:37,719 | INFO | kafka.producer.kafka | <KafkaProducer client_id=kafka-python-producer-1 transactional_id=None>: Closing the Kafka producer with 2 secs timeout.
+2025-08-13 11:40:37,719 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 11:40:37,910 | INFO | kafka_consumer | Inserted final 242 rows.
+2025-08-13 11:40:37,910 | INFO | kafka_consumer | Closing consumer.
+2025-08-13 11:40:37,921 | INFO | kafka.coordinator | Stopping heartbeat thread
+2025-08-13 11:40:40,721 | INFO | __main__ | Application shutdown complete.
+2025-08-13 11:40:40,921 | WARNING | kafka.coordinator | Heartbeat thread did not fully terminate during close
+2025-08-13 11:40:40,922 | INFO | kafka.coordinator | Leaving consumer group (ticks_ingestor).
+2025-08-13 11:40:40,962 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 11:40:40,963 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 11:41:17,251 | INFO | __main__ | Application starting.
+2025-08-13 11:41:17,872 | INFO | kafka_producer | Producer thread started.
+2025-08-13 11:41:18,029 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 11:41:18,036 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <checking_api_versions_recv> [IPv6 ('::1', 9092, 0, 0)]>: Broker version identified as 2.6
+2025-08-13 11:41:18,036 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 11:41:18,037 | INFO | kafka.consumer.subscription_state | Updating subscribed topics to: ('price_ticks',)
+2025-08-13 11:41:18,038 | INFO | kafka_consumer | Kafka consumer started.
+2025-08-13 11:41:18,041 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 11:41:18,042 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 11:41:18,042 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 11:41:18,090 | INFO | websocket | Websocket connected
+2025-08-13 11:41:18,090 | INFO | kafka_producer | WebSocket connected.
+2025-08-13 11:41:18,090 | INFO | kafka_producer | Subscribing to BINANCE:ETHUSDT
+2025-08-13 11:41:18,148 | INFO | kafka.cluster | Coordinator for group/ticks_ingestor is BrokerMetadata(nodeId='coordinator-1', host='localhost', port=9092, rack=None)
+2025-08-13 11:41:18,148 | INFO | kafka.coordinator | Discovered coordinator coordinator-1 for group ticks_ingestor
+2025-08-13 11:41:18,148 | INFO | kafka.coordinator | Starting new heartbeat thread
+2025-08-13 11:41:18,149 | INFO | kafka.coordinator.consumer | Revoking previously assigned partitions set() for group ticks_ingestor
+2025-08-13 11:41:18,151 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 11:41:18,152 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 11:41:18,252 | INFO | kafka.coordinator | (Re-)joining group ticks_ingestor
+2025-08-13 11:41:18,258 | INFO | kafka.coordinator | (Re-)joining group ticks_ingestor
+2025-08-13 11:41:19,115 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 11:41:19,116 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 11:41:19,116 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 11:41:21,273 | INFO | kafka.coordinator | Elected group leader -- performing partition assignments using range
+2025-08-13 11:41:21,285 | INFO | kafka.coordinator | Successfully joined group ticks_ingestor with generation 3
+2025-08-13 11:41:21,286 | INFO | kafka.consumer.subscription_state | Updated partition assignment: [TopicPartition(topic='price_ticks', partition=0)]
+2025-08-13 11:41:21,286 | INFO | kafka.coordinator.consumer | Setting newly assigned partitions {TopicPartition(topic='price_ticks', partition=0)} for group ticks_ingestor
+2025-08-13 11:41:21,435 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 11:41:22,250 | INFO | kafka_consumer | Inserted 416 rows.
+2025-08-13 11:41:23,230 | INFO | kafka_consumer | Inserted 135 rows.
+2025-08-13 11:41:24,262 | INFO | kafka_consumer | Inserted 269 rows.
+2025-08-13 11:41:25,261 | INFO | kafka_consumer | Inserted 26 rows.
+2025-08-13 11:41:26,272 | INFO | kafka_consumer | Inserted 254 rows.
+2025-08-13 11:41:26,820 | INFO | __main__ | Stopping application via KeyboardInterrupt.
+2025-08-13 11:41:26,908 | INFO | kafka_producer | Shutting down producer.
+2025-08-13 11:41:26,956 | INFO | kafka_producer | WebSocket closed: code=None msg=None
+2025-08-13 11:41:26,958 | INFO | kafka.producer.kafka | <KafkaProducer client_id=kafka-python-producer-1 transactional_id=None>: Closing the Kafka producer with 2 secs timeout.
+2025-08-13 11:41:26,959 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 11:41:27,383 | INFO | kafka_consumer | Inserted final 114 rows.
+2025-08-13 11:41:27,383 | INFO | kafka_consumer | Closing consumer.
+2025-08-13 11:41:27,387 | INFO | kafka.coordinator | Stopping heartbeat thread
+2025-08-13 11:41:29,963 | INFO | __main__ | Application shutdown complete.
+2025-08-13 11:41:30,398 | WARNING | kafka.coordinator | Heartbeat thread did not fully terminate during close
+2025-08-13 11:41:30,398 | INFO | kafka.coordinator | Leaving consumer group (ticks_ingestor).
+2025-08-13 11:41:30,403 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 11:41:30,404 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 12:54:31,376 | INFO | __main__ | Application starting.
+2025-08-13 12:54:31,377 | INFO | clickhouse | Creating ticks_db table.
+2025-08-13 12:54:31,591 | INFO | clickhouse | ticks_db table created successfully.
+2025-08-13 12:54:31,592 | INFO | clickhouse | Creating websocket_diagnostics table.
+2025-08-13 12:54:31,804 | INFO | clickhouse | websocket_diagnostics table created successfully.
+2025-08-13 12:54:31,804 | INFO | clickhouse | Creating processing_diagnostics table.
+2025-08-13 12:54:31,853 | INFO | clickhouse | processing_diagnostics table created successfully.
+2025-08-13 12:54:31,853 | INFO | kafka_producer | Producer thread started.
+2025-08-13 12:54:32,035 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 12:54:32,044 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <checking_api_versions_recv> [IPv6 ('::1', 9092, 0, 0)]>: Broker version identified as 2.6
+2025-08-13 12:54:32,044 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 12:54:32,044 | INFO | kafka.consumer.subscription_state | Updating subscribed topics to: ('price_ticks',)
+2025-08-13 12:54:32,045 | INFO | kafka_consumer | Kafka consumer started.
+2025-08-13 12:54:32,048 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 12:54:32,048 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 12:54:32,048 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 12:54:32,086 | INFO | websocket | Websocket connected
+2025-08-13 12:54:32,087 | INFO | kafka_producer | WebSocket connected.
+2025-08-13 12:54:32,087 | INFO | kafka_producer | Subscribing to BINANCE:ETHUSDT
+2025-08-13 12:54:32,157 | INFO | kafka.cluster | Coordinator for group/ticks_ingestor is BrokerMetadata(nodeId='coordinator-1', host='localhost', port=9092, rack=None)
+2025-08-13 12:54:32,158 | INFO | kafka.coordinator | Discovered coordinator coordinator-1 for group ticks_ingestor
+2025-08-13 12:54:32,158 | INFO | kafka.coordinator | Starting new heartbeat thread
+2025-08-13 12:54:32,159 | INFO | kafka.coordinator.consumer | Revoking previously assigned partitions set() for group ticks_ingestor
+2025-08-13 12:54:32,159 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 12:54:32,159 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 12:54:32,261 | INFO | kafka.coordinator | (Re-)joining group ticks_ingestor
+2025-08-13 12:54:32,272 | INFO | kafka.coordinator | (Re-)joining group ticks_ingestor
+2025-08-13 12:54:33,090 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 12:54:33,090 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 12:54:33,090 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 12:54:35,293 | INFO | kafka.coordinator | Elected group leader -- performing partition assignments using range
+2025-08-13 12:54:35,303 | INFO | kafka.coordinator | Successfully joined group ticks_ingestor with generation 5
+2025-08-13 12:54:35,303 | INFO | kafka.consumer.subscription_state | Updated partition assignment: [TopicPartition(topic='price_ticks', partition=0)]
+2025-08-13 12:54:35,304 | INFO | kafka.coordinator.consumer | Setting newly assigned partitions {TopicPartition(topic='price_ticks', partition=0)} for group ticks_ingestor
+2025-08-13 12:54:35,463 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:54:36,221 | INFO | kafka_consumer | Inserted 449 rows.
+2025-08-13 12:54:37,232 | INFO | kafka_consumer | Inserted 107 rows.
+2025-08-13 12:54:37,312 | INFO | clickhouse | Inserted diagnostics for 450 messages.
+2025-08-13 12:54:38,216 | INFO | kafka_consumer | Inserted 14 rows.
+2025-08-13 12:54:39,231 | INFO | kafka_consumer | Inserted 17 rows.
+2025-08-13 12:54:40,216 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 12:54:41,212 | INFO | kafka_consumer | Inserted 64 rows.
+2025-08-13 12:54:42,210 | INFO | kafka_consumer | Inserted 12 rows.
+2025-08-13 12:54:42,601 | INFO | clickhouse | Inserted diagnostics for 112 messages.
+2025-08-13 12:54:43,209 | INFO | kafka_consumer | Inserted 20 rows.
+2025-08-13 12:54:44,220 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:54:45,219 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 12:54:46,220 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:54:47,221 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 12:54:47,873 | INFO | clickhouse | Inserted diagnostics for 37 messages.
+2025-08-13 12:54:48,243 | INFO | kafka_consumer | Inserted 52 rows.
+2025-08-13 12:54:49,225 | INFO | kafka_consumer | Inserted 92 rows.
+2025-08-13 12:54:50,227 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:54:51,220 | INFO | kafka_consumer | Inserted 40 rows.
+2025-08-13 12:54:52,272 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:54:53,135 | INFO | clickhouse | Inserted diagnostics for 187 messages.
+2025-08-13 12:54:53,275 | INFO | kafka_consumer | Inserted 119 rows.
+2025-08-13 12:54:55,281 | INFO | kafka_consumer | Inserted 103 rows.
+2025-08-13 12:54:56,318 | INFO | kafka_consumer | Inserted 32 rows.
+2025-08-13 12:54:57,301 | INFO | kafka_consumer | Inserted 49 rows.
+2025-08-13 12:54:58,313 | INFO | kafka_consumer | Inserted 119 rows.
+2025-08-13 12:54:58,473 | INFO | clickhouse | Inserted diagnostics for 303 messages.
+2025-08-13 12:54:59,317 | INFO | kafka_consumer | Inserted 91 rows.
+2025-08-13 12:55:00,301 | INFO | kafka_consumer | Inserted 126 rows.
+2025-08-13 12:55:01,295 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:55:02,319 | INFO | kafka_consumer | Inserted 16 rows.
+2025-08-13 12:55:03,324 | INFO | kafka_consumer | Inserted 170 rows.
+2025-08-13 12:55:03,745 | INFO | clickhouse | Inserted diagnostics for 405 messages.
+2025-08-13 12:55:04,307 | INFO | kafka_consumer | Inserted 10 rows.
+2025-08-13 12:55:05,324 | INFO | kafka_consumer | Inserted 79 rows.
+2025-08-13 12:55:06,341 | INFO | kafka_consumer | Inserted 61 rows.
+2025-08-13 12:55:07,340 | INFO | kafka_consumer | Inserted 151 rows.
+2025-08-13 12:55:08,339 | INFO | kafka_consumer | Inserted 194 rows.
+2025-08-13 12:55:09,034 | INFO | clickhouse | Inserted diagnostics for 495 messages.
+2025-08-13 12:55:09,342 | INFO | kafka_consumer | Inserted 68 rows.
+2025-08-13 12:55:10,316 | INFO | kafka_consumer | Inserted 76 rows.
+2025-08-13 12:55:11,323 | INFO | kafka_consumer | Inserted 9 rows.
+2025-08-13 12:55:12,330 | INFO | kafka_consumer | Inserted 17 rows.
+2025-08-13 12:55:13,410 | INFO | kafka_consumer | Inserted 9 rows.
+2025-08-13 12:55:14,316 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 12:55:14,326 | INFO | clickhouse | Inserted diagnostics for 179 messages.
+2025-08-13 12:55:15,336 | INFO | kafka_consumer | Inserted 26 rows.
+2025-08-13 12:55:16,336 | INFO | kafka_consumer | Inserted 132 rows.
+2025-08-13 12:55:17,347 | INFO | kafka_consumer | Inserted 16 rows.
+2025-08-13 12:55:19,329 | INFO | kafka_consumer | Inserted 65 rows.
+2025-08-13 12:55:19,600 | INFO | clickhouse | Inserted diagnostics for 179 messages.
+2025-08-13 12:55:20,341 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:55:21,355 | INFO | kafka_consumer | Inserted 15 rows.
+2025-08-13 12:55:22,346 | INFO | kafka_consumer | Inserted 17 rows.
+2025-08-13 12:55:23,339 | INFO | kafka_consumer | Inserted 20 rows.
+2025-08-13 12:55:24,339 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 12:55:24,874 | INFO | clickhouse | Inserted diagnostics for 62 messages.
+2025-08-13 12:55:25,355 | INFO | kafka_consumer | Inserted 16 rows.
+2025-08-13 12:55:26,378 | INFO | kafka_consumer | Inserted 21 rows.
+2025-08-13 12:55:27,393 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:55:28,387 | INFO | kafka_consumer | Inserted 99 rows.
+2025-08-13 12:55:29,381 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:55:30,144 | INFO | clickhouse | Inserted diagnostics for 141 messages.
+2025-08-13 12:55:30,405 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:55:31,419 | INFO | kafka_consumer | Inserted 82 rows.
+2025-08-13 12:55:32,433 | INFO | kafka_consumer | Inserted 60 rows.
+2025-08-13 12:55:33,437 | INFO | kafka_consumer | Inserted 171 rows.
+2025-08-13 12:55:34,421 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:55:35,375 | INFO | kafka_consumer | Inserted 21 rows.
+2025-08-13 12:55:35,415 | INFO | clickhouse | Inserted diagnostics for 316 messages.
+2025-08-13 12:55:36,430 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 12:55:37,419 | INFO | kafka_consumer | Inserted 20 rows.
+2025-08-13 12:55:38,430 | INFO | kafka_consumer | Inserted 23 rows.
+2025-08-13 12:55:39,444 | INFO | kafka_consumer | Inserted 28 rows.
+2025-08-13 12:55:40,439 | INFO | kafka_consumer | Inserted 122 rows.
+2025-08-13 12:55:40,717 | INFO | clickhouse | Inserted diagnostics for 78 messages.
+2025-08-13 12:55:41,434 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:55:42,452 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:55:43,450 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 12:55:45,458 | INFO | kafka_consumer | Inserted 116 rows.
+2025-08-13 12:55:45,988 | INFO | clickhouse | Inserted diagnostics for 127 messages.
+2025-08-13 12:55:46,539 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 12:55:47,569 | INFO | kafka_consumer | Inserted 104 rows.
+2025-08-13 12:55:48,561 | INFO | kafka_consumer | Inserted 321 rows.
+2025-08-13 12:55:49,552 | INFO | kafka_consumer | Inserted 120 rows.
+2025-08-13 12:55:50,554 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:55:51,266 | INFO | clickhouse | Inserted diagnostics for 553 messages.
+2025-08-13 12:55:52,560 | INFO | kafka_consumer | Inserted 14 rows.
+2025-08-13 12:55:53,574 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:55:54,557 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:55:55,570 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:55:56,513 | INFO | kafka_consumer | Inserted 31 rows.
+2025-08-13 12:55:56,544 | INFO | clickhouse | Inserted diagnostics for 21 messages.
+2025-08-13 12:55:57,568 | INFO | kafka_consumer | Inserted 12 rows.
+2025-08-13 12:55:58,591 | INFO | kafka_consumer | Inserted 90 rows.
+2025-08-13 12:55:59,556 | INFO | kafka_consumer | Inserted 136 rows.
+2025-08-13 12:56:00,570 | INFO | kafka_consumer | Inserted 49 rows.
+2025-08-13 12:56:01,563 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:56:01,815 | INFO | clickhouse | Inserted diagnostics for 289 messages.
+2025-08-13 12:56:02,619 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 12:56:03,623 | INFO | kafka_consumer | Inserted 9 rows.
+2025-08-13 12:56:04,617 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:56:05,631 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:56:06,625 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:56:07,096 | INFO | clickhouse | Inserted diagnostics for 23 messages.
+2025-08-13 12:56:07,633 | INFO | kafka_consumer | Inserted 55 rows.
+2025-08-13 12:56:08,624 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:56:09,647 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:56:11,677 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 12:56:12,355 | INFO | clickhouse | Inserted diagnostics for 67 messages.
+2025-08-13 12:56:13,663 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:56:14,661 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:56:15,672 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:56:16,651 | INFO | kafka_consumer | Inserted 21 rows.
+2025-08-13 12:56:17,613 | INFO | clickhouse | Inserted diagnostics for 25 messages.
+2025-08-13 12:56:17,652 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 12:56:18,673 | INFO | kafka_consumer | Inserted 39 rows.
+2025-08-13 12:56:19,686 | INFO | kafka_consumer | Inserted 14 rows.
+2025-08-13 12:56:20,677 | INFO | kafka_consumer | Inserted 14 rows.
+2025-08-13 12:56:21,690 | INFO | kafka_consumer | Inserted 12 rows.
+2025-08-13 12:56:22,684 | INFO | kafka_consumer | Inserted 62 rows.
+2025-08-13 12:56:22,884 | INFO | clickhouse | Inserted diagnostics for 86 messages.
+2025-08-13 12:56:23,686 | INFO | kafka_consumer | Inserted 62 rows.
+2025-08-13 12:56:24,681 | INFO | kafka_consumer | Inserted 17 rows.
+2025-08-13 12:56:25,685 | INFO | kafka_consumer | Inserted 9 rows.
+2025-08-13 12:56:26,690 | INFO | kafka_consumer | Inserted 59 rows.
+2025-08-13 12:56:27,694 | INFO | kafka_consumer | Inserted 17 rows.
+2025-08-13 12:56:28,176 | INFO | clickhouse | Inserted diagnostics for 164 messages.
+2025-08-13 12:56:28,689 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 12:56:29,683 | INFO | kafka_consumer | Inserted 26 rows.
+2025-08-13 12:56:30,687 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 12:56:31,681 | INFO | kafka_consumer | Inserted 16 rows.
+2025-08-13 12:56:32,143 | INFO | db_storage | Written Parquet file: parquet_data/ticks_1755107732001.parquet
+2025-08-13 12:56:32,350 | INFO | db_storage | Written Parquet file: parquet_data/ws_diagnostics_1755107732001.parquet
+2025-08-13 12:56:32,457 | INFO | db_storage | Written Parquet file: parquet_data/proc_diagnostics_1755107732001.parquet
+2025-08-13 12:56:32,685 | INFO | kafka_consumer | Inserted 85 rows.
+2025-08-13 12:56:33,288 | INFO | db_storage | Uploaded parquet_data/proc_diagnostics_1755107732001.parquet to S3 bucket tickerdata-v1-etk as archived_data/proc_diagnostics_1755107732001.parquet and removed local file.
+2025-08-13 12:56:33,475 | INFO | db_storage | Uploaded parquet_data/ticks_1755107732001.parquet to S3 bucket tickerdata-v1-etk as archived_data/ticks_1755107732001.parquet and removed local file.
+2025-08-13 12:56:33,520 | INFO | clickhouse | Inserted diagnostics for 141 messages.
+2025-08-13 12:56:33,679 | INFO | db_storage | Uploaded parquet_data/ws_diagnostics_1755107732001.parquet to S3 bucket tickerdata-v1-etk as archived_data/ws_diagnostics_1755107732001.parquet and removed local file.
+2025-08-13 12:56:33,710 | INFO | kafka_consumer | Inserted 21 rows.
+2025-08-13 12:56:34,718 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 12:56:35,703 | INFO | kafka_consumer | Inserted 20 rows.
+2025-08-13 12:56:36,699 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:56:37,715 | INFO | kafka_consumer | Inserted 62 rows.
+2025-08-13 12:56:38,665 | INFO | kafka_consumer | Inserted 14 rows.
+2025-08-13 12:56:38,820 | INFO | clickhouse | Inserted diagnostics for 111 messages.
+2025-08-13 12:56:39,709 | INFO | kafka_consumer | Inserted 34 rows.
+2025-08-13 12:56:40,719 | INFO | kafka_consumer | Inserted 126 rows.
+2025-08-13 12:56:41,707 | INFO | kafka_consumer | Inserted 62 rows.
+2025-08-13 12:56:42,703 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:56:43,754 | INFO | kafka_consumer | Inserted 33 rows.
+2025-08-13 12:56:44,114 | INFO | clickhouse | Inserted diagnostics for 256 messages.
+2025-08-13 12:56:44,772 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 12:56:45,783 | INFO | kafka_consumer | Inserted 80 rows.
+2025-08-13 12:56:46,757 | INFO | kafka_consumer | Inserted 123 rows.
+2025-08-13 12:56:47,771 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:56:48,756 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:56:49,416 | INFO | clickhouse | Inserted diagnostics for 216 messages.
+2025-08-13 12:56:49,826 | INFO | kafka_consumer | Inserted 13 rows.
+2025-08-13 12:56:50,841 | INFO | kafka_consumer | Inserted 25 rows.
+2025-08-13 12:56:51,842 | INFO | kafka_consumer | Inserted 48 rows.
+2025-08-13 12:56:52,839 | INFO | kafka_consumer | Inserted 13 rows.
+2025-08-13 12:56:53,854 | INFO | kafka_consumer | Inserted 24 rows.
+2025-08-13 12:56:54,729 | INFO | clickhouse | Inserted diagnostics for 123 messages.
+2025-08-13 12:56:54,879 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:56:55,873 | INFO | kafka_consumer | Inserted 29 rows.
+2025-08-13 12:56:56,886 | INFO | kafka_consumer | Inserted 16 rows.
+2025-08-13 12:56:57,873 | INFO | kafka_consumer | Inserted 38 rows.
+2025-08-13 12:56:58,853 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:56:59,829 | INFO | kafka_consumer | Inserted 13 rows.
+2025-08-13 12:57:00,019 | INFO | clickhouse | Inserted diagnostics for 89 messages.
+2025-08-13 12:57:00,883 | INFO | kafka_consumer | Inserted 62 rows.
+2025-08-13 12:57:01,878 | INFO | kafka_consumer | Inserted 87 rows.
+2025-08-13 12:57:02,910 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:57:03,886 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:57:04,880 | INFO | kafka_consumer | Inserted 9 rows.
+2025-08-13 12:57:05,311 | INFO | clickhouse | Inserted diagnostics for 162 messages.
+2025-08-13 12:57:05,874 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:57:06,889 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 12:57:07,883 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:57:08,884 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:57:09,901 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:57:10,622 | INFO | clickhouse | Inserted diagnostics for 18 messages.
+2025-08-13 12:57:10,888 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:57:11,880 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:57:13,898 | INFO | kafka_consumer | Inserted 58 rows.
+2025-08-13 12:57:14,905 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:57:15,925 | INFO | kafka_consumer | Inserted 23 rows.
+2025-08-13 12:57:15,936 | INFO | clickhouse | Inserted diagnostics for 67 messages.
+2025-08-13 12:57:16,886 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 12:57:17,892 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:57:18,910 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:57:19,902 | INFO | kafka_consumer | Inserted 80 rows.
+2025-08-13 12:57:20,897 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 12:57:21,224 | INFO | clickhouse | Inserted diagnostics for 118 messages.
+2025-08-13 12:57:22,911 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:57:23,922 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:57:24,927 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:57:25,920 | INFO | kafka_consumer | Inserted 78 rows.
+2025-08-13 12:57:26,523 | INFO | clickhouse | Inserted diagnostics for 87 messages.
+2025-08-13 12:57:26,928 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:57:27,927 | INFO | kafka_consumer | Inserted 59 rows.
+2025-08-13 12:57:28,930 | INFO | kafka_consumer | Inserted 77 rows.
+2025-08-13 12:57:29,948 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:57:30,941 | INFO | kafka_consumer | Inserted 79 rows.
+2025-08-13 12:57:31,812 | INFO | clickhouse | Inserted diagnostics for 222 messages.
+2025-08-13 12:57:31,944 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:57:32,949 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 12:57:33,779 | INFO | db_storage | Written Parquet file: parquet_data/ticks_1755107793683.parquet
+2025-08-13 12:57:33,912 | INFO | kafka_consumer | Inserted 21 rows.
+2025-08-13 12:57:33,939 | INFO | db_storage | Written Parquet file: parquet_data/ws_diagnostics_1755107793683.parquet
+2025-08-13 12:57:34,070 | INFO | db_storage | Written Parquet file: parquet_data/proc_diagnostics_1755107793683.parquet
+2025-08-13 12:57:34,824 | INFO | db_storage | Uploaded parquet_data/proc_diagnostics_1755107793683.parquet to S3 bucket tickerdata-v1-etk as archived_data/proc_diagnostics_1755107793683.parquet and removed local file.
+2025-08-13 12:57:34,956 | INFO | kafka_consumer | Inserted 59 rows.
+2025-08-13 12:57:34,971 | INFO | db_storage | Uploaded parquet_data/ticks_1755107793683.parquet to S3 bucket tickerdata-v1-etk as archived_data/ticks_1755107793683.parquet and removed local file.
+2025-08-13 12:57:35,113 | INFO | db_storage | Uploaded parquet_data/ws_diagnostics_1755107793683.parquet to S3 bucket tickerdata-v1-etk as archived_data/ws_diagnostics_1755107793683.parquet and removed local file.
+2025-08-13 12:57:35,939 | INFO | kafka_consumer | Inserted 43 rows.
+2025-08-13 12:57:36,936 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:57:37,107 | INFO | clickhouse | Inserted diagnostics for 135 messages.
+2025-08-13 12:57:37,980 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:57:38,950 | INFO | kafka_consumer | Inserted 38 rows.
+2025-08-13 12:57:39,944 | INFO | kafka_consumer | Inserted 10 rows.
+2025-08-13 12:57:40,955 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:57:41,969 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:57:42,407 | INFO | clickhouse | Inserted diagnostics for 55 messages.
+2025-08-13 12:57:42,939 | INFO | kafka_consumer | Inserted 159 rows.
+2025-08-13 12:57:43,953 | INFO | kafka_consumer | Inserted 10 rows.
+2025-08-13 12:57:44,980 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 12:57:45,953 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:57:46,979 | INFO | kafka_consumer | Inserted 98 rows.
+2025-08-13 12:57:47,703 | INFO | clickhouse | Inserted diagnostics for 277 messages.
+2025-08-13 12:57:47,973 | INFO | kafka_consumer | Inserted 111 rows.
+2025-08-13 12:57:48,978 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 12:57:49,957 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:57:50,980 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:57:51,972 | INFO | kafka_consumer | Inserted 106 rows.
+2025-08-13 12:57:52,978 | INFO | kafka_consumer | Inserted 170 rows.
+2025-08-13 12:57:53,025 | INFO | clickhouse | Inserted diagnostics for 229 messages.
+2025-08-13 12:57:53,988 | INFO | kafka_consumer | Inserted 94 rows.
+2025-08-13 12:57:54,996 | INFO | kafka_consumer | Inserted 429 rows.
+2025-08-13 12:57:56,005 | INFO | kafka_consumer | Inserted 472 rows.
+2025-08-13 12:57:56,988 | INFO | kafka_consumer | Inserted 153 rows.
+2025-08-13 12:57:57,984 | INFO | kafka_consumer | Inserted 322 rows.
+2025-08-13 12:57:58,387 | INFO | clickhouse | Inserted diagnostics for 1470 messages.
+2025-08-13 12:57:59,008 | INFO | kafka_consumer | Inserted 20 rows.
+2025-08-13 12:57:59,984 | INFO | kafka_consumer | Inserted 10 rows.
+2025-08-13 12:58:00,971 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:58:01,999 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:58:03,003 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:58:03,685 | INFO | clickhouse | Inserted diagnostics for 40 messages.
+2025-08-13 12:58:03,990 | INFO | kafka_consumer | Inserted 84 rows.
+2025-08-13 12:58:04,984 | INFO | kafka_consumer | Inserted 81 rows.
+2025-08-13 12:58:06,009 | INFO | kafka_consumer | Inserted 14 rows.
+2025-08-13 12:58:06,985 | INFO | kafka_consumer | Inserted 10 rows.
+2025-08-13 12:58:08,004 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:58:08,648 | INFO | kafka_consumer | Inserted 50 rows.
+2025-08-13 12:58:08,967 | INFO | clickhouse | Inserted diagnostics for 241 messages.
+2025-08-13 12:58:10,023 | INFO | kafka_consumer | Inserted 54 rows.
+2025-08-13 12:58:11,035 | INFO | kafka_consumer | Inserted 128 rows.
+2025-08-13 12:58:12,041 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:58:13,050 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 12:58:14,020 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 12:58:14,237 | INFO | clickhouse | Inserted diagnostics for 191 messages.
+2025-08-13 12:58:15,050 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 12:58:16,060 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 12:58:17,078 | INFO | kafka_consumer | Inserted 141 rows.
+2025-08-13 12:58:18,061 | INFO | kafka_consumer | Inserted 89 rows.
+2025-08-13 12:58:19,053 | INFO | kafka_consumer | Inserted 283 rows.
+2025-08-13 12:58:19,532 | INFO | clickhouse | Inserted diagnostics for 523 messages.
+2025-08-13 12:58:20,033 | INFO | kafka_consumer | Inserted 87 rows.
+2025-08-13 12:58:21,070 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 12:58:22,040 | INFO | kafka_consumer | Inserted 50 rows.
+2025-08-13 12:58:23,033 | INFO | kafka_consumer | Inserted 18 rows.
+2025-08-13 12:58:24,034 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:58:24,857 | INFO | clickhouse | Inserted diagnostics for 167 messages.
+2025-08-13 12:58:25,071 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:58:26,043 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:58:27,046 | INFO | kafka_consumer | Inserted 27 rows.
+2025-08-13 12:58:28,052 | INFO | kafka_consumer | Inserted 45 rows.
+2025-08-13 12:58:29,061 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:58:30,018 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:58:30,176 | INFO | clickhouse | Inserted diagnostics for 80 messages.
+2025-08-13 12:58:31,043 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:58:32,046 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:58:33,058 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:58:34,054 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:58:35,037 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:58:35,213 | INFO | db_storage | Written Parquet file: parquet_data/ticks_1755107855115.parquet
+2025-08-13 12:58:35,364 | INFO | db_storage | Written Parquet file: parquet_data/ws_diagnostics_1755107855115.parquet
+2025-08-13 12:58:35,460 | INFO | clickhouse | Inserted diagnostics for 15 messages.
+2025-08-13 12:58:35,497 | INFO | db_storage | Written Parquet file: parquet_data/proc_diagnostics_1755107855115.parquet
+2025-08-13 12:58:36,072 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 12:58:36,229 | INFO | db_storage | Uploaded parquet_data/proc_diagnostics_1755107855115.parquet to S3 bucket tickerdata-v1-etk as archived_data/proc_diagnostics_1755107855115.parquet and removed local file.
+2025-08-13 12:58:36,368 | INFO | db_storage | Uploaded parquet_data/ticks_1755107855115.parquet to S3 bucket tickerdata-v1-etk as archived_data/ticks_1755107855115.parquet and removed local file.
+2025-08-13 12:58:36,518 | INFO | db_storage | Uploaded parquet_data/ws_diagnostics_1755107855115.parquet to S3 bucket tickerdata-v1-etk as archived_data/ws_diagnostics_1755107855115.parquet and removed local file.
+2025-08-13 12:58:37,051 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:58:38,090 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:58:39,051 | INFO | kafka_consumer | Inserted 128 rows.
+2025-08-13 12:58:40,059 | INFO | kafka_consumer | Inserted 32 rows.
+2025-08-13 12:58:40,749 | INFO | clickhouse | Inserted diagnostics for 171 messages.
+2025-08-13 12:58:41,050 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:58:44,077 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:58:45,050 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 12:58:46,027 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:58:46,059 | INFO | clickhouse | Inserted diagnostics for 11 messages.
+2025-08-13 12:58:47,061 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 12:58:49,079 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 12:58:50,067 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:58:51,071 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:58:51,368 | INFO | clickhouse | Inserted diagnostics for 14 messages.
+2025-08-13 12:58:52,072 | INFO | kafka_consumer | Inserted 60 rows.
+2025-08-13 12:58:53,088 | INFO | kafka_consumer | Inserted 183 rows.
+2025-08-13 12:58:54,067 | INFO | kafka_consumer | Inserted 43 rows.
+2025-08-13 12:58:55,080 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 12:58:56,067 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:58:56,677 | INFO | clickhouse | Inserted diagnostics for 295 messages.
+2025-08-13 12:58:58,093 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:58:59,099 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:59:00,083 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:59:01,108 | INFO | kafka_consumer | Inserted 131 rows.
+2025-08-13 12:59:01,970 | INFO | clickhouse | Inserted diagnostics for 141 messages.
+2025-08-13 12:59:02,119 | INFO | kafka_consumer | Inserted 124 rows.
+2025-08-13 12:59:03,107 | INFO | kafka_consumer | Inserted 69 rows.
+2025-08-13 12:59:04,094 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 12:59:05,101 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 12:59:06,089 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 12:59:07,300 | INFO | clickhouse | Inserted diagnostics for 214 messages.
+2025-08-13 12:59:08,104 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 12:59:09,105 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 12:59:10,109 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:59:11,115 | INFO | kafka_consumer | Inserted 60 rows.
+2025-08-13 12:59:12,102 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 12:59:12,587 | INFO | clickhouse | Inserted diagnostics for 80 messages.
+2025-08-13 12:59:13,122 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 12:59:14,122 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:59:17,119 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:17,879 | INFO | clickhouse | Inserted diagnostics for 9 messages.
+2025-08-13 12:59:18,111 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:19,114 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:59:20,231 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 12:59:21,092 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:22,149 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:23,072 | INFO | kafka_consumer | Inserted 13 rows.
+2025-08-13 12:59:23,152 | INFO | clickhouse | Inserted diagnostics for 10 messages.
+2025-08-13 12:59:24,141 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:26,123 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:59:27,137 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:28,115 | INFO | kafka_consumer | Inserted 58 rows.
+2025-08-13 12:59:28,444 | INFO | clickhouse | Inserted diagnostics for 64 messages.
+2025-08-13 12:59:29,142 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:30,135 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:59:31,120 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:32,125 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:59:33,140 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 12:59:33,733 | INFO | clickhouse | Inserted diagnostics for 12 messages.
+2025-08-13 12:59:34,126 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:59:34,749 | INFO | kafka_consumer | Inserted 50 rows.
+2025-08-13 12:59:36,135 | INFO | kafka_consumer | Inserted 54 rows.
+2025-08-13 12:59:36,667 | INFO | db_storage | Written Parquet file: parquet_data/ticks_1755107916524.parquet
+2025-08-13 12:59:36,861 | INFO | db_storage | Written Parquet file: parquet_data/ws_diagnostics_1755107916524.parquet
+2025-08-13 12:59:36,974 | INFO | db_storage | Written Parquet file: parquet_data/proc_diagnostics_1755107916524.parquet
+2025-08-13 12:59:37,109 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:37,765 | INFO | db_storage | Uploaded parquet_data/proc_diagnostics_1755107916524.parquet to S3 bucket tickerdata-v1-etk as archived_data/proc_diagnostics_1755107916524.parquet and removed local file.
+2025-08-13 12:59:37,886 | INFO | db_storage | Uploaded parquet_data/ticks_1755107916524.parquet to S3 bucket tickerdata-v1-etk as archived_data/ticks_1755107916524.parquet and removed local file.
+2025-08-13 12:59:38,020 | INFO | db_storage | Uploaded parquet_data/ws_diagnostics_1755107916524.parquet to S3 bucket tickerdata-v1-etk as archived_data/ws_diagnostics_1755107916524.parquet and removed local file.
+2025-08-13 12:59:38,149 | INFO | kafka_consumer | Inserted 135 rows.
+2025-08-13 12:59:39,032 | INFO | clickhouse | Inserted diagnostics for 242 messages.
+2025-08-13 12:59:39,143 | INFO | kafka_consumer | Inserted 11 rows.
+2025-08-13 12:59:40,134 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:59:41,164 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:42,137 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:43,146 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 12:59:44,323 | INFO | clickhouse | Inserted diagnostics for 18 messages.
+2025-08-13 12:59:45,182 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:46,153 | INFO | kafka_consumer | Inserted 169 rows.
+2025-08-13 12:59:47,153 | INFO | kafka_consumer | Inserted 10 rows.
+2025-08-13 12:59:49,165 | INFO | kafka_consumer | Inserted 32 rows.
+2025-08-13 12:59:49,616 | INFO | clickhouse | Inserted diagnostics for 212 messages.
+2025-08-13 12:59:50,158 | INFO | kafka_consumer | Inserted 13 rows.
+2025-08-13 12:59:51,155 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:52,174 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 12:59:53,168 | INFO | kafka_consumer | Inserted 42 rows.
+2025-08-13 12:59:54,213 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 12:59:54,918 | INFO | clickhouse | Inserted diagnostics for 64 messages.
+2025-08-13 12:59:56,193 | INFO | kafka_consumer | Inserted 38 rows.
+2025-08-13 12:59:57,196 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 12:59:58,191 | INFO | kafka_consumer | Inserted 140 rows.
+2025-08-13 12:59:59,187 | INFO | kafka_consumer | Inserted 14 rows.
+2025-08-13 13:00:00,161 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:00:00,208 | INFO | clickhouse | Inserted diagnostics for 195 messages.
+2025-08-13 13:00:01,204 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:00:02,228 | INFO | kafka_consumer | Inserted 41 rows.
+2025-08-13 13:00:03,282 | INFO | kafka_consumer | Inserted 141 rows.
+2025-08-13 13:00:04,291 | INFO | kafka_consumer | Inserted 148 rows.
+2025-08-13 13:00:05,311 | INFO | kafka_consumer | Inserted 98 rows.
+2025-08-13 13:00:05,492 | INFO | clickhouse | Inserted diagnostics for 331 messages.
+2025-08-13 13:00:06,326 | INFO | kafka_consumer | Inserted 170 rows.
+2025-08-13 13:00:07,330 | INFO | kafka_consumer | Inserted 84 rows.
+2025-08-13 13:00:08,339 | INFO | kafka_consumer | Inserted 43 rows.
+2025-08-13 13:00:09,364 | INFO | kafka_consumer | Inserted 149 rows.
+2025-08-13 13:00:10,395 | INFO | kafka_consumer | Inserted 104 rows.
+2025-08-13 13:00:10,821 | INFO | clickhouse | Inserted diagnostics for 550 messages.
+2025-08-13 13:00:11,399 | INFO | kafka_consumer | Inserted 130 rows.
+2025-08-13 13:00:12,457 | INFO | kafka_consumer | Inserted 267 rows.
+2025-08-13 13:00:13,492 | INFO | kafka_consumer | Inserted 111 rows.
+2025-08-13 13:00:14,507 | INFO | kafka_consumer | Inserted 70 rows.
+2025-08-13 13:00:15,513 | INFO | kafka_consumer | Inserted 79 rows.
+2025-08-13 13:00:16,132 | INFO | clickhouse | Inserted diagnostics for 657 messages.
+2025-08-13 13:00:16,613 | INFO | kafka_consumer | Inserted 241 rows.
+2025-08-13 13:00:17,558 | INFO | kafka_consumer | Inserted 87 rows.
+2025-08-13 13:00:18,568 | INFO | kafka_consumer | Inserted 54 rows.
+2025-08-13 13:00:19,620 | INFO | kafka_consumer | Inserted 236 rows.
+2025-08-13 13:00:20,653 | INFO | kafka_consumer | Inserted 148 rows.
+2025-08-13 13:00:21,420 | INFO | clickhouse | Inserted diagnostics for 766 messages.
+2025-08-13 13:00:21,670 | INFO | kafka_consumer | Inserted 73 rows.
+2025-08-13 13:00:22,293 | INFO | kafka_consumer | Inserted 79 rows.
+2025-08-13 13:00:23,680 | INFO | kafka_consumer | Inserted 178 rows.
+2025-08-13 13:00:24,698 | INFO | kafka_consumer | Inserted 50 rows.
+2025-08-13 13:00:25,750 | INFO | kafka_consumer | Inserted 40 rows.
+2025-08-13 13:00:26,707 | INFO | clickhouse | Inserted diagnostics for 420 messages.
+2025-08-13 13:00:26,767 | INFO | kafka_consumer | Inserted 89 rows.
+2025-08-13 13:00:27,754 | INFO | kafka_consumer | Inserted 183 rows.
+2025-08-13 13:00:28,781 | INFO | kafka_consumer | Inserted 22 rows.
+2025-08-13 13:00:29,790 | INFO | kafka_consumer | Inserted 107 rows.
+2025-08-13 13:00:30,777 | INFO | kafka_consumer | Inserted 85 rows.
+2025-08-13 13:00:32,030 | INFO | kafka_consumer | Inserted 12 rows.
+2025-08-13 13:00:32,051 | INFO | clickhouse | Inserted diagnostics for 486 messages.
+2025-08-13 13:00:33,016 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 13:00:34,048 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 13:00:35,028 | INFO | kafka_consumer | Inserted 41 rows.
+2025-08-13 13:00:36,058 | INFO | kafka_consumer | Inserted 87 rows.
+2025-08-13 13:00:37,059 | INFO | kafka_consumer | Inserted 234 rows.
+2025-08-13 13:00:37,342 | INFO | clickhouse | Inserted diagnostics for 374 messages.
+2025-08-13 13:00:38,095 | INFO | kafka_consumer | Inserted 207 rows.
+2025-08-13 13:00:38,134 | INFO | db_storage | Written Parquet file: parquet_data/ticks_1755107978021.parquet
+2025-08-13 13:00:38,294 | INFO | db_storage | Written Parquet file: parquet_data/ws_diagnostics_1755107978021.parquet
+2025-08-13 13:00:38,417 | INFO | db_storage | Written Parquet file: parquet_data/proc_diagnostics_1755107978021.parquet
+2025-08-13 13:00:39,147 | INFO | kafka_consumer | Inserted 122 rows.
+2025-08-13 13:00:39,188 | INFO | db_storage | Uploaded parquet_data/proc_diagnostics_1755107978021.parquet to S3 bucket tickerdata-v1-etk as archived_data/proc_diagnostics_1755107978021.parquet and removed local file.
+2025-08-13 13:00:39,349 | INFO | db_storage | Uploaded parquet_data/ticks_1755107978021.parquet to S3 bucket tickerdata-v1-etk as archived_data/ticks_1755107978021.parquet and removed local file.
+2025-08-13 13:00:39,480 | INFO | db_storage | Uploaded parquet_data/ws_diagnostics_1755107978021.parquet to S3 bucket tickerdata-v1-etk as archived_data/ws_diagnostics_1755107978021.parquet and removed local file.
+2025-08-13 13:00:40,617 | INFO | kafka_consumer | Inserted 226 rows.
+2025-08-13 13:00:41,674 | INFO | kafka_consumer | Inserted 188 rows.
+2025-08-13 13:00:42,638 | INFO | clickhouse | Inserted diagnostics for 743 messages.
+2025-08-13 13:00:42,638 | INFO | kafka_consumer | Inserted 84 rows.
+2025-08-13 13:00:43,638 | INFO | kafka_consumer | Inserted 114 rows.
+2025-08-13 13:00:44,729 | INFO | kafka_consumer | Inserted 97 rows.
+2025-08-13 13:00:45,717 | INFO | kafka_consumer | Inserted 140 rows.
+2025-08-13 13:00:46,728 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:00:47,727 | INFO | kafka_consumer | Inserted 268 rows.
+2025-08-13 13:00:47,949 | INFO | clickhouse | Inserted diagnostics for 441 messages.
+2025-08-13 13:00:48,963 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:00:49,982 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:00:50,987 | INFO | kafka_consumer | Inserted 210 rows.
+2025-08-13 13:00:51,978 | INFO | kafka_consumer | Inserted 92 rows.
+2025-08-13 13:00:52,950 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 13:00:53,221 | INFO | clickhouse | Inserted diagnostics for 308 messages.
+2025-08-13 13:00:53,954 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:00:54,958 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 13:00:55,967 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:00:56,978 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:00:57,969 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:00:58,502 | INFO | clickhouse | Inserted diagnostics for 12 messages.
+2025-08-13 13:00:58,992 | INFO | kafka_consumer | Inserted 16 rows.
+2025-08-13 13:00:59,999 | INFO | kafka_consumer | Inserted 44 rows.
+2025-08-13 13:01:01,030 | INFO | kafka_consumer | Inserted 13 rows.
+2025-08-13 13:01:02,045 | INFO | kafka_consumer | Inserted 64 rows.
+2025-08-13 13:01:03,104 | INFO | kafka_consumer | Inserted 164 rows.
+2025-08-13 13:01:03,772 | INFO | clickhouse | Inserted diagnostics for 301 messages.
+2025-08-13 13:01:04,123 | INFO | kafka_consumer | Inserted 69 rows.
+2025-08-13 13:01:05,164 | INFO | kafka_consumer | Inserted 119 rows.
+2025-08-13 13:01:06,142 | INFO | kafka_consumer | Inserted 89 rows.
+2025-08-13 13:01:07,217 | INFO | kafka_consumer | Inserted 37 rows.
+2025-08-13 13:01:08,233 | INFO | kafka_consumer | Inserted 143 rows.
+2025-08-13 13:01:08,439 | INFO | __main__ | Stopping application via KeyboardInterrupt.
+2025-08-13 13:01:08,487 | INFO | kafka_producer | Shutting down producer.
+2025-08-13 13:01:08,528 | INFO | kafka_producer | WebSocket closed: code=None msg=None
+2025-08-13 13:01:08,530 | INFO | kafka.producer.kafka | <KafkaProducer client_id=kafka-python-producer-1 transactional_id=None>: Closing the Kafka producer with 2 secs timeout.
+2025-08-13 13:01:08,541 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:01:08,863 | INFO | kafka_consumer | Inserted final 111 rows.
+2025-08-13 13:01:08,863 | INFO | kafka_consumer | Closing consumer.
+2025-08-13 13:01:08,866 | INFO | kafka.coordinator | Stopping heartbeat thread
+2025-08-13 13:01:11,551 | INFO | __main__ | Application shutdown complete.
+2025-08-13 13:01:11,874 | WARNING | kafka.coordinator | Heartbeat thread did not fully terminate during close
+2025-08-13 13:01:11,874 | INFO | kafka.coordinator | Leaving consumer group (ticks_ingestor).
+2025-08-13 13:01:11,880 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:01:11,880 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:01:45,277 | INFO | __main__ | Application starting.
+2025-08-13 13:01:45,277 | INFO | clickhouse | Creating ticks_db table.
+2025-08-13 13:01:45,537 | INFO | clickhouse | ticks_db table created successfully.
+2025-08-13 13:01:45,538 | INFO | clickhouse | Creating websocket_diagnostics table.
+2025-08-13 13:06:17,658 | INFO | __main__ | Application starting.
+2025-08-13 13:06:17,659 | INFO | clickhouse | Creating ticks_db table.
+2025-08-13 13:06:17,918 | INFO | clickhouse | ticks_db table created successfully.
+2025-08-13 13:06:17,918 | INFO | clickhouse | Creating websocket_diagnostics table.
+2025-08-13 13:10:29,238 | INFO | __main__ | Application starting.
+2025-08-13 13:10:29,238 | INFO | clickhouse | Creating ticks_db table.
+2025-08-13 13:10:29,499 | INFO | clickhouse | ticks_db table created successfully.
+2025-08-13 13:10:29,499 | INFO | clickhouse | Creating websocket_diagnostics table.
+2025-08-13 13:10:29,882 | INFO | clickhouse | websocket_diagnostics table created successfully.
+2025-08-13 13:10:29,883 | INFO | clickhouse | Creating processing_diagnostics table.
+2025-08-13 13:10:29,960 | INFO | clickhouse | processing_diagnostics table created successfully.
+2025-08-13 13:10:29,961 | INFO | kafka_producer | Producer thread started.
+2025-08-13 13:10:30,134 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 13:10:30,139 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <checking_api_versions_recv> [IPv6 ('::1', 9092, 0, 0)]>: Broker version identified as 2.6
+2025-08-13 13:10:30,139 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 13:10:30,140 | INFO | kafka.consumer.subscription_state | Updating subscribed topics to: ('price_ticks',)
+2025-08-13 13:10:30,141 | INFO | kafka_consumer | Kafka consumer started.
+2025-08-13 13:10:30,145 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 13:10:30,145 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 13:10:30,145 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:10:30,169 | INFO | websocket | Websocket connected
+2025-08-13 13:10:30,169 | INFO | kafka_producer | WebSocket connected.
+2025-08-13 13:10:30,169 | INFO | kafka_producer | Subscribing to BINANCE:ETHUSDT
+2025-08-13 13:10:30,250 | INFO | kafka.cluster | Coordinator for group/ticks_ingestor is BrokerMetadata(nodeId='coordinator-1', host='localhost', port=9092, rack=None)
+2025-08-13 13:10:30,250 | INFO | kafka.coordinator | Discovered coordinator coordinator-1 for group ticks_ingestor
+2025-08-13 13:10:30,250 | INFO | kafka.coordinator | Starting new heartbeat thread
+2025-08-13 13:10:30,252 | INFO | kafka.coordinator.consumer | Revoking previously assigned partitions set() for group ticks_ingestor
+2025-08-13 13:10:30,252 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 13:10:30,253 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 13:10:30,353 | INFO | kafka.coordinator | (Re-)joining group ticks_ingestor
+2025-08-13 13:10:30,358 | INFO | kafka.coordinator | (Re-)joining group ticks_ingestor
+2025-08-13 13:10:31,170 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 13:10:31,170 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 13:10:31,171 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:10:33,379 | INFO | kafka.coordinator | Elected group leader -- performing partition assignments using range
+2025-08-13 13:10:33,384 | INFO | kafka.coordinator | Successfully joined group ticks_ingestor with generation 7
+2025-08-13 13:10:33,385 | INFO | kafka.consumer.subscription_state | Updated partition assignment: [TopicPartition(topic='price_ticks', partition=0)]
+2025-08-13 13:10:33,385 | INFO | kafka.coordinator.consumer | Setting newly assigned partitions {TopicPartition(topic='price_ticks', partition=0)} for group ticks_ingestor
+2025-08-13 13:10:33,490 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:10:34,325 | INFO | kafka_consumer | Inserted 18 rows.
+2025-08-13 13:10:35,300 | INFO | kafka_consumer | Inserted 117 rows.
+2025-08-13 13:10:35,390 | INFO | clickhouse | Inserted diagnostics for 19 messages.
+2025-08-13 13:10:36,324 | INFO | kafka_consumer | Inserted 210 rows.
+2025-08-13 13:10:37,310 | INFO | kafka_consumer | Inserted 97 rows.
+2025-08-13 13:10:38,320 | INFO | kafka_consumer | Inserted 15 rows.
+2025-08-13 13:10:39,341 | INFO | kafka_consumer | Inserted 55 rows.
+2025-08-13 13:10:40,402 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 13:10:40,652 | INFO | clickhouse | Inserted diagnostics for 377 messages.
+2025-08-13 13:10:41,397 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:10:43,409 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:10:44,407 | INFO | kafka_consumer | Inserted 75 rows.
+2025-08-13 13:10:45,406 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:10:45,915 | INFO | clickhouse | Inserted diagnostics for 86 messages.
+2025-08-13 13:10:47,407 | INFO | kafka_consumer | Inserted 119 rows.
+2025-08-13 13:10:48,417 | INFO | kafka_consumer | Inserted 100 rows.
+2025-08-13 13:10:49,418 | INFO | kafka_consumer | Inserted 52 rows.
+2025-08-13 13:10:50,400 | INFO | kafka_consumer | Inserted 25 rows.
+2025-08-13 13:10:51,182 | INFO | clickhouse | Inserted diagnostics for 296 messages.
+2025-08-13 13:10:51,432 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:10:52,436 | INFO | kafka_consumer | Inserted 146 rows.
+2025-08-13 13:10:53,438 | INFO | kafka_consumer | Inserted 59 rows.
+2025-08-13 13:10:54,442 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:10:55,435 | INFO | kafka_consumer | Inserted 93 rows.
+2025-08-13 13:10:56,409 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:10:56,469 | INFO | clickhouse | Inserted diagnostics for 303 messages.
+2025-08-13 13:10:57,433 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:10:58,437 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 13:10:59,452 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:11:01,449 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 13:11:01,742 | INFO | clickhouse | Inserted diagnostics for 25 messages.
+2025-08-13 13:11:02,435 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:11:03,459 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:11:04,505 | INFO | kafka_consumer | Inserted 91 rows.
+2025-08-13 13:11:05,451 | INFO | kafka_consumer | Inserted 227 rows.
+2025-08-13 13:11:06,454 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:07,017 | INFO | clickhouse | Inserted diagnostics for 325 messages.
+2025-08-13 13:11:07,116 | INFO | __main__ | Stopping application via KeyboardInterrupt.
+2025-08-13 13:11:07,209 | INFO | kafka_producer | Shutting down producer.
+2025-08-13 13:11:07,248 | INFO | kafka_producer | WebSocket closed: code=None msg=None
+2025-08-13 13:11:07,249 | INFO | kafka.producer.kafka | <KafkaProducer client_id=kafka-python-producer-1 transactional_id=None>: Closing the Kafka producer with 2 secs timeout.
+2025-08-13 13:11:07,250 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:11:07,560 | INFO | kafka_consumer | Inserted final 1 rows.
+2025-08-13 13:11:07,560 | INFO | kafka_consumer | Closing consumer.
+2025-08-13 13:11:07,563 | INFO | kafka.coordinator | Stopping heartbeat thread
+2025-08-13 13:11:10,256 | INFO | __main__ | Application shutdown complete.
+2025-08-13 13:11:10,572 | WARNING | kafka.coordinator | Heartbeat thread did not fully terminate during close
+2025-08-13 13:11:10,572 | INFO | kafka.coordinator | Leaving consumer group (ticks_ingestor).
+2025-08-13 13:11:10,578 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:11:10,578 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:11:16,300 | INFO | __main__ | Application starting.
+2025-08-13 13:11:16,303 | INFO | clickhouse | Creating ticks_db table.
+2025-08-13 13:11:16,565 | INFO | clickhouse | ticks_db table created successfully.
+2025-08-13 13:11:16,565 | INFO | clickhouse | Creating websocket_diagnostics table.
+2025-08-13 13:11:16,841 | INFO | clickhouse | websocket_diagnostics table created successfully.
+2025-08-13 13:11:16,841 | INFO | clickhouse | Creating processing_diagnostics table.
+2025-08-13 13:11:16,960 | INFO | clickhouse | processing_diagnostics table created successfully.
+2025-08-13 13:11:16,960 | INFO | kafka_producer | Producer thread started.
+2025-08-13 13:11:17,118 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 13:11:17,127 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <checking_api_versions_recv> [IPv6 ('::1', 9092, 0, 0)]>: Broker version identified as 2.6
+2025-08-13 13:11:17,127 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 13:11:17,128 | INFO | kafka.consumer.subscription_state | Updating subscribed topics to: ('price_ticks',)
+2025-08-13 13:11:17,128 | INFO | kafka_consumer | Kafka consumer started.
+2025-08-13 13:11:17,131 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 13:11:17,131 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 13:11:17,131 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:11:17,162 | INFO | websocket | Websocket connected
+2025-08-13 13:11:17,162 | INFO | kafka_producer | WebSocket connected.
+2025-08-13 13:11:17,162 | INFO | kafka_producer | Subscribing to BINANCE:ETHUSDT
+2025-08-13 13:11:17,233 | INFO | kafka.cluster | Coordinator for group/ticks_ingestor is BrokerMetadata(nodeId='coordinator-1', host='localhost', port=9092, rack=None)
+2025-08-13 13:11:17,233 | INFO | kafka.coordinator | Discovered coordinator coordinator-1 for group ticks_ingestor
+2025-08-13 13:11:17,233 | INFO | kafka.coordinator | Starting new heartbeat thread
+2025-08-13 13:11:17,235 | INFO | kafka.coordinator.consumer | Revoking previously assigned partitions set() for group ticks_ingestor
+2025-08-13 13:11:17,235 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 13:11:17,235 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 13:11:17,337 | INFO | kafka.coordinator | (Re-)joining group ticks_ingestor
+2025-08-13 13:11:17,339 | INFO | kafka.coordinator | (Re-)joining group ticks_ingestor
+2025-08-13 13:11:18,163 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 13:11:18,163 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 13:11:18,163 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:11:20,346 | INFO | kafka.coordinator | Elected group leader -- performing partition assignments using range
+2025-08-13 13:11:20,349 | INFO | kafka.coordinator | Successfully joined group ticks_ingestor with generation 9
+2025-08-13 13:11:20,350 | INFO | kafka.consumer.subscription_state | Updated partition assignment: [TopicPartition(topic='price_ticks', partition=0)]
+2025-08-13 13:11:20,350 | INFO | kafka.coordinator.consumer | Setting newly assigned partitions {TopicPartition(topic='price_ticks', partition=0)} for group ticks_ingestor
+2025-08-13 13:11:20,477 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:20,578 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:20,686 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:20,787 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:20,897 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:21,007 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:21,107 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:21,212 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:21,339 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:21,458 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:21,577 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:21,687 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:21,788 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:21,888 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:21,998 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:22,100 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:22,200 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:22,301 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:22,341 | INFO | clickhouse | Inserted diagnostics for 15 messages.
+2025-08-13 13:11:22,402 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:22,512 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:22,620 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:22,742 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:22,851 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:22,952 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:23,053 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:23,153 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:23,253 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:23,374 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:23,485 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:23,594 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:23,692 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:23,804 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:23,912 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:24,025 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:24,137 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:24,257 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:24,368 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:24,488 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:24,608 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:24,708 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:24,809 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:24,909 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:25,019 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:25,130 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:25,241 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:25,351 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:25,452 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:25,572 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:25,691 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:25,793 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:25,903 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:26,023 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:26,124 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:26,222 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:26,325 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:26,421 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:26,525 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:26,625 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:26,725 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:26,836 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:26,936 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:27,037 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:27,147 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:27,258 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:27,369 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:27,488 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:27,601 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:27,619 | INFO | clickhouse | Inserted diagnostics for 46 messages.
+2025-08-13 13:11:27,719 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:27,839 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:27,950 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:28,067 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:28,182 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:28,279 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:28,382 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:28,489 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:28,594 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:28,704 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:28,805 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:28,904 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:29,016 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:29,134 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:29,234 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:29,337 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:29,447 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:29,550 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:29,660 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:29,759 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:29,870 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:29,979 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:30,100 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:30,211 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:30,331 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:30,438 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:30,557 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:30,683 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:30,783 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:30,889 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:31,001 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:31,122 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:31,220 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:31,324 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:31,426 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:31,526 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:31,627 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:31,738 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:31,838 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:31,948 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:32,058 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:32,168 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:32,278 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:32,378 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:32,480 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:32,582 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:32,677 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:32,788 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:32,893 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:32,914 | INFO | clickhouse | Inserted diagnostics for 46 messages.
+2025-08-13 13:11:33,024 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:33,123 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:33,219 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:33,333 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:33,434 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:33,536 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:33,637 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:33,750 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:33,848 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:33,958 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:34,058 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:34,158 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:34,268 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:34,377 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:34,491 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:34,600 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:34,712 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:34,832 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:34,942 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:35,053 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:35,164 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:35,285 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:35,404 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:35,525 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:35,627 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:35,736 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:35,847 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:35,958 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:36,068 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:36,169 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:36,289 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:36,409 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:36,530 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:36,651 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:36,761 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:36,862 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:36,963 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:37,063 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:37,184 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:37,294 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:37,415 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:37,515 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:37,625 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:37,727 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:37,827 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:37,948 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:38,058 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:38,157 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:38,215 | INFO | clickhouse | Inserted diagnostics for 45 messages.
+2025-08-13 13:11:38,275 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:38,394 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:38,512 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:38,631 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:38,730 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:38,829 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:38,938 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:39,047 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:39,157 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:39,266 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:39,385 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:39,493 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:39,603 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:39,703 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:39,801 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:39,900 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:40,009 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:40,119 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:40,229 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:40,348 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:40,447 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:40,559 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:40,657 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:40,755 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:40,874 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:40,983 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:41,093 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:41,212 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:41,322 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:41,420 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:41,530 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:41,630 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:41,729 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:41,829 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:41,928 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:42,047 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:42,147 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:42,258 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:42,357 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:42,466 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:42,575 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:42,685 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:42,795 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:42,894 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:42,994 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:43,114 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:43,216 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:43,324 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:43,433 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:43,492 | INFO | clickhouse | Inserted diagnostics for 46 messages.
+2025-08-13 13:11:43,543 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:43,651 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:43,772 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:43,881 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:43,992 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:44,092 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:44,211 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:44,311 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:44,464 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:44,561 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:44,660 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:44,761 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:44,861 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:44,970 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:45,071 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:45,170 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:45,268 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:45,379 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:45,479 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:45,589 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:45,689 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:45,789 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:45,909 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:46,019 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:46,119 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:46,229 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:46,339 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:46,439 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:46,540 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:46,648 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:46,750 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:46,850 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:46,948 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:47,048 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:47,160 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:47,260 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:47,359 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:47,459 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:47,559 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:47,659 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:47,759 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:47,860 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:47,959 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:48,060 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:48,160 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:48,260 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:48,371 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:48,479 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:48,582 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:48,690 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:48,751 | INFO | clickhouse | Inserted diagnostics for 47 messages.
+2025-08-13 13:11:48,801 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:48,901 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:49,001 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:49,121 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:49,242 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:49,361 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:49,502 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:49,601 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:49,712 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:49,812 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:49,913 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:50,013 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:50,124 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:50,243 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:50,374 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:50,473 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:50,586 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:50,684 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:50,784 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:50,894 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:50,995 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:51,095 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:51,206 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:51,306 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:51,406 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:51,506 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:51,607 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:51,706 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:51,817 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:51,927 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:52,037 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:52,138 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:52,238 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:52,349 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:52,458 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:52,559 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:52,660 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:52,759 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:52,862 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:52,962 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:53,063 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:53,162 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:53,263 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:53,363 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:53,463 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:53,563 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:53,665 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:53,764 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:53,865 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:53,986 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:54,015 | INFO | clickhouse | Inserted diagnostics for 47 messages.
+2025-08-13 13:11:54,108 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:54,207 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:54,317 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:54,487 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:54,549 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:54,659 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:54,770 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:54,871 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:54,971 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:55,082 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:55,181 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:55,282 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:55,382 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:55,483 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:55,583 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:55,684 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:55,785 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:55,886 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:55,986 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:56,096 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:56,196 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:56,297 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:56,398 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:56,499 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:56,608 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:56,719 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:56,830 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:56,929 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:57,041 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:57,152 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:57,262 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:57,393 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:57,504 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:57,613 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:57,734 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:57,846 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:57,956 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:58,067 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:58,167 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:58,267 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:58,368 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:58,468 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:58,569 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:58,670 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:58,781 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:58,892 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:58,992 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:59,092 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:59,205 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:59,293 | INFO | clickhouse | Inserted diagnostics for 47 messages.
+2025-08-13 13:11:59,314 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:59,433 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:59,564 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:59,676 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:59,786 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:59,897 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:11:59,997 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:00,098 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:00,197 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:00,298 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:00,408 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:00,509 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:00,610 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:00,710 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:00,810 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:00,911 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:01,021 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:01,122 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:01,222 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:01,332 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:01,433 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:01,544 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:01,647 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:01,745 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:01,856 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:01,955 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:02,066 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:02,167 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:02,267 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:02,388 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:02,488 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:02,588 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:02,699 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:02,820 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:02,930 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:03,051 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:03,162 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:03,261 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:03,362 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:03,462 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:03,583 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:03,693 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:03,795 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:03,904 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:04,025 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:04,125 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:04,237 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:04,337 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:04,448 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:04,567 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:04,587 | INFO | clickhouse | Inserted diagnostics for 47 messages.
+2025-08-13 13:12:04,679 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:04,789 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:04,909 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:05,021 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:05,141 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:05,261 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:05,371 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:05,482 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:05,593 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:05,703 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:05,814 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:05,916 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:06,015 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:06,136 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:06,246 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:06,357 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:06,467 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:06,567 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:06,670 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:06,769 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:06,869 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:06,969 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:07,080 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:07,180 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:07,291 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:07,412 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:07,532 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:07,643 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:07,764 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:07,884 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:07,981 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:08,094 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:08,193 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:08,302 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:08,411 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:08,530 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:08,648 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:08,767 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:08,868 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:08,976 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:09,074 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:09,184 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:09,283 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:09,382 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:09,519 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:09,569 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:09,680 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:09,797 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:09,858 | INFO | clickhouse | Inserted diagnostics for 46 messages.
+2025-08-13 13:12:09,918 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:10,026 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:10,135 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:10,235 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:10,354 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:10,474 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:10,573 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:10,672 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:10,771 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:10,870 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:10,990 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:11,108 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:11,208 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:11,307 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:11,417 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:11,517 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:11,616 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:11,716 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:11,815 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:11,936 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:12,054 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:12,163 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:12,811 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:12,920 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:13,040 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:13,159 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:13,269 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:13,379 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:13,488 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:13,588 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:13,687 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:13,787 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:13,887 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:14,037 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:14,137 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:14,247 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:14,356 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:14,477 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:14,586 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:14,686 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:14,785 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:14,895 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:14,995 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:15,106 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:15,146 | INFO | clickhouse | Inserted diagnostics for 41 messages.
+2025-08-13 13:12:15,205 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:15,304 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:15,405 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:15,504 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:15,604 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:15,704 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:15,824 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:15,924 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:16,033 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:16,135 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:16,234 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:16,344 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:16,454 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:16,553 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:16,653 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:16,765 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:16,864 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:16,966 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:17,073 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:17,175 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:17,273 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:17,384 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:17,504 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:17,604 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:17,705 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:17,804 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:17,904 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:18,015 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:18,114 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:18,216 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:18,315 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:18,415 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:18,516 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:18,616 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:18,726 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:18,826 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:18,925 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:19,035 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:19,136 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:19,237 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:19,347 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:19,447 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:19,547 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:19,658 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:19,758 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:19,867 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:19,979 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:20,078 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:20,178 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:20,288 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:20,388 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:20,409 | INFO | clickhouse | Inserted diagnostics for 48 messages.
+2025-08-13 13:12:20,490 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:20,599 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:20,699 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:20,820 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:20,939 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:21,040 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:21,150 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:21,271 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:21,371 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:21,481 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:21,592 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:21,692 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:21,802 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:21,898 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:22,013 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:22,113 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:22,213 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:22,314 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:22,423 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:22,525 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:22,627 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:22,725 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:22,826 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:22,926 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:23,047 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:23,148 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:23,257 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:23,358 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:23,457 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:23,568 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:23,669 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:23,770 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:23,870 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:23,992 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:24,100 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:24,210 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:24,321 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:24,421 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:24,542 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:24,663 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:24,772 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:24,872 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:24,973 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:25,073 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:25,194 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:25,304 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:25,415 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:25,516 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:25,616 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:25,676 | INFO | clickhouse | Inserted diagnostics for 47 messages.
+2025-08-13 13:12:25,726 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:25,837 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:25,937 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:26,037 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:26,157 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:26,258 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:26,368 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:26,469 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:26,580 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:26,691 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:26,801 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:26,911 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:27,021 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:27,132 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:27,233 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:27,334 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:27,444 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:27,544 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:27,644 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:27,746 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:27,845 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:27,946 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:28,047 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:28,147 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:28,259 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:28,359 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:28,459 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:28,559 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:28,659 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:28,760 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:28,861 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:28,961 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:29,081 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:29,179 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:29,297 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:29,403 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:29,511 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:29,611 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:29,711 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:29,816 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:29,925 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:30,046 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:30,166 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:30,288 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:30,398 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:30,518 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:30,638 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:30,740 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:30,842 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:30,948 | INFO | clickhouse | Inserted diagnostics for 47 messages.
+2025-08-13 13:12:30,952 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:31,061 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:31,172 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:31,277 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:31,393 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:31,494 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:31,595 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:31,704 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:31,810 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:31,927 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:32,047 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:32,147 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:32,258 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:32,358 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:32,459 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:32,559 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:32,658 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:32,770 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:32,870 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:32,981 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:33,102 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:33,200 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:33,321 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:33,432 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:33,544 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:33,649 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:33,755 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:33,874 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:33,985 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:34,097 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:34,205 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:34,327 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:34,438 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:34,548 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:34,659 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:34,757 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:34,860 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:34,971 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:35,072 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:35,182 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:35,298 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:35,422 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:35,543 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:35,649 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:35,765 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:35,884 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:36,007 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:36,110 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:36,237 | INFO | clickhouse | Inserted diagnostics for 45 messages.
+2025-08-13 13:12:36,238 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:36,348 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:36,458 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:36,558 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:36,659 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:36,760 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:36,867 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:36,969 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:37,080 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:37,187 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:37,312 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:37,433 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:37,542 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:37,644 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:37,745 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:37,855 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:37,956 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:38,065 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:38,174 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:38,282 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:38,402 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:38,521 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:38,628 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:38,738 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:38,858 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:38,969 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:39,095 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:39,210 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:39,333 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:39,432 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:39,533 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:39,637 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:39,739 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:39,857 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:39,978 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:40,096 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:40,215 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:40,320 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:40,424 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:40,523 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:40,623 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:40,741 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:40,861 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:40,957 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:41,061 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:41,169 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:41,268 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:41,367 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:41,469 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:41,509 | INFO | clickhouse | Inserted diagnostics for 45 messages.
+2025-08-13 13:12:41,569 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:41,688 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:41,797 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:41,897 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:42,016 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:42,116 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:42,215 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:42,315 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:42,415 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:42,514 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:42,624 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:42,722 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:42,822 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:42,922 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:43,032 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:43,132 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:43,231 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:43,331 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:43,431 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:43,530 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:43,631 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:43,730 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:43,830 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:43,939 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:44,060 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:44,179 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:44,279 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:44,389 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:44,515 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:44,618 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:44,728 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:44,837 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:44,938 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:45,057 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:45,167 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:45,278 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:45,387 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:45,497 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:45,598 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:45,697 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:45,818 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:45,920 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:46,037 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:46,138 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:46,237 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:46,337 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:46,448 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:46,557 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:46,668 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:46,787 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:46,797 | INFO | clickhouse | Inserted diagnostics for 47 messages.
+2025-08-13 13:12:46,898 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:46,997 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:47,107 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:47,218 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:47,318 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:47,427 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:47,527 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:47,627 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:47,737 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:47,847 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:47,957 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:48,057 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:48,158 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:48,257 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:48,357 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:48,477 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:48,577 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:48,689 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:48,788 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:48,910 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:49,009 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:49,107 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:49,208 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:49,307 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:49,419 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:49,520 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:49,628 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:49,730 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:49,851 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:49,951 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:50,071 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:50,169 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:50,281 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:50,392 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:50,502 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:50,602 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:50,702 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:50,805 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:50,902 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:51,013 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:51,111 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:51,212 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:51,312 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:51,424 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:51,534 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:51,634 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:51,734 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:51,844 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:51,946 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:52,056 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:52,056 | INFO | clickhouse | Inserted diagnostics for 48 messages.
+2025-08-13 13:12:52,155 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:52,265 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:52,377 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:52,487 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:52,587 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:52,687 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:52,787 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:52,898 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:52,998 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:53,098 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:53,199 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:53,299 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:53,399 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:53,520 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:53,620 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:53,720 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:53,831 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:53,931 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:54,032 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:54,034 | INFO | __main__ | Stopping application via KeyboardInterrupt.
+2025-08-13 13:12:54,126 | INFO | kafka_producer | Shutting down producer.
+2025-08-13 13:12:54,142 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:54,163 | INFO | kafka_producer | WebSocket closed: code=None msg=None
+2025-08-13 13:12:54,165 | INFO | kafka.producer.kafka | <KafkaProducer client_id=kafka-python-producer-1 transactional_id=None>: Closing the Kafka producer with 2 secs timeout.
+2025-08-13 13:12:54,166 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:12:54,251 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:54,353 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:54,463 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:54,573 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:54,683 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:54,784 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:54,884 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:54,984 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:55,106 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:55,215 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:55,327 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:55,427 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:55,527 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:55,627 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:55,728 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:55,828 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:55,938 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:56,048 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:56,150 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:56,270 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:56,380 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:56,491 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:56,601 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:56,711 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:56,833 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:56,932 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:57,033 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:57,143 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:57,172 | INFO | __main__ | Application shutdown complete.
+2025-08-13 13:12:57,254 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:57,354 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:57,464 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:57,565 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:57,666 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:57,766 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:57,867 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:57,976 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:58,076 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:58,177 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:58,278 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:58,388 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:58,489 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:58,599 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:58,719 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:58,841 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:58,941 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:59,051 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:59,161 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:59,272 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:59,392 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:59,513 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:59,634 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:59,744 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:59,855 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:12:59,975 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:00,076 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:00,175 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:00,277 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:00,378 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:00,487 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:00,590 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:00,697 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:00,799 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:00,919 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:01,020 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:01,131 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:01,241 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:01,361 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:01,472 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:01,582 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:01,703 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:01,824 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:01,924 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:02,025 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:02,135 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:02,235 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:02,336 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:02,437 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:02,546 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:02,658 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:02,768 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:02,879 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:02,980 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:03,089 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:03,200 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:03,300 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:03,411 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:03,531 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:03,643 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:03,752 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:03,865 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:03,963 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:04,074 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:04,195 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:04,295 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:04,416 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:04,537 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:04,648 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:04,748 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:04,849 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:04,958 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:05,079 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:05,190 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:05,310 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:05,421 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:05,542 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:05,662 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:05,782 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:05,894 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:05,993 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:06,104 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:06,205 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:06,305 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:06,405 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:06,505 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:06,606 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:06,706 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:06,807 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:06,908 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:07,019 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:07,133 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:07,230 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:07,350 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:07,461 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:13:07,461 | INFO | kafka_consumer | Closing consumer.
+2025-08-13 13:13:07,464 | INFO | kafka.coordinator | Stopping heartbeat thread
+2025-08-13 13:13:10,478 | WARNING | kafka.coordinator | Heartbeat thread did not fully terminate during close
+2025-08-13 13:13:10,478 | INFO | kafka.coordinator | Leaving consumer group (ticks_ingestor).
+2025-08-13 13:13:10,482 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:13:10,482 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:14:38,192 | INFO | __main__ | Application starting.
+2025-08-13 13:14:38,192 | INFO | clickhouse | Creating ticks_db table.
+2025-08-13 13:14:38,433 | INFO | clickhouse | ticks_db table created successfully.
+2025-08-13 13:14:38,433 | INFO | clickhouse | Creating websocket_diagnostics table.
+2025-08-13 13:14:38,680 | INFO | clickhouse | websocket_diagnostics table created successfully.
+2025-08-13 13:14:38,687 | INFO | clickhouse | Creating processing_diagnostics table.
+2025-08-13 13:14:38,806 | INFO | clickhouse | processing_diagnostics table created successfully.
+2025-08-13 13:14:38,807 | INFO | kafka_producer | Producer thread started.
+2025-08-13 13:14:38,974 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 13:14:38,979 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <checking_api_versions_recv> [IPv6 ('::1', 9092, 0, 0)]>: Broker version identified as 2.6
+2025-08-13 13:14:38,979 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 13:14:38,980 | INFO | kafka.consumer.subscription_state | Updating subscribed topics to: ('price_ticks',)
+2025-08-13 13:14:38,980 | INFO | kafka_consumer | Kafka consumer started.
+2025-08-13 13:14:38,983 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 13:14:38,983 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 13:14:38,983 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:14:39,082 | INFO | websocket | Websocket connected
+2025-08-13 13:14:39,083 | INFO | kafka_producer | WebSocket connected.
+2025-08-13 13:14:39,083 | INFO | kafka_producer | Subscribing to BINANCE:ETHUSDT
+2025-08-13 13:14:39,086 | INFO | kafka.cluster | Coordinator for group/ticks_ingestor is BrokerMetadata(nodeId='coordinator-1', host='localhost', port=9092, rack=None)
+2025-08-13 13:14:39,086 | INFO | kafka.coordinator | Discovered coordinator coordinator-1 for group ticks_ingestor
+2025-08-13 13:14:39,086 | INFO | kafka.coordinator | Starting new heartbeat thread
+2025-08-13 13:14:39,087 | INFO | kafka.coordinator.consumer | Revoking previously assigned partitions set() for group ticks_ingestor
+2025-08-13 13:14:39,087 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 13:14:39,089 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 13:14:39,189 | INFO | kafka.coordinator | (Re-)joining group ticks_ingestor
+2025-08-13 13:14:39,192 | INFO | kafka.coordinator | (Re-)joining group ticks_ingestor
+2025-08-13 13:14:40,081 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connecting> [IPv6 ('::1', 9092, 0, 0)]>: connecting to localhost:9092 [('::1', 9092, 0, 0) IPv6]
+2025-08-13 13:14:40,081 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Connection complete.
+2025-08-13 13:14:40,087 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=bootstrap-0 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:14:42,176 | INFO | kafka.coordinator | Elected group leader -- performing partition assignments using range
+2025-08-13 13:14:42,180 | INFO | kafka.coordinator | Successfully joined group ticks_ingestor with generation 11
+2025-08-13 13:14:42,180 | INFO | kafka.consumer.subscription_state | Updated partition assignment: [TopicPartition(topic='price_ticks', partition=0)]
+2025-08-13 13:14:42,180 | INFO | kafka.coordinator.consumer | Setting newly assigned partitions {TopicPartition(topic='price_ticks', partition=0)} for group ticks_ingestor
+2025-08-13 13:14:42,322 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:14:42,423 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:42,561 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:42,687 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:42,828 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:42,978 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:43,079 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:43,230 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:43,327 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:43,469 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:43,617 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:43,718 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:43,867 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:43,987 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:44,157 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:44,287 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:14:44,370 | INFO | clickhouse | Inserted diagnostics for 3601 messages.
+2025-08-13 13:14:45,121 | ERROR | kafka.producer.sender | <Sender client_id=kafka-python-producer-1 transactional_id=None>: Uncaught error in kafka producer I/O thread
+Traceback (most recent call last):
+  File "C:\Users\erict\anaconda3\Lib\site-packages\kafka\producer\sender.py", line 110, in run
+    self.run_once()
+  File "C:\Users\erict\anaconda3\Lib\site-packages\kafka\producer\sender.py", line 171, in run_once
+    poll_timeout_ms = self._send_producer_data()
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erict\anaconda3\Lib\site-packages\kafka\producer\sender.py", line 204, in _send_producer_data
+    heapq.heappush(queue, item)
+TypeError: '<' not supported between instances of 'ProducerBatch' and 'ProducerBatch'
+2025-08-13 13:14:45,242 | INFO | kafka_consumer | Inserted 11 rows.
+2025-08-13 13:14:46,241 | INFO | kafka_consumer | Inserted 90 rows.
+2025-08-13 13:14:47,231 | INFO | kafka_consumer | Inserted 54 rows.
+2025-08-13 13:14:48,238 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 13:14:49,247 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 13:14:49,647 | INFO | clickhouse | Inserted diagnostics for 167 messages.
+2025-08-13 13:14:50,217 | INFO | kafka_consumer | Inserted 49 rows.
+2025-08-13 13:14:51,229 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:14:52,258 | INFO | kafka_consumer | Inserted 86 rows.
+2025-08-13 13:14:53,237 | INFO | kafka_consumer | Inserted 136 rows.
+2025-08-13 13:14:54,240 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:14:54,912 | INFO | clickhouse | Inserted diagnostics for 280 messages.
+2025-08-13 13:14:55,228 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:14:56,247 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:14:57,241 | INFO | kafka_consumer | Inserted 45 rows.
+2025-08-13 13:14:58,237 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 13:14:59,259 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:15:00,192 | INFO | clickhouse | Inserted diagnostics for 57 messages.
+2025-08-13 13:15:00,244 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:15:01,257 | INFO | kafka_consumer | Inserted 45 rows.
+2025-08-13 13:15:02,268 | INFO | kafka_consumer | Inserted 29 rows.
+2025-08-13 13:15:03,249 | INFO | kafka_consumer | Inserted 122 rows.
+2025-08-13 13:15:04,294 | INFO | kafka_consumer | Inserted 40 rows.
+2025-08-13 13:15:05,289 | INFO | kafka_consumer | Inserted 160 rows.
+2025-08-13 13:15:05,490 | INFO | clickhouse | Inserted diagnostics for 239 messages.
+2025-08-13 13:15:06,299 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:15:07,318 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 13:15:08,307 | INFO | kafka_consumer | Inserted 53 rows.
+2025-08-13 13:15:09,319 | INFO | kafka_consumer | Inserted 32 rows.
+2025-08-13 13:15:10,317 | INFO | kafka_consumer | Inserted 97 rows.
+2025-08-13 13:15:10,748 | INFO | clickhouse | Inserted diagnostics for 192 messages.
+2025-08-13 13:15:11,345 | INFO | kafka_consumer | Inserted 12 rows.
+2025-08-13 13:15:12,348 | INFO | kafka_consumer | Inserted 244 rows.
+2025-08-13 13:15:13,377 | INFO | kafka_consumer | Inserted 155 rows.
+2025-08-13 13:15:14,378 | INFO | kafka_consumer | Inserted 16 rows.
+2025-08-13 13:15:15,417 | INFO | kafka_consumer | Inserted 153 rows.
+2025-08-13 13:15:16,033 | INFO | clickhouse | Inserted diagnostics for 580 messages.
+2025-08-13 13:15:16,417 | INFO | kafka_consumer | Inserted 194 rows.
+2025-08-13 13:15:17,410 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 13:15:18,419 | INFO | kafka_consumer | Inserted 9 rows.
+2025-08-13 13:15:19,433 | INFO | kafka_consumer | Inserted 11 rows.
+2025-08-13 13:15:20,477 | INFO | kafka_consumer | Inserted 89 rows.
+2025-08-13 13:15:21,308 | INFO | clickhouse | Inserted diagnostics for 310 messages.
+2025-08-13 13:15:21,530 | INFO | kafka_consumer | Inserted 136 rows.
+2025-08-13 13:15:22,452 | INFO | kafka_consumer | Inserted 100 rows.
+2025-08-13 13:15:23,465 | INFO | kafka_consumer | Inserted 24 rows.
+2025-08-13 13:15:24,477 | INFO | kafka_consumer | Inserted 15 rows.
+2025-08-13 13:15:25,479 | INFO | kafka_consumer | Inserted 99 rows.
+2025-08-13 13:15:26,497 | INFO | kafka_consumer | Inserted 32 rows.
+2025-08-13 13:15:26,577 | INFO | clickhouse | Inserted diagnostics for 374 messages.
+2025-08-13 13:15:27,472 | INFO | kafka_consumer | Inserted 181 rows.
+2025-08-13 13:15:28,496 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:15:29,549 | INFO | kafka_consumer | Inserted 57 rows.
+2025-08-13 13:15:29,681 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:15:30,605 | INFO | kafka_consumer | Inserted 96 rows.
+2025-08-13 13:15:31,579 | INFO | kafka_consumer | Inserted 119 rows.
+2025-08-13 13:15:31,860 | INFO | clickhouse | Inserted diagnostics for 759 messages.
+2025-08-13 13:15:32,628 | INFO | kafka_consumer | Inserted 204 rows.
+2025-08-13 13:15:33,619 | INFO | kafka_consumer | Inserted 60 rows.
+2025-08-13 13:15:34,614 | INFO | kafka_consumer | Inserted 71 rows.
+2025-08-13 13:15:35,639 | INFO | kafka_consumer | Inserted 44 rows.
+2025-08-13 13:15:36,643 | INFO | kafka_consumer | Inserted 173 rows.
+2025-08-13 13:15:37,137 | INFO | clickhouse | Inserted diagnostics for 552 messages.
+2025-08-13 13:15:37,639 | INFO | kafka_consumer | Inserted 53 rows.
+2025-08-13 13:15:38,645 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:15:39,655 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:15:40,647 | INFO | kafka_consumer | Inserted 124 rows.
+2025-08-13 13:15:41,690 | INFO | kafka_consumer | Inserted 51 rows.
+2025-08-13 13:15:42,409 | INFO | clickhouse | Inserted diagnostics for 240 messages.
+2025-08-13 13:15:42,677 | INFO | kafka_consumer | Inserted 226 rows.
+2025-08-13 13:15:43,677 | INFO | kafka_consumer | Inserted 33 rows.
+2025-08-13 13:15:44,702 | INFO | kafka_consumer | Inserted 89 rows.
+2025-08-13 13:15:45,680 | INFO | kafka_consumer | Inserted 162 rows.
+2025-08-13 13:15:46,681 | INFO | kafka_consumer | Inserted 44 rows.
+2025-08-13 13:15:47,642 | INFO | kafka_consumer | Inserted 18 rows.
+2025-08-13 13:15:47,703 | INFO | clickhouse | Inserted diagnostics for 554 messages.
+2025-08-13 13:15:48,681 | INFO | kafka_consumer | Inserted 23 rows.
+2025-08-13 13:15:49,687 | INFO | kafka_consumer | Inserted 111 rows.
+2025-08-13 13:15:50,699 | INFO | kafka_consumer | Inserted 37 rows.
+2025-08-13 13:15:51,699 | INFO | kafka_consumer | Inserted 34 rows.
+2025-08-13 13:15:52,695 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:15:52,967 | INFO | clickhouse | Inserted diagnostics for 205 messages.
+2025-08-13 13:15:53,710 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:15:54,714 | INFO | kafka_consumer | Inserted 121 rows.
+2025-08-13 13:15:55,721 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:15:56,711 | INFO | kafka_consumer | Inserted 10 rows.
+2025-08-13 13:15:57,708 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:15:58,242 | INFO | clickhouse | Inserted diagnostics for 144 messages.
+2025-08-13 13:15:58,709 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:15:59,709 | INFO | kafka_consumer | Inserted 9 rows.
+2025-08-13 13:16:00,712 | INFO | kafka_consumer | Inserted 109 rows.
+2025-08-13 13:16:01,719 | INFO | kafka_consumer | Inserted 99 rows.
+2025-08-13 13:16:02,735 | INFO | kafka_consumer | Inserted 107 rows.
+2025-08-13 13:16:03,518 | INFO | clickhouse | Inserted diagnostics for 328 messages.
+2025-08-13 13:16:03,739 | INFO | kafka_consumer | Inserted 203 rows.
+2025-08-13 13:16:04,708 | INFO | kafka_consumer | Inserted 82 rows.
+2025-08-13 13:16:05,760 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 13:16:06,767 | INFO | kafka_consumer | Inserted 80 rows.
+2025-08-13 13:16:07,780 | INFO | kafka_consumer | Inserted 31 rows.
+2025-08-13 13:16:08,725 | INFO | kafka_consumer | Inserted 108 rows.
+2025-08-13 13:16:08,795 | INFO | clickhouse | Inserted diagnostics for 404 messages.
+2025-08-13 13:16:09,799 | INFO | kafka_consumer | Inserted 33 rows.
+2025-08-13 13:16:10,798 | INFO | kafka_consumer | Inserted 11 rows.
+2025-08-13 13:16:11,791 | INFO | kafka_consumer | Inserted 34 rows.
+2025-08-13 13:16:12,787 | INFO | kafka_consumer | Inserted 64 rows.
+2025-08-13 13:16:13,813 | INFO | kafka_consumer | Inserted 128 rows.
+2025-08-13 13:16:14,080 | INFO | clickhouse | Inserted diagnostics for 142 messages.
+2025-08-13 13:16:14,804 | INFO | kafka_consumer | Inserted 57 rows.
+2025-08-13 13:16:15,791 | INFO | kafka_consumer | Inserted 30 rows.
+2025-08-13 13:16:16,808 | INFO | kafka_consumer | Inserted 10 rows.
+2025-08-13 13:16:17,821 | INFO | kafka_consumer | Inserted 56 rows.
+2025-08-13 13:16:18,819 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:16:19,374 | INFO | clickhouse | Inserted diagnostics for 157 messages.
+2025-08-13 13:16:19,832 | INFO | kafka_consumer | Inserted 11 rows.
+2025-08-13 13:16:20,847 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:16:22,852 | INFO | kafka_consumer | Inserted 29 rows.
+2025-08-13 13:16:23,866 | INFO | kafka_consumer | Inserted 123 rows.
+2025-08-13 13:16:24,648 | INFO | clickhouse | Inserted diagnostics for 165 messages.
+2025-08-13 13:16:24,840 | INFO | kafka_consumer | Inserted 132 rows.
+2025-08-13 13:16:25,849 | INFO | kafka_consumer | Inserted 30 rows.
+2025-08-13 13:16:26,869 | INFO | kafka_consumer | Inserted 199 rows.
+2025-08-13 13:16:27,864 | INFO | kafka_consumer | Inserted 128 rows.
+2025-08-13 13:16:28,971 | INFO | kafka_consumer | Inserted 34 rows.
+2025-08-13 13:16:29,944 | INFO | clickhouse | Inserted diagnostics for 523 messages.
+2025-08-13 13:16:29,945 | INFO | kafka_consumer | Inserted 10 rows.
+2025-08-13 13:16:31,160 | INFO | kafka_consumer | Inserted 81 rows.
+2025-08-13 13:16:32,157 | INFO | kafka_consumer | Inserted 30 rows.
+2025-08-13 13:16:33,181 | INFO | kafka_consumer | Inserted 50 rows.
+2025-08-13 13:16:34,157 | INFO | kafka_consumer | Inserted 80 rows.
+2025-08-13 13:16:35,173 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:16:35,202 | INFO | clickhouse | Inserted diagnostics for 241 messages.
+2025-08-13 13:16:36,167 | INFO | kafka_consumer | Inserted 90 rows.
+2025-08-13 13:16:37,172 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:16:38,163 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:16:39,183 | INFO | db_storage | Written Parquet file: parquet_data/ticks_1755108938975.parquet
+2025-08-13 13:16:39,338 | INFO | db_storage | Written Parquet file: parquet_data/ws_diagnostics_1755108938975.parquet
+2025-08-13 13:16:39,434 | INFO | db_storage | Written Parquet file: parquet_data/proc_diagnostics_1755108938975.parquet
+2025-08-13 13:16:40,178 | INFO | db_storage | Uploaded parquet_data/proc_diagnostics_1755108938975.parquet to S3 bucket tickerdata-v1-etk as archived_data/proc_diagnostics_1755108938975.parquet and removed local file.
+2025-08-13 13:16:40,190 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:16:40,329 | INFO | db_storage | Uploaded parquet_data/ticks_1755108938975.parquet to S3 bucket tickerdata-v1-etk as archived_data/ticks_1755108938975.parquet and removed local file.
+2025-08-13 13:16:40,482 | INFO | db_storage | Uploaded parquet_data/ws_diagnostics_1755108938975.parquet to S3 bucket tickerdata-v1-etk as archived_data/ws_diagnostics_1755108938975.parquet and removed local file.
+2025-08-13 13:16:40,517 | INFO | clickhouse | Inserted diagnostics for 95 messages.
+2025-08-13 13:16:41,212 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 13:16:42,219 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 13:16:43,189 | INFO | kafka_consumer | Inserted 82 rows.
+2025-08-13 13:16:44,192 | INFO | kafka_consumer | Inserted 136 rows.
+2025-08-13 13:16:45,109 | WARNING | kafka.producer.record_accumulator | Failed to produce messages to topic-partition TopicPartition(topic='price_ticks', partition=0) with base offset -1: KafkaTimeoutError: Expiring 21 record(s) for TopicPartition(topic='price_ticks', partition=0): 120000 ms has passed since batch creation
+2025-08-13 13:16:45,228 | INFO | kafka_consumer | Inserted 59 rows.
+2025-08-13 13:16:45,818 | INFO | clickhouse | Inserted diagnostics for 287 messages.
+2025-08-13 13:16:46,219 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:16:47,219 | INFO | kafka_consumer | Inserted 34 rows.
+2025-08-13 13:16:48,241 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:16:49,223 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:16:50,327 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:16:51,056 | INFO | clickhouse | Inserted diagnostics for 45 messages.
+2025-08-13 13:16:51,249 | INFO | kafka_consumer | Inserted 14 rows.
+2025-08-13 13:16:52,257 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:16:53,239 | INFO | kafka_consumer | Inserted 47 rows.
+2025-08-13 13:16:53,847 | INFO | kafka_consumer | Inserted 50 rows.
+2025-08-13 13:16:55,268 | INFO | kafka_consumer | Inserted 96 rows.
+2025-08-13 13:16:56,202 | INFO | kafka_consumer | Inserted 38 rows.
+2025-08-13 13:16:56,340 | INFO | clickhouse | Inserted diagnostics for 209 messages.
+2025-08-13 13:16:57,274 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:16:58,255 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 13:16:59,253 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:17:00,252 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 13:17:01,270 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:17:01,419 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:17:01,636 | INFO | clickhouse | Inserted diagnostics for 22 messages.
+2025-08-13 13:17:02,234 | ERROR | kafka.producer.sender | <Sender client_id=kafka-python-producer-1 transactional_id=None>: Uncaught error in kafka producer I/O thread
+Traceback (most recent call last):
+  File "C:\Users\erict\anaconda3\Lib\site-packages\kafka\producer\sender.py", line 110, in run
+    self.run_once()
+  File "C:\Users\erict\anaconda3\Lib\site-packages\kafka\producer\sender.py", line 171, in run_once
+    poll_timeout_ms = self._send_producer_data()
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\erict\anaconda3\Lib\site-packages\kafka\producer\sender.py", line 204, in _send_producer_data
+    heapq.heappush(queue, item)
+TypeError: '<' not supported between instances of 'ProducerBatch' and 'ProducerBatch'
+2025-08-13 13:17:02,289 | INFO | kafka_consumer | Inserted 11 rows.
+2025-08-13 13:17:02,771 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:17:04,280 | INFO | kafka_consumer | Inserted 34 rows.
+2025-08-13 13:17:05,297 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:17:06,313 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 13:17:06,944 | INFO | clickhouse | Inserted diagnostics for 356 messages.
+2025-08-13 13:17:07,344 | INFO | kafka_consumer | Inserted 30 rows.
+2025-08-13 13:17:08,317 | INFO | kafka_consumer | Inserted 93 rows.
+2025-08-13 13:17:09,349 | INFO | kafka_consumer | Inserted 234 rows.
+2025-08-13 13:17:10,327 | INFO | kafka_consumer | Inserted 27 rows.
+2025-08-13 13:17:11,353 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:17:12,248 | INFO | clickhouse | Inserted diagnostics for 387 messages.
+2025-08-13 13:17:12,308 | INFO | kafka_consumer | Inserted 135 rows.
+2025-08-13 13:17:13,336 | INFO | kafka_consumer | Inserted 45 rows.
+2025-08-13 13:17:14,351 | INFO | kafka_consumer | Inserted 202 rows.
+2025-08-13 13:17:15,369 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:17:16,367 | INFO | kafka_consumer | Inserted 54 rows.
+2025-08-13 13:17:17,368 | INFO | kafka_consumer | Inserted 129 rows.
+2025-08-13 13:17:17,545 | INFO | clickhouse | Inserted diagnostics for 440 messages.
+2025-08-13 13:17:18,369 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 13:17:19,379 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:17:20,399 | INFO | kafka_consumer | Inserted 35 rows.
+2025-08-13 13:17:21,445 | INFO | kafka_consumer | Inserted 65 rows.
+2025-08-13 13:17:22,438 | INFO | kafka_consumer | Inserted 93 rows.
+2025-08-13 13:17:22,844 | INFO | clickhouse | Inserted diagnostics for 201 messages.
+2025-08-13 13:17:23,535 | INFO | kafka_consumer | Inserted 99 rows.
+2025-08-13 13:17:24,573 | INFO | kafka_consumer | Inserted 244 rows.
+2025-08-13 13:17:25,508 | INFO | kafka_consumer | Inserted 137 rows.
+2025-08-13 13:17:26,567 | INFO | kafka_consumer | Inserted 153 rows.
+2025-08-13 13:17:27,631 | INFO | kafka_consumer | Inserted 17 rows.
+2025-08-13 13:17:28,169 | INFO | clickhouse | Inserted diagnostics for 650 messages.
+2025-08-13 13:17:28,569 | INFO | kafka_consumer | Inserted 137 rows.
+2025-08-13 13:17:29,588 | INFO | kafka_consumer | Inserted 53 rows.
+2025-08-13 13:17:30,590 | INFO | kafka_consumer | Inserted 64 rows.
+2025-08-13 13:17:31,597 | INFO | kafka_consumer | Inserted 133 rows.
+2025-08-13 13:17:32,580 | INFO | kafka_consumer | Inserted 41 rows.
+2025-08-13 13:17:33,455 | INFO | clickhouse | Inserted diagnostics for 428 messages.
+2025-08-13 13:17:33,585 | INFO | kafka_consumer | Inserted 69 rows.
+2025-08-13 13:17:34,589 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:17:35,594 | INFO | kafka_consumer | Inserted 41 rows.
+2025-08-13 13:17:36,589 | INFO | kafka_consumer | Inserted 138 rows.
+2025-08-13 13:17:37,573 | INFO | kafka_consumer | Inserted 42 rows.
+2025-08-13 13:17:38,570 | INFO | kafka_consumer | Inserted 21 rows.
+2025-08-13 13:17:38,759 | INFO | clickhouse | Inserted diagnostics for 292 messages.
+2025-08-13 13:17:39,603 | INFO | kafka_consumer | Inserted 53 rows.
+2025-08-13 13:17:40,608 | INFO | kafka_consumer | Inserted 113 rows.
+2025-08-13 13:17:40,645 | INFO | db_storage | Written Parquet file: parquet_data/ticks_1755109000486.parquet
+2025-08-13 13:17:40,801 | INFO | db_storage | Written Parquet file: parquet_data/ws_diagnostics_1755109000486.parquet
+2025-08-13 13:17:40,913 | INFO | db_storage | Written Parquet file: parquet_data/proc_diagnostics_1755109000486.parquet
+2025-08-13 13:17:41,589 | INFO | kafka_consumer | Inserted 9 rows.
+2025-08-13 13:17:41,669 | INFO | db_storage | Uploaded parquet_data/proc_diagnostics_1755109000486.parquet to S3 bucket tickerdata-v1-etk as archived_data/proc_diagnostics_1755109000486.parquet and removed local file.
+2025-08-13 13:17:41,824 | INFO | db_storage | Uploaded parquet_data/ticks_1755109000486.parquet to S3 bucket tickerdata-v1-etk as archived_data/ticks_1755109000486.parquet and removed local file.
+2025-08-13 13:17:41,951 | INFO | db_storage | Uploaded parquet_data/ws_diagnostics_1755109000486.parquet to S3 bucket tickerdata-v1-etk as archived_data/ws_diagnostics_1755109000486.parquet and removed local file.
+2025-08-13 13:17:42,601 | INFO | kafka_consumer | Inserted 37 rows.
+2025-08-13 13:17:43,597 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:17:44,048 | INFO | clickhouse | Inserted diagnostics for 213 messages.
+2025-08-13 13:17:44,727 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:17:45,737 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:17:46,737 | INFO | kafka_consumer | Inserted 116 rows.
+2025-08-13 13:17:47,718 | INFO | kafka_consumer | Inserted 274 rows.
+2025-08-13 13:17:48,718 | INFO | kafka_consumer | Inserted 34 rows.
+2025-08-13 13:17:49,331 | INFO | clickhouse | Inserted diagnostics for 434 messages.
+2025-08-13 13:17:49,720 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:17:50,703 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:17:51,707 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:17:52,729 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 13:17:53,745 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:17:54,655 | INFO | clickhouse | Inserted diagnostics for 21 messages.
+2025-08-13 13:17:54,707 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:17:55,773 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:17:56,762 | INFO | kafka_consumer | Inserted 33 rows.
+2025-08-13 13:17:57,755 | INFO | kafka_consumer | Inserted 106 rows.
+2025-08-13 13:17:58,744 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:17:59,737 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 13:17:59,938 | INFO | clickhouse | Inserted diagnostics for 149 messages.
+2025-08-13 13:18:00,744 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:18:01,747 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 13:18:02,744 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:18:03,740 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:18:04,755 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 13:18:05,259 | INFO | clickhouse | Inserted diagnostics for 22 messages.
+2025-08-13 13:18:05,757 | INFO | kafka_consumer | Inserted 12 rows.
+2025-08-13 13:18:06,759 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:18:07,807 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 13:18:08,823 | INFO | kafka_consumer | Inserted 117 rows.
+2025-08-13 13:18:09,777 | INFO | kafka_consumer | Inserted 82 rows.
+2025-08-13 13:18:10,549 | INFO | clickhouse | Inserted diagnostics for 220 messages.
+2025-08-13 13:18:10,798 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:18:11,797 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 13:18:12,785 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:18:13,798 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:18:14,807 | INFO | kafka_consumer | Inserted 117 rows.
+2025-08-13 13:18:15,792 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:18:15,838 | INFO | clickhouse | Inserted diagnostics for 133 messages.
+2025-08-13 13:18:16,787 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:18:17,826 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:18:18,810 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:18:19,817 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:18:20,829 | INFO | kafka_consumer | Inserted 110 rows.
+2025-08-13 13:18:21,112 | INFO | clickhouse | Inserted diagnostics for 8 messages.
+2025-08-13 13:18:21,812 | INFO | kafka_consumer | Inserted 104 rows.
+2025-08-13 13:18:22,814 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:18:24,819 | INFO | kafka_consumer | Inserted 17 rows.
+2025-08-13 13:18:25,837 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 13:18:26,401 | INFO | clickhouse | Inserted diagnostics for 131 messages.
+2025-08-13 13:18:26,821 | INFO | kafka_consumer | Inserted 202 rows.
+2025-08-13 13:18:27,457 | INFO | kafka_consumer | Inserted 50 rows.
+2025-08-13 13:18:28,837 | INFO | kafka_consumer | Inserted 113 rows.
+2025-08-13 13:18:29,840 | INFO | kafka_consumer | Inserted 87 rows.
+2025-08-13 13:18:30,856 | INFO | kafka_consumer | Inserted 44 rows.
+2025-08-13 13:18:31,711 | INFO | clickhouse | Inserted diagnostics for 496 messages.
+2025-08-13 13:18:31,920 | INFO | kafka_consumer | Inserted 12 rows.
+2025-08-13 13:18:32,917 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 13:18:33,891 | INFO | kafka_consumer | Inserted 53 rows.
+2025-08-13 13:18:34,896 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:18:35,891 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:18:36,855 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:18:36,988 | INFO | clickhouse | Inserted diagnostics for 80 messages.
+2025-08-13 13:18:37,902 | INFO | kafka_consumer | Inserted 26 rows.
+2025-08-13 13:18:38,905 | INFO | kafka_consumer | Inserted 76 rows.
+2025-08-13 13:18:39,918 | INFO | kafka_consumer | Inserted 112 rows.
+2025-08-13 13:18:40,948 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 13:18:41,934 | INFO | kafka_consumer | Inserted 97 rows.
+2025-08-13 13:18:42,112 | INFO | db_storage | Written Parquet file: parquet_data/ticks_1755109061953.parquet
+2025-08-13 13:18:42,299 | INFO | clickhouse | Inserted diagnostics for 318 messages.
+2025-08-13 13:18:42,309 | INFO | db_storage | Written Parquet file: parquet_data/ws_diagnostics_1755109061953.parquet
+2025-08-13 13:18:42,427 | INFO | db_storage | Written Parquet file: parquet_data/proc_diagnostics_1755109061953.parquet
+2025-08-13 13:18:42,927 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:18:43,222 | INFO | db_storage | Uploaded parquet_data/proc_diagnostics_1755109061953.parquet to S3 bucket tickerdata-v1-etk as archived_data/proc_diagnostics_1755109061953.parquet and removed local file.
+2025-08-13 13:18:43,375 | INFO | db_storage | Uploaded parquet_data/ticks_1755109061953.parquet to S3 bucket tickerdata-v1-etk as archived_data/ticks_1755109061953.parquet and removed local file.
+2025-08-13 13:18:43,529 | INFO | db_storage | Uploaded parquet_data/ws_diagnostics_1755109061953.parquet to S3 bucket tickerdata-v1-etk as archived_data/ws_diagnostics_1755109061953.parquet and removed local file.
+2025-08-13 13:18:43,958 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:18:44,948 | INFO | kafka_consumer | Inserted 122 rows.
+2025-08-13 13:18:45,100 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:18:46,947 | INFO | kafka_consumer | Inserted 119 rows.
+2025-08-13 13:18:47,587 | INFO | clickhouse | Inserted diagnostics for 544 messages.
+2025-08-13 13:18:47,945 | INFO | kafka_consumer | Inserted 88 rows.
+2025-08-13 13:18:48,929 | INFO | kafka_consumer | Inserted 9 rows.
+2025-08-13 13:18:49,938 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:18:50,967 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:18:51,960 | INFO | kafka_consumer | Inserted 29 rows.
+2025-08-13 13:18:52,870 | INFO | clickhouse | Inserted diagnostics for 129 messages.
+2025-08-13 13:18:52,919 | INFO | kafka_consumer | Inserted 21 rows.
+2025-08-13 13:18:53,938 | INFO | kafka_consumer | Inserted 163 rows.
+2025-08-13 13:18:54,967 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:18:55,955 | INFO | kafka_consumer | Inserted 106 rows.
+2025-08-13 13:18:56,946 | INFO | kafka_consumer | Inserted 65 rows.
+2025-08-13 13:18:57,958 | INFO | kafka_consumer | Inserted 28 rows.
+2025-08-13 13:18:58,185 | INFO | clickhouse | Inserted diagnostics for 359 messages.
+2025-08-13 13:18:58,968 | INFO | kafka_consumer | Inserted 37 rows.
+2025-08-13 13:18:59,975 | INFO | kafka_consumer | Inserted 47 rows.
+2025-08-13 13:19:00,970 | INFO | kafka_consumer | Inserted 66 rows.
+2025-08-13 13:19:01,975 | INFO | kafka_consumer | Inserted 267 rows.
+2025-08-13 13:19:02,221 | WARNING | kafka.producer.record_accumulator | Failed to produce messages to topic-partition TopicPartition(topic='price_ticks', partition=0) with base offset -1: KafkaTimeoutError: Expiring 32 record(s) for TopicPartition(topic='price_ticks', partition=0): 120002 ms has passed since batch creation
+2025-08-13 13:19:02,959 | INFO | kafka_consumer | Inserted 197 rows.
+2025-08-13 13:19:03,482 | INFO | clickhouse | Inserted diagnostics for 614 messages.
+2025-08-13 13:19:03,966 | INFO | kafka_consumer | Inserted 167 rows.
+2025-08-13 13:19:04,967 | INFO | kafka_consumer | Inserted 259 rows.
+2025-08-13 13:19:05,996 | INFO | kafka_consumer | Inserted 129 rows.
+2025-08-13 13:19:06,965 | INFO | kafka_consumer | Inserted 149 rows.
+2025-08-13 13:19:07,983 | INFO | kafka_consumer | Inserted 111 rows.
+2025-08-13 13:19:08,892 | INFO | clickhouse | Inserted diagnostics for 815 messages.
+2025-08-13 13:19:08,964 | INFO | kafka_consumer | Inserted 142 rows.
+2025-08-13 13:19:09,995 | INFO | kafka_consumer | Inserted 222 rows.
+2025-08-13 13:19:10,985 | INFO | kafka_consumer | Inserted 135 rows.
+2025-08-13 13:19:12,108 | INFO | kafka_consumer | Inserted 17 rows.
+2025-08-13 13:19:13,093 | INFO | kafka_consumer | Inserted 223 rows.
+2025-08-13 13:19:14,110 | INFO | kafka_consumer | Inserted 67 rows.
+2025-08-13 13:19:14,188 | INFO | clickhouse | Inserted diagnostics for 739 messages.
+2025-08-13 13:19:15,104 | INFO | kafka_consumer | Inserted 125 rows.
+2025-08-13 13:19:16,102 | INFO | kafka_consumer | Inserted 67 rows.
+2025-08-13 13:19:17,133 | INFO | kafka_consumer | Inserted 78 rows.
+2025-08-13 13:19:18,121 | INFO | kafka_consumer | Inserted 62 rows.
+2025-08-13 13:19:19,126 | INFO | kafka_consumer | Inserted 141 rows.
+2025-08-13 13:19:19,467 | INFO | clickhouse | Inserted diagnostics for 473 messages.
+2025-08-13 13:19:20,204 | INFO | kafka_consumer | Inserted 26 rows.
+2025-08-13 13:19:21,126 | INFO | kafka_consumer | Inserted 70 rows.
+2025-08-13 13:19:22,131 | INFO | kafka_consumer | Inserted 33 rows.
+2025-08-13 13:19:23,110 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 13:19:24,119 | INFO | kafka_consumer | Inserted 21 rows.
+2025-08-13 13:19:24,748 | INFO | clickhouse | Inserted diagnostics for 158 messages.
+2025-08-13 13:19:25,102 | INFO | kafka_consumer | Inserted 17 rows.
+2025-08-13 13:19:26,117 | INFO | kafka_consumer | Inserted 15 rows.
+2025-08-13 13:19:27,127 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:19:28,176 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:19:29,126 | INFO | kafka_consumer | Inserted 260 rows.
+2025-08-13 13:19:30,053 | INFO | clickhouse | Inserted diagnostics for 297 messages.
+2025-08-13 13:19:30,164 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:19:31,147 | INFO | kafka_consumer | Inserted 89 rows.
+2025-08-13 13:19:32,123 | INFO | kafka_consumer | Inserted 139 rows.
+2025-08-13 13:19:33,135 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:19:34,159 | INFO | kafka_consumer | Inserted 37 rows.
+2025-08-13 13:19:35,158 | INFO | kafka_consumer | Inserted 53 rows.
+2025-08-13 13:19:35,345 | INFO | clickhouse | Inserted diagnostics for 267 messages.
+2025-08-13 13:19:36,139 | INFO | kafka_consumer | Inserted 11 rows.
+2025-08-13 13:19:37,139 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:19:38,135 | INFO | kafka_consumer | Inserted 32 rows.
+2025-08-13 13:19:40,161 | INFO | kafka_consumer | Inserted 9 rows.
+2025-08-13 13:19:40,651 | INFO | clickhouse | Inserted diagnostics for 58 messages.
+2025-08-13 13:19:41,141 | INFO | kafka_consumer | Inserted 169 rows.
+2025-08-13 13:19:42,146 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:19:43,143 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:19:43,643 | INFO | db_storage | Written Parquet file: parquet_data/ticks_1755109123531.parquet
+2025-08-13 13:19:43,795 | INFO | db_storage | Written Parquet file: parquet_data/ws_diagnostics_1755109123531.parquet
+2025-08-13 13:19:43,935 | INFO | db_storage | Written Parquet file: parquet_data/proc_diagnostics_1755109123531.parquet
+2025-08-13 13:19:44,155 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:19:44,705 | INFO | db_storage | Uploaded parquet_data/proc_diagnostics_1755109123531.parquet to S3 bucket tickerdata-v1-etk as archived_data/proc_diagnostics_1755109123531.parquet and removed local file.
+2025-08-13 13:19:44,828 | INFO | db_storage | Uploaded parquet_data/ticks_1755109123531.parquet to S3 bucket tickerdata-v1-etk as archived_data/ticks_1755109123531.parquet and removed local file.
+2025-08-13 13:19:44,967 | INFO | db_storage | Uploaded parquet_data/ws_diagnostics_1755109123531.parquet to S3 bucket tickerdata-v1-etk as archived_data/ws_diagnostics_1755109123531.parquet and removed local file.
+2025-08-13 13:19:45,157 | INFO | kafka_consumer | Inserted 40 rows.
+2025-08-13 13:19:45,947 | INFO | clickhouse | Inserted diagnostics for 221 messages.
+2025-08-13 13:19:46,175 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:19:47,132 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:19:48,137 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:19:49,147 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:19:50,147 | INFO | kafka_consumer | Inserted 9 rows.
+2025-08-13 13:19:51,099 | INFO | kafka_consumer | Inserted 193 rows.
+2025-08-13 13:19:51,220 | INFO | clickhouse | Inserted diagnostics for 22 messages.
+2025-08-13 13:19:52,131 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:19:53,154 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:19:54,155 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:19:55,154 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:19:56,157 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 13:19:56,498 | INFO | clickhouse | Inserted diagnostics for 15 messages.
+2025-08-13 13:19:57,163 | INFO | kafka_consumer | Inserted 41 rows.
+2025-08-13 13:19:58,171 | INFO | kafka_consumer | Inserted 244 rows.
+2025-08-13 13:19:59,180 | INFO | kafka_consumer | Inserted 94 rows.
+2025-08-13 13:20:00,317 | INFO | kafka_consumer | Inserted 42 rows.
+2025-08-13 13:20:01,825 | INFO | clickhouse | Inserted diagnostics for 421 messages.
+2025-08-13 13:20:02,175 | INFO | kafka_consumer | Inserted 102 rows.
+2025-08-13 13:20:03,171 | INFO | kafka_consumer | Inserted 112 rows.
+2025-08-13 13:20:04,209 | INFO | kafka_consumer | Inserted 153 rows.
+2025-08-13 13:20:05,161 | INFO | kafka_consumer | Inserted 151 rows.
+2025-08-13 13:20:06,175 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:20:07,130 | INFO | clickhouse | Inserted diagnostics for 521 messages.
+2025-08-13 13:20:07,170 | INFO | kafka_consumer | Inserted 112 rows.
+2025-08-13 13:20:08,187 | INFO | kafka_consumer | Inserted 85 rows.
+2025-08-13 13:20:09,177 | INFO | kafka_consumer | Inserted 62 rows.
+2025-08-13 13:20:10,201 | INFO | kafka_consumer | Inserted 62 rows.
+2025-08-13 13:20:11,230 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:20:12,224 | INFO | kafka_consumer | Inserted 142 rows.
+2025-08-13 13:20:12,438 | INFO | clickhouse | Inserted diagnostics for 212 messages.
+2025-08-13 13:20:13,230 | INFO | kafka_consumer | Inserted 72 rows.
+2025-08-13 13:20:14,245 | INFO | kafka_consumer | Inserted 118 rows.
+2025-08-13 13:20:15,243 | INFO | kafka_consumer | Inserted 63 rows.
+2025-08-13 13:20:16,244 | INFO | kafka_consumer | Inserted 181 rows.
+2025-08-13 13:20:17,244 | INFO | kafka_consumer | Inserted 55 rows.
+2025-08-13 13:20:17,746 | INFO | clickhouse | Inserted diagnostics for 489 messages.
+2025-08-13 13:20:18,250 | INFO | kafka_consumer | Inserted 13 rows.
+2025-08-13 13:20:19,253 | INFO | kafka_consumer | Inserted 16 rows.
+2025-08-13 13:20:20,255 | INFO | kafka_consumer | Inserted 172 rows.
+2025-08-13 13:20:21,244 | INFO | kafka_consumer | Inserted 29 rows.
+2025-08-13 13:20:22,273 | INFO | kafka_consumer | Inserted 29 rows.
+2025-08-13 13:20:23,021 | INFO | clickhouse | Inserted diagnostics for 259 messages.
+2025-08-13 13:20:23,240 | INFO | kafka_consumer | Inserted 125 rows.
+2025-08-13 13:20:24,265 | INFO | kafka_consumer | Inserted 26 rows.
+2025-08-13 13:20:25,260 | INFO | kafka_consumer | Inserted 104 rows.
+2025-08-13 13:20:26,264 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:20:27,267 | INFO | kafka_consumer | Inserted 71 rows.
+2025-08-13 13:20:28,218 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:20:28,310 | INFO | clickhouse | Inserted diagnostics for 332 messages.
+2025-08-13 13:20:29,256 | INFO | kafka_consumer | Inserted 7 rows.
+2025-08-13 13:20:30,272 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:20:31,285 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:20:31,434 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 13:20:32,311 | INFO | kafka_consumer | Inserted 22 rows.
+2025-08-13 13:20:33,317 | INFO | kafka_consumer | Inserted 274 rows.
+2025-08-13 13:20:33,604 | INFO | clickhouse | Inserted diagnostics for 607 messages.
+2025-08-13 13:20:34,325 | INFO | kafka_consumer | Inserted 28 rows.
+2025-08-13 13:20:35,314 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 13:20:36,319 | INFO | kafka_consumer | Inserted 11 rows.
+2025-08-13 13:20:37,335 | INFO | kafka_consumer | Inserted 38 rows.
+2025-08-13 13:20:38,369 | INFO | kafka_consumer | Inserted 214 rows.
+2025-08-13 13:20:38,922 | INFO | clickhouse | Inserted diagnostics for 295 messages.
+2025-08-13 13:20:39,341 | INFO | kafka_consumer | Inserted 83 rows.
+2025-08-13 13:20:40,351 | INFO | kafka_consumer | Inserted 99 rows.
+2025-08-13 13:20:41,366 | INFO | kafka_consumer | Inserted 36 rows.
+2025-08-13 13:20:42,377 | INFO | kafka_consumer | Inserted 36 rows.
+2025-08-13 13:20:43,373 | INFO | kafka_consumer | Inserted 170 rows.
+2025-08-13 13:20:44,219 | INFO | clickhouse | Inserted diagnostics for 424 messages.
+2025-08-13 13:20:44,386 | INFO | kafka_consumer | Inserted 78 rows.
+2025-08-13 13:20:45,154 | INFO | db_storage | Written Parquet file: parquet_data/ticks_1755109184969.parquet
+2025-08-13 13:20:45,303 | INFO | db_storage | Written Parquet file: parquet_data/ws_diagnostics_1755109184969.parquet
+2025-08-13 13:20:45,356 | INFO | kafka_consumer | Inserted 138 rows.
+2025-08-13 13:20:45,444 | INFO | db_storage | Written Parquet file: parquet_data/proc_diagnostics_1755109184969.parquet
+2025-08-13 13:20:46,249 | INFO | db_storage | Uploaded parquet_data/proc_diagnostics_1755109184969.parquet to S3 bucket tickerdata-v1-etk as archived_data/proc_diagnostics_1755109184969.parquet and removed local file.
+2025-08-13 13:20:46,386 | INFO | kafka_consumer | Inserted 115 rows.
+2025-08-13 13:20:46,399 | INFO | db_storage | Uploaded parquet_data/ticks_1755109184969.parquet to S3 bucket tickerdata-v1-etk as archived_data/ticks_1755109184969.parquet and removed local file.
+2025-08-13 13:20:46,552 | INFO | db_storage | Uploaded parquet_data/ws_diagnostics_1755109184969.parquet to S3 bucket tickerdata-v1-etk as archived_data/ws_diagnostics_1755109184969.parquet and removed local file.
+2025-08-13 13:20:47,405 | INFO | kafka_consumer | Inserted 209 rows.
+2025-08-13 13:20:48,394 | INFO | kafka_consumer | Inserted 273 rows.
+2025-08-13 13:20:49,003 | INFO | kafka_consumer | Inserted 79 rows.
+2025-08-13 13:20:49,553 | INFO | clickhouse | Inserted diagnostics for 892 messages.
+2025-08-13 13:20:50,405 | INFO | kafka_consumer | Inserted 70 rows.
+2025-08-13 13:20:51,377 | INFO | kafka_consumer | Inserted 48 rows.
+2025-08-13 13:20:52,417 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 13:20:53,390 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 13:20:54,378 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 13:20:54,482 | INFO | __main__ | Stopping application via KeyboardInterrupt.
+2025-08-13 13:20:54,554 | INFO | kafka_producer | Shutting down producer.
+2025-08-13 13:20:54,602 | INFO | kafka_producer | WebSocket closed: code=None msg=None
+2025-08-13 13:20:54,604 | INFO | kafka.producer.kafka | <KafkaProducer client_id=kafka-python-producer-1 transactional_id=None>: Closing the Kafka producer with 2 secs timeout.
+2025-08-13 13:20:54,615 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:20:55,007 | INFO | kafka_consumer | Inserted final 5 rows.
+2025-08-13 13:20:55,007 | INFO | kafka_consumer | Closing consumer.
+2025-08-13 13:20:55,008 | INFO | kafka.coordinator | Stopping heartbeat thread
+2025-08-13 13:20:57,617 | INFO | __main__ | Application shutdown complete.
+2025-08-13 13:20:58,016 | WARNING | kafka.coordinator | Heartbeat thread did not fully terminate during close
+2025-08-13 13:20:58,016 | INFO | kafka.coordinator | Leaving consumer group (ticks_ingestor).
+2025-08-13 13:20:58,019 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 13:20:58,020 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
