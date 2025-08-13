@@ -1,0 +1,28 @@
+2025-08-13 15:09:56,571 | INFO | db_storage | Uploaded log_parquet_data\logs_20250813_200536.parquet to S3 bucket tickerdata-v1-etk as logs/logs_20250813_200536.parquet and removed local file.
+2025-08-13 15:09:56,684 | INFO | db_storage | Uploaded log_parquet_data\logs_20250813_200945.parquet to S3 bucket tickerdata-v1-etk as logs/logs_20250813_200945.parquet and removed local file.
+2025-08-13 15:09:56,789 | INFO | db_storage | Uploaded log_parquet_data\logs_20250813_200956.parquet to S3 bucket tickerdata-v1-etk as logs/logs_20250813_200956.parquet and removed local file.
+2025-08-13 15:09:57,080 | INFO | db_storage | Written Parquet file: parquet_data/ticks_1755115787013.parquet
+2025-08-13 15:09:57,102 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 15:09:57,206 | INFO | db_storage | Written Parquet file: parquet_data/ws_diagnostics_1755115787013.parquet
+2025-08-13 15:09:57,300 | INFO | db_storage | Written Parquet file: parquet_data/proc_diagnostics_1755115787013.parquet
+2025-08-13 15:09:57,429 | INFO | clickhouse | Inserted diagnostics for 137 messages.
+2025-08-13 15:09:57,473 | INFO | db_storage | Uploaded parquet_data/proc_diagnostics_1755115787013.parquet to S3 bucket tickerdata-v1-etk as archived_data/proc_diagnostics_1755115787013.parquet and removed local file.
+2025-08-13 15:09:57,583 | INFO | db_storage | Uploaded parquet_data/ticks_1755115787013.parquet to S3 bucket tickerdata-v1-etk as archived_data/ticks_1755115787013.parquet and removed local file.
+2025-08-13 15:09:57,695 | INFO | db_storage | Uploaded parquet_data/ws_diagnostics_1755115787013.parquet to S3 bucket tickerdata-v1-etk as archived_data/ws_diagnostics_1755115787013.parquet and removed local file.
+2025-08-13 15:09:58,119 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 15:09:59,145 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 15:10:00,111 | INFO | kafka_consumer | Inserted 116 rows.
+2025-08-13 15:10:01,119 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 15:10:01,776 | INFO | __main__ | Stopping application via KeyboardInterrupt.
+2025-08-13 15:10:01,859 | INFO | kafka_producer | Shutting down producer.
+2025-08-13 15:10:01,909 | INFO | kafka_producer | WebSocket closed: code=None msg=None
+2025-08-13 15:10:01,909 | INFO | kafka.producer.kafka | <KafkaProducer client_id=kafka-python-producer-1 transactional_id=None>: Closing the Kafka producer with 2 secs timeout.
+2025-08-13 15:10:01,909 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 15:10:02,209 | INFO | kafka_consumer | Inserted final 48 rows.
+2025-08-13 15:10:02,218 | INFO | kafka_consumer | Closing consumer.
+2025-08-13 15:10:02,220 | INFO | kafka.coordinator | Stopping heartbeat thread
+2025-08-13 15:10:04,924 | INFO | __main__ | Application shutdown complete.
+2025-08-13 15:10:05,224 | WARNING | kafka.coordinator | Heartbeat thread did not fully terminate during close
+2025-08-13 15:10:05,224 | INFO | kafka.coordinator | Leaving consumer group (ticks_ingestor).
+2025-08-13 15:10:05,227 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 15:10:05,228 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 

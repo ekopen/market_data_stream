@@ -9,6 +9,8 @@ import pandas as pd
 import threading
 import boto3, os
 from dotenv import load_dotenv
+import subprocess
+import sys
 load_dotenv()  # Load from .env file
 
 import logging
@@ -38,7 +40,7 @@ def new_client():
 def create_ticks_db():
     logger.info("Creating ticks_db table.")
     ch = new_client()
-    ch.command('''DROP TABLE IF EXISTS ticks_db''')  # drop if exists to ensure fresh creation
+    # ch.command('''DROP TABLE IF EXISTS ticks_db''')  # drop if exists to ensure fresh creation
     ch.command('''
     CREATE TABLE IF NOT EXISTS ticks_db(
         timestamp       DateTime64(3, 'UTC'),
@@ -58,12 +60,12 @@ def create_ticks_db():
 def create_diagnostics_db():
     logger.info("Creating websocket_diagnostics table.")
     ch = new_client()
-    ch.command('''DROP TABLE IF EXISTS websocket_diagnostics''')  # drop if exists to ensure fresh creation
+    # ch.command('''DROP TABLE IF EXISTS websocket_diagnostics''')  # drop if exists to ensure fresh creation
     ch.command(f"""
     CREATE TABLE IF NOT EXISTS websocket_diagnostics (
         avg_timestamp Nullable(DateTime64(3, 'UTC')),
         avg_received_at Nullable(DateTime64(3, 'UTC')),
-        avg_websocket_lag Float64,
+        avg_websocket_lag Nullable(Float64),
         message_count Float64,
         diagnostics_timestamp    DateTime64(3, 'UTC') DEFAULT now64(3)
     )
@@ -74,13 +76,13 @@ def create_diagnostics_db():
     logger.info("websocket_diagnostics table created successfully.")
 
     logger.info("Creating processing_diagnostics table.")
-    ch.command('''DROP TABLE IF EXISTS processing_diagnostics''')  # drop if exists to ensure fresh creation
+    #ch.command('''DROP TABLE IF EXISTS processing_diagnostics''')  # drop if exists to ensure fresh creation
     ch.command(f"""
     CREATE TABLE IF NOT EXISTS processing_diagnostics (
         avg_timestamp Nullable(DateTime64(3, 'UTC')),
         avg_received_at Nullable(DateTime64(3, 'UTC')),
         avg_processed_timestamp Nullable(DateTime64(3, 'UTC')),
-        avg_processing_lag Float64,
+        avg_processing_lag Nullable(Float64),
         message_count Float64,
         diagnostics_timestamp    DateTime64(3, 'UTC') DEFAULT now64(3)
     )
@@ -90,11 +92,12 @@ def create_diagnostics_db():
     """)
     logger.info("processing_diagnostics table created successfully.")
 
-def insert_diagnostics(stop_event,duration):
+def insert_diagnostics(stop_event,duration,empty_limit):
 
     time.sleep(duration)
     ch = new_client()
-    empty_streak_s = 0.0
+    empty_streak = 0
+    test_stop = 0
 
     while not stop_event.is_set():
         logger.debug("Starting diagnostics insert cycle.")
@@ -113,18 +116,29 @@ def insert_diagnostics(stop_event,duration):
                 'timestamp', 'timestamp_ms', 'symbol', 'price', 'volume', 'received_at', 'insert_time'
                 ])
             
+            test_stop += 1
+            
+            # if test_stop > 2:
+                # df = pd.DataFrame() #FOR TESTING PURPOSES ONLY, TO SIMULATE EMPTY DIAGNOSTICS
+
             #if the system is down, we still want to record diagnostics data to show lag
             if df.empty:
 
                 avg_timestamp = None
                 avg_received_at = None
-                avg_insert_time = cutoff_time + (current_time - cutoff_time) / 2
+                avg_insert_time = None
                 message_count = 0
+                ws_lag = None
+                proc_lag = None
 
-                empty_streak_s += float(duration)
-                ws_lag += empty_streak_s
-                proc_lag += empty_streak_s
-            
+                empty_streak += 1
+                logger.debug("Diagnostics has returned an empty dataframe. Occurrence count: {empty_streak}")
+
+                if empty_streak >= empty_limit:
+                    logger.warning(f"Diagnostics has been empty for {empty_streak} consecutive cycles. Restarting system.")
+                    subprocess.Popen([sys.executable] + sys.argv)
+                    os._exit(0)
+
             else:
                 df['timestamp'] = pd.to_datetime(df['timestamp'])
                 df['received_at'] = pd.to_datetime(df['received_at'])
@@ -137,7 +151,7 @@ def insert_diagnostics(stop_event,duration):
                 proc_lag = (avg_insert_time - avg_received_at).total_seconds()
                 message_count = len(df)
                 
-                empty_streak_s = 0.0
+                empty_streak = 0
 
             ch.insert('websocket_diagnostics',
                 [(avg_timestamp, avg_received_at, ws_lag, message_count)],

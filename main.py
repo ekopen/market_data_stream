@@ -1,35 +1,48 @@
 # main.py
 # starts and stops the data pipeline
 
-import threading, time, sys
+import threading, time, sys, os
 from dotenv import load_dotenv
 load_dotenv()  # Load from .env file
-from config import SYMBOL, API_KEY, CLICKHOUSE_DURATION, DIAGNOSTIC_FREQUENCY
+from config import SYMBOL, API_KEY, CLICKHOUSE_DURATION, LOG_DURATION, DIAGNOSTIC_FREQUENCY, EMPTY_LIMIT
 
 from clickhouse import create_ticks_db, create_diagnostics_db, insert_diagnostics
-from db_storage import clickhouse_to_cloud
+from db_storage import clickhouse_to_cloud, logs_to_cloud
 from kafka_producer import start_producer
 from kafka_consumer import start_consumer
 
 # logging setup
-import logging, sys
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-    handlers=[logging.StreamHandler(sys.stdout)]
+import logging
+from logging.handlers import TimedRotatingFileHandler
+
+formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s")
+
+# File handler with daily rotation
+file_handler = TimedRotatingFileHandler(
+    filename=os.path.join("log_data/app.log"),
+    when="midnight",
+    backupCount=7,
+    encoding="utf-8"
 )
-fh = logging.FileHandler("app.log", encoding="utf-8")
-fh.setLevel(logging.INFO)
-fh.setFormatter(logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s"))
-logging.getLogger().addHandler(fh)
+file_handler.setLevel(logging.INFO)
+file_handler.setFormatter(formatter)
+
+# Console (stdout) handler
+console_handler = logging.StreamHandler(sys.stdout)
+console_handler.setLevel(logging.INFO)
+console_handler.setFormatter(formatter)
+
+# Root logger setup
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logger.handlers = []  # Clear default handlers
+logger.addHandler(file_handler)
+logger.addHandler(console_handler)
 
 logger = logging.getLogger(__name__)
 
 # shutdown setup if we want to pass python main.py --stop
 stop_event = threading.Event()
-if "--stop" in sys.argv:
-    stop_event.set()
-    exit(0)
 
 if __name__ == "__main__":
     
@@ -48,8 +61,9 @@ if __name__ == "__main__":
         consumer_thread.start()
 
         # misc daemon aka background threads for diagnostics and cloud migration
-        threading.Thread(target=insert_diagnostics, args=(stop_event,DIAGNOSTIC_FREQUENCY), daemon=True).start() 
+        threading.Thread(target=insert_diagnostics, args=(stop_event,DIAGNOSTIC_FREQUENCY,EMPTY_LIMIT), daemon=True).start() 
         threading.Thread(target=clickhouse_to_cloud, args=(stop_event,CLICKHOUSE_DURATION), daemon=True).start() 
+        threading.Thread(target=logs_to_cloud, args=(stop_event, LOG_DURATION), daemon=True).start()
 
         try:
             while not stop_event.is_set():

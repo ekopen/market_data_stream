@@ -121,3 +121,60 @@ def clickhouse_to_cloud(stop_event,duration):
             logger.exception("Error during clickhouse_to_cloud")
 
         time.sleep(duration) #pause before rerunning
+
+def logs_to_cloud(stop_event, duration):
+
+    time.sleep(duration * 2)
+
+    log_dir = "log_data"
+    parquet_dir = "log_parquet_data"
+
+    while not stop_event.is_set():
+        logger.debug("Starting log migration cycle.")
+        try:
+            cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=duration)
+
+            for file in os.listdir(log_dir):
+
+                file_path = os.path.join(log_dir, file)
+                try:
+                    # read the log
+                    df = pd.read_csv(
+                        file_path,
+                        sep="|",
+                        header=None,
+                        names=["timestamp", "level", "logger", "message"],
+                        engine="python"
+                    )
+                    df["timestamp"] = pd.to_datetime(
+                        df["timestamp"].str.strip(),  # strip spaces!
+                        format="%Y-%m-%d %H:%M:%S,%f",
+                        errors="coerce",              # or "raise" if you want it to fail loudly
+                        utc=True
+                    )
+                    df_old = df[df["timestamp"] < cutoff_time]
+                    df_new = df[df["timestamp"] >= cutoff_time]
+
+                    if not df_old.empty:
+                        ts = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')
+                        parquet_file = f"{parquet_dir}/logs_{ts}.parquet"
+                        df_old.to_parquet(parquet_file, index=False)
+                        logger.info(f"Migrated {len(df_old)} log rows to {parquet_file}")
+
+                    # overwrite original file with only recent entries
+                    df_new.to_csv(file_path, sep="|", header=False, index=False)
+
+                except Exception:
+                    logger.exception(f"Failed to process log file {file_path}")
+
+            for parquet in os.listdir(parquet_dir):
+                file_name = os.path.join(parquet_dir, parquet)
+                s3_key = f"logs/{parquet}"
+                s3.upload_file(file_name, BUCKET_NAME, s3_key)
+                #os.remove(file_name)
+                logger.info(f"Uploaded {file_name} to S3 bucket {BUCKET_NAME} as {s3_key} and removed local file.")
+
+        except Exception:
+            logger.exception("Error during logs_to_cloud")
+
+        time.sleep(duration)
