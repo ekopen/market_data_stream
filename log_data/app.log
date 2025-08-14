@@ -1,0 +1,144 @@
+2025-08-13 20:45:00,427 | INFO | kafka_consumer | Inserted 72 rows.
+2025-08-13 20:45:00,488 | INFO | db_storage | Uploaded log_parquet_data\logs_20250814_014459.parquet to S3 bucket tickerdata-v1-etk as logs/logs_20250814_014459.parquet and removed local file.
+2025-08-13 20:45:01,412 | INFO | kafka_consumer | Inserted 197 rows.
+2025-08-13 20:45:02,402 | INFO | kafka_consumer | Inserted 61 rows.
+2025-08-13 20:45:03,423 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 20:45:04,083 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:45:04,391 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:45:04,476 | INFO | monitoring | Inserted diagnostics for 335 messages.
+2025-08-13 20:45:05,441 | INFO | kafka_consumer | Inserted 135 rows.
+2025-08-13 20:45:06,429 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:45:07,451 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 20:45:08,449 | INFO | kafka_consumer | Inserted 159 rows.
+2025-08-13 20:45:09,273 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:45:09,447 | INFO | kafka_consumer | Inserted 80 rows.
+2025-08-13 20:45:09,761 | INFO | monitoring | Inserted diagnostics for 301 messages.
+2025-08-13 20:45:10,446 | INFO | kafka_consumer | Inserted 49 rows.
+2025-08-13 20:45:11,433 | INFO | kafka_consumer | Inserted 32 rows.
+2025-08-13 20:45:12,435 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:45:13,461 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 20:45:14,436 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:45:14,454 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:45:15,053 | INFO | monitoring | Inserted diagnostics for 173 messages.
+2025-08-13 20:45:15,477 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 20:45:16,447 | INFO | kafka_consumer | Inserted 16 rows.
+2025-08-13 20:45:17,471 | INFO | kafka_consumer | Inserted 86 rows.
+2025-08-13 20:45:18,464 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 20:45:19,634 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:45:20,709 | INFO | monitoring | Inserted diagnostics for 109 messages.
+2025-08-13 20:45:20,793 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:45:20,843 | INFO | db_storage | Written Parquet file: clickhouse_parquet_data/ticks_1755135320096.parquet
+2025-08-13 20:45:21,072 | INFO | db_storage | Written Parquet file: clickhouse_parquet_data/ws_diagnostics_1755135320096.parquet
+2025-08-13 20:45:21,232 | INFO | db_storage | Written Parquet file: clickhouse_parquet_data/proc_diagnostics_1755135320096.parquet
+2025-08-13 20:45:21,470 | INFO | db_storage | Written Parquet file: clickhouse_parquet_data/monitoring_1755135320096.parquet
+2025-08-13 20:45:21,479 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 20:45:21,702 | INFO | db_storage | Uploaded clickhouse_parquet_data/monitoring_1755135320096.parquet to S3 bucket tickerdata-v1-etk as archived_data/monitoring_1755135320096.parquet and removed local file.
+2025-08-13 20:45:21,849 | INFO | db_storage | Uploaded clickhouse_parquet_data/proc_diagnostics_1755135320096.parquet to S3 bucket tickerdata-v1-etk as archived_data/proc_diagnostics_1755135320096.parquet and removed local file.
+2025-08-13 20:45:21,985 | INFO | db_storage | Uploaded clickhouse_parquet_data/ticks_1755135320096.parquet to S3 bucket tickerdata-v1-etk as archived_data/ticks_1755135320096.parquet and removed local file.
+2025-08-13 20:45:22,118 | INFO | db_storage | Uploaded clickhouse_parquet_data/ws_diagnostics_1755135320096.parquet to S3 bucket tickerdata-v1-etk as archived_data/ws_diagnostics_1755135320096.parquet and removed local file.
+2025-08-13 20:45:22,452 | INFO | kafka_consumer | Inserted 64 rows.
+2025-08-13 20:45:23,460 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:45:24,454 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 20:45:24,809 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:45:25,478 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 20:45:26,006 | INFO | monitoring | Inserted diagnostics for 81 messages.
+2025-08-13 20:45:26,103 | INFO | kafka_consumer | Inserted 50 rows.
+2025-08-13 20:45:27,455 | INFO | kafka_consumer | Inserted 128 rows.
+2025-08-13 20:45:28,456 | INFO | kafka_consumer | Inserted 9 rows.
+2025-08-13 20:45:29,471 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 20:45:30,012 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:45:31,334 | INFO | monitoring | Inserted diagnostics for 138 messages.
+2025-08-13 20:45:31,458 | INFO | kafka_consumer | Inserted 20 rows.
+2025-08-13 20:45:32,512 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 20:45:33,466 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:45:34,497 | INFO | kafka_consumer | Inserted 38 rows.
+2025-08-13 20:45:35,201 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:45:35,458 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 20:45:36,451 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:45:36,616 | INFO | monitoring | Inserted diagnostics for 48 messages.
+2025-08-13 20:45:37,524 | INFO | kafka_consumer | Inserted 113 rows.
+2025-08-13 20:45:38,514 | INFO | kafka_consumer | Inserted 53 rows.
+2025-08-13 20:45:39,496 | INFO | kafka_consumer | Inserted 191 rows.
+2025-08-13 20:45:40,388 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:45:40,513 | INFO | kafka_consumer | Inserted 85 rows.
+2025-08-13 20:45:41,513 | INFO | kafka_consumer | Inserted 11 rows.
+2025-08-13 20:45:41,914 | INFO | monitoring | Inserted diagnostics for 442 messages.
+2025-08-13 20:45:42,484 | INFO | kafka_consumer | Inserted 38 rows.
+2025-08-13 20:45:43,516 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 20:45:45,512 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 20:45:45,576 | WARNING | monitoring | Processing Lag Spike: 1.579606
+2025-08-13 20:45:45,687 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:45:46,540 | INFO | kafka_consumer | Inserted 226 rows.
+2025-08-13 20:45:47,209 | INFO | monitoring | Inserted diagnostics for 269 messages.
+2025-08-13 20:45:47,515 | INFO | kafka_consumer | Inserted 129 rows.
+2025-08-13 20:45:48,484 | INFO | kafka_consumer | Inserted 9 rows.
+2025-08-13 20:45:49,517 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 20:45:50,504 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:45:50,871 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:45:51,500 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:45:52,521 | INFO | kafka_consumer | Inserted 19 rows.
+2025-08-13 20:45:52,522 | INFO | monitoring | Inserted diagnostics for 149 messages.
+2025-08-13 20:45:53,536 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 20:45:54,514 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 20:45:55,548 | INFO | kafka_consumer | Inserted 37 rows.
+2025-08-13 20:45:56,039 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:45:56,523 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 20:45:57,609 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 20:45:57,818 | INFO | monitoring | Inserted diagnostics for 69 messages.
+2025-08-13 20:45:58,582 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 20:45:59,584 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:46:00,591 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 20:46:01,272 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:46:01,602 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:46:02,605 | INFO | kafka_consumer | Inserted 1 rows.
+2025-08-13 20:46:03,102 | INFO | monitoring | Inserted diagnostics for 13 messages.
+2025-08-13 20:46:03,577 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:46:04,580 | INFO | kafka_consumer | Inserted 5 rows.
+2025-08-13 20:46:05,595 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:46:06,463 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:46:06,597 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:46:07,632 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 20:46:08,396 | INFO | monitoring | Inserted diagnostics for 22 messages.
+2025-08-13 20:46:08,623 | INFO | kafka_consumer | Inserted 151 rows.
+2025-08-13 20:46:09,614 | INFO | kafka_consumer | Inserted 10 rows.
+2025-08-13 20:46:09,766 | INFO | kafka_consumer | Inserted 300 rows.
+2025-08-13 20:46:10,599 | INFO | kafka_consumer | Inserted 124 rows.
+2025-08-13 20:46:11,592 | INFO | kafka_consumer | Inserted 37 rows.
+2025-08-13 20:46:11,623 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:46:12,616 | INFO | kafka_consumer | Inserted 78 rows.
+2025-08-13 20:46:13,616 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 20:46:13,712 | INFO | monitoring | Inserted diagnostics for 700 messages.
+2025-08-13 20:46:14,605 | INFO | kafka_consumer | Inserted 8 rows.
+2025-08-13 20:46:15,616 | INFO | kafka_consumer | Inserted 6 rows.
+2025-08-13 20:46:16,601 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 20:46:16,806 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:46:17,624 | INFO | kafka_consumer | Inserted 16 rows.
+2025-08-13 20:46:18,634 | INFO | kafka_consumer | Inserted 11 rows.
+2025-08-13 20:46:19,018 | INFO | monitoring | Inserted diagnostics for 34 messages.
+2025-08-13 20:46:19,638 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:46:20,623 | INFO | kafka_consumer | Inserted 3 rows.
+2025-08-13 20:46:21,637 | INFO | kafka_consumer | Inserted 70 rows.
+2025-08-13 20:46:22,007 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:46:22,630 | INFO | kafka_consumer | Inserted 112 rows.
+2025-08-13 20:46:23,636 | INFO | kafka_consumer | Inserted 45 rows.
+2025-08-13 20:46:24,317 | INFO | monitoring | Inserted diagnostics for 233 messages.
+2025-08-13 20:46:25,652 | INFO | kafka_consumer | Inserted 2 rows.
+2025-08-13 20:46:26,634 | INFO | kafka_consumer | Inserted 197 rows.
+2025-08-13 20:46:27,184 | INFO | monitoring | Completed a monitoring cycle.
+2025-08-13 20:46:27,649 | INFO | kafka_consumer | Inserted 4 rows.
+2025-08-13 20:46:28,645 | INFO | kafka_consumer | Inserted 198 rows.
+2025-08-13 20:46:28,676 | INFO | __main__ | Stopping application via KeyboardInterrupt.
+2025-08-13 20:46:28,858 | INFO | kafka_producer | Shutting down producer.
+2025-08-13 20:46:28,927 | INFO | kafka_producer | WebSocket closed: code=None msg=None
+2025-08-13 20:46:29,261 | WARNING | kafka.producer.record_accumulator | Failed to produce messages to topic-partition TopicPartition(topic='price_ticks', partition=0) with base offset -1: KafkaTimeoutError: Expiring 21 record(s) for TopicPartition(topic='price_ticks', partition=0): 120008 ms has passed since batch creation
+2025-08-13 20:46:29,261 | WARNING | kafka.producer.record_accumulator | KafkaTimeoutError: Expiring 21 record(s) for TopicPartition(topic='price_ticks', partition=0): 120008 ms has passed since batch creation
+2025-08-13 20:46:29,263 | INFO | kafka.producer.kafka | <KafkaProducer client_id=kafka-python-producer-1 transactional_id=None>: Closing the Kafka producer with 2 secs timeout.
+2025-08-13 20:46:29,263 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-producer-1, node_id=1 host=localhost:9092 <connected> [IPv4 ('127.0.0.1', 9092)]>: Closing connection. 
+2025-08-13 20:46:29,359 | INFO | kafka_consumer | Inserted final 21 rows.
+2025-08-13 20:46:29,359 | INFO | kafka_consumer | Closing consumer.
+2025-08-13 20:46:29,363 | INFO | kafka.coordinator | Stopping heartbeat thread
+2025-08-13 20:46:32,271 | INFO | __main__ | System shutdown complete.
+2025-08-13 20:46:32,376 | WARNING | kafka.coordinator | Heartbeat thread did not fully terminate during close
+2025-08-13 20:46:32,376 | INFO | kafka.coordinator | Leaving consumer group (ticks_ingestor).
+2025-08-13 20:46:32,456 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
+2025-08-13 20:46:32,457 | INFO | kafka.conn | <BrokerConnection client_id=kafka-python-2.2.4, node_id=coordinator-1 host=localhost:9092 <connected> [IPv6 ('::1', 9092, 0, 0)]>: Closing connection. 
