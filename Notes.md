@@ -8,7 +8,6 @@
 
 # Next steps
 
-- potentially get rid of the monitoring db and just use logger?
 - creat visualizations/breakdowns of all logged/tracked data
 
 - figure out how to run on cloud
