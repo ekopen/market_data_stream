@@ -16,18 +16,6 @@ load_dotenv()  # Load from .env file
 import logging
 logger = logging.getLogger(__name__)
 
-AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-AWS_REGION = os.getenv('AWS_REGION')
-BUCKET_NAME = os.getenv('S3_BUCKET_NAME')
-stop_event = threading.Event()
-
-s3 = boto3.client(
-    's3',
-    region_name=AWS_REGION,
-    aws_access_key_id=os.getenv('AWS_ACCESS_KEY_ID'),
-    aws_secret_access_key=os.getenv('AWS_SECRET_ACCESS_KEY')
-)
 
 def new_client():
     return clickhouse_connect.get_client(
