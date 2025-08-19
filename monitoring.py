@@ -10,14 +10,13 @@ import os, subprocess, sys
 import logging
 logger = logging.getLogger(__name__)
 
-def insert_diagnostics(stop_event,duration):
+def ticks_monitoring(stop_event,duration):
 
     time.sleep(duration)
     ch = new_client()
-    empty_streak = 0
 
     while not stop_event.is_set():
-        logger.debug("Starting diagnostics insert cycle.")
+        logger.debug("Starting ticks monitoring cycle.")
         try:
             current_time = datetime.now(timezone.utc)
             current_time_ms = int(current_time.timestamp() * 1000)
@@ -35,7 +34,6 @@ def insert_diagnostics(stop_event,duration):
 
             #if the system is down, we still want to record diagnostics data to show lag
             if df.empty:
-
                 avg_timestamp = None
                 avg_received_at = None
                 avg_insert_time = None
@@ -43,22 +41,19 @@ def insert_diagnostics(stop_event,duration):
                 ws_lag = None
                 proc_lag = None
 
-                empty_streak += 1
-                logger.debug(f"Diagnostics has returned an empty dataframe. Occurrence count: {empty_streak}")
-
             else:
                 df['timestamp'] = pd.to_datetime(df['timestamp'])
                 df['received_at'] = pd.to_datetime(df['received_at'])
                 df['insert_time'] = pd.to_datetime(df['insert_time'])
 
+
+                # ----- diagnostics  ----- #
                 avg_timestamp = df['timestamp'].mean()
                 avg_received_at = df['received_at'].mean()
                 avg_insert_time = df['insert_time'].mean()
                 ws_lag = (avg_received_at - avg_timestamp).total_seconds()
                 proc_lag = (avg_insert_time - avg_received_at).total_seconds()
                 message_count = len(df)
-                
-                empty_streak = 0
 
             ch.insert('websocket_diagnostics',
                 [(avg_timestamp, avg_received_at, ws_lag, message_count)],
@@ -67,15 +62,15 @@ def insert_diagnostics(stop_event,duration):
             ch.insert('processing_diagnostics',
                 [(avg_timestamp, avg_received_at, avg_insert_time, proc_lag, message_count)],
                 column_names=['avg_timestamp', 'avg_received_at', 'avg_processed_timestamp', 'avg_processing_lag', 'message_count'])
-        
-            logger.info(f"Inserted diagnostics for {message_count} messages.")
+
+            logger.info(f"Inserted ticks monitoring data for {message_count} messages.")
 
         except Exception as e:
-            logger.exception(f"Error inserting diagnostics.")
+            logger.exception(f"Error inserting ticks monitoring data.")
 
         time.sleep(duration)
 
-def insert_monitoring(stop_event,duration,empty_limit, ws_lag_threshold, proc_lag_threshold):
+def diagnostics_monitoring(stop_event,duration,empty_limit, ws_lag_threshold, proc_lag_threshold):
 
     time.sleep(duration+1) #delay to allow diagnostics to populate first
     ch = new_client()
@@ -88,6 +83,13 @@ def insert_monitoring(stop_event,duration,empty_limit, ws_lag_threshold, proc_la
             #--------------------------pipeline down--------------------------#
             
             rows = ch.query(f"""
+                SELECT message_count
+                FROM websocket_diagnostics
+                ORDER BY diagnostics_timestamp DESC
+                LIMIT {int(empty_limit)}
+            """).result_rows
+
+            summed_rows = ch.query(f"""
                 SELECT SUM(message_count)
                 FROM (
                     SELECT message_count
@@ -97,11 +99,11 @@ def insert_monitoring(stop_event,duration,empty_limit, ws_lag_threshold, proc_la
                 )
             """).result_rows
 
-            total = rows[0][0] if rows and rows[0] else None
+            total = summed_rows[0][0] if summed_rows and summed_rows[0] else None
 
-            if total is not None and total == 0:
+            if total is not None and total == 0 and len(rows) >= empty_limit:
                 logger.warning(
-                    "Diagnostics has been empty for %d consecutive cycles. Restarting system."
+                    f"Diagnostics has been empty for {empty_limit} consecutive cycles. Restarting system."
                 )
                 ch.insert(
                     'monitoring_db',
@@ -122,7 +124,6 @@ def insert_monitoring(stop_event,duration,empty_limit, ws_lag_threshold, proc_la
             """).result_rows[0][0]
 
             if lag is not None and (lag > ws_lag_threshold):
-                logger.warning(f"Websocket Lag Spike: {lag}")
                 ch.insert(
                     'monitoring_db',
                     [(f"Websocket Lag Spike: {lag}",)],
@@ -138,7 +139,6 @@ def insert_monitoring(stop_event,duration,empty_limit, ws_lag_threshold, proc_la
             """).result_rows[0][0]
 
             if lag is not None and (lag > proc_lag_threshold):
-                logger.warning(f"Processing Lag Spike: {lag}")
                 ch.insert(
                     'monitoring_db',
                     [(f"Processing Lag Spike: {lag}",)],

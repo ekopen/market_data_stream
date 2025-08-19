@@ -6,9 +6,8 @@ import os
 API_KEY = os.getenv("FINNHUB_API_KEY")
 SYMBOL = 'BINANCE:ETHUSDT'
 
-CLICKHOUSE_DURATION = 600  # seconds before moving clickhouse data to parquet
-LOG_DURATION = 600  # seconds before moving logging data to parquet
-DIAGNOSTIC_FREQUENCY = 10 #seconds per diagnostic update
+DATA_DURATION = 600  # seconds before moving local data to parquet and cloud
+HEARTBEAT_FREQUENCY = 5 # seconds per heartbeat, where we record diagnostics and monitoring data
 
 EMPTY_LIMIT = 6 #number of consecutive empty diagnostics records before restarting the system
 

@@ -92,7 +92,7 @@ def create_diagnostics_db():
     """)
     logger.info("processing_diagnostics table created successfully.")
 
-def create_monitoring_db():
+def create_diagnostics_monitoring_db():
     logger.info("Creating monitoring_db table.")
     ch = new_client()
     # ch.command('''DROP TABLE IF EXISTS monitoring_db''')  # drop if exists to ensure fresh creation

@@ -4,13 +4,13 @@
 import threading, time, sys, os
 from dotenv import load_dotenv
 load_dotenv()  # Load from .env file
-from config import SYMBOL, API_KEY, CLICKHOUSE_DURATION, LOG_DURATION, DIAGNOSTIC_FREQUENCY, EMPTY_LIMIT, WS_LAG_THRESHOLD, PROC_LAG_THRESHOLD
+from config import SYMBOL, API_KEY, DATA_DURATION, HEARTBEAT_FREQUENCY, EMPTY_LIMIT, WS_LAG_THRESHOLD, PROC_LAG_THRESHOLD
 
-from clickhouse import create_ticks_db, create_diagnostics_db, create_monitoring_db, new_client
-from db_storage import clickhouse_to_cloud, logs_to_cloud
+from clickhouse import create_ticks_db, create_diagnostics_db, create_diagnostics_monitoring_db, new_client
+from cloud_migration import migration_to_cloud
 from kafka_producer import start_producer
 from kafka_consumer import start_consumer
-from monitoring import insert_diagnostics, insert_monitoring
+from monitoring import ticks_monitoring, diagnostics_monitoring
 
 # logging setup
 import logging
@@ -53,7 +53,7 @@ if __name__ == "__main__":
 
         create_ticks_db()
         create_diagnostics_db()
-        create_monitoring_db()
+        create_diagnostics_monitoring_db()
 
         ch = new_client()
         ch.insert('monitoring_db',[("System started",)],column_names=['message'])
@@ -66,10 +66,10 @@ if __name__ == "__main__":
         consumer_thread.start()
 
         # misc daemon aka background threads for diagnostics and cloud migration
-        threading.Thread(target=insert_diagnostics, args=(stop_event,DIAGNOSTIC_FREQUENCY), daemon=True).start()
-        threading.Thread(target=insert_monitoring, args=(stop_event, DIAGNOSTIC_FREQUENCY, EMPTY_LIMIT, WS_LAG_THRESHOLD, PROC_LAG_THRESHOLD), daemon=True).start() 
-        threading.Thread(target=clickhouse_to_cloud, args=(stop_event,CLICKHOUSE_DURATION), daemon=True).start() 
-        threading.Thread(target=logs_to_cloud, args=(stop_event, LOG_DURATION), daemon=True).start()
+        threading.Thread(target=ticks_monitoring, args=(stop_event,HEARTBEAT_FREQUENCY), daemon=True).start()
+        threading.Thread(target=diagnostics_monitoring, args=(stop_event, HEARTBEAT_FREQUENCY, EMPTY_LIMIT, WS_LAG_THRESHOLD, PROC_LAG_THRESHOLD), daemon=True).start() 
+        threading.Thread(target=migration_to_cloud, args=(stop_event,DATA_DURATION), daemon=True).start() 
+
 
         try:
             while not stop_event.is_set():
