@@ -2,15 +2,8 @@
 # creates pricing database
 
 import clickhouse_connect
-
-import time, os
-from datetime import timedelta, datetime, timezone
-import pandas as pd
-import threading
-import boto3, os
+import os
 from dotenv import load_dotenv
-import subprocess
-import sys
 load_dotenv()  # Load from .env file
 
 import logging
@@ -19,10 +12,10 @@ logger = logging.getLogger(__name__)
 
 def new_client():
     return clickhouse_connect.get_client(
-        host='localhost',
-        port=8123,
-        username='default',
-        password='mysecurepassword'
+        host=os.getenv("CLICKHOUSE_HOST", "localhost"),
+        port=int(os.getenv("CLICKHOUSE_PORT", "8123")),
+        username=os.getenv("CLICKHOUSE_USER", "default"),
+        password=os.getenv("CLICKHOUSE_PASSWORD", "mysecurepassword"),
     )
 
 def create_ticks_db():

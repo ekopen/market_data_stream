@@ -5,13 +5,16 @@ from kafka import KafkaProducer
 import json, websocket, time
 from datetime import datetime, timezone
 import threading
+import os
 
 import logging
 logger = logging.getLogger(__name__)
 
+BOOTSTRAP = os.getenv("KAFKA_BOOTSTRAP", "localhost:9092")
+
 # producer class
 producer = KafkaProducer(
-    bootstrap_servers='localhost:9092',
+    bootstrap_servers=BOOTSTRAP,
     value_serializer=lambda v: json.dumps(v).encode('utf-8'),
     linger_ms=2, # trades off latency for throughput
     retries=1, # retry once on failure

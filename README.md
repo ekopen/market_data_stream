@@ -1,68 +1,57 @@
-# Real-Time Data Strean
+# Real-Time Market Data Pipeline
 
-This project is to start a real time data feed and build infrastructure needed to maintain it.
+## Overview
+This project implements a real-time market data infrastructure designed for ingestion, processing, storage, monitoring, and visualization of financial tick data.  
+It simulates a simplified version of pipelines used in trading environments, featuring:
 
-The subject of our data stream will be financial data, specifically for Crypto which has as 24/7 market.
+- Kafka for streaming
+- ClickHouse for storage
+- Streamlit for dashboarding
+- AWS S3 for archival
+- Monitoring and diagnostics for reliability
 
-## Project Overview
+![Architecture Diagram](assets/architecture_simple.png)
 
+## Architecture
+The pipeline consists of the following components:
 
-1. **Data Pipeline** – Real-time data ingestion using WebSockets and Kafka.
-2. **Fault Tolerance/Error Analysis** - Create procedures and protocol to deal with crashes, bad data, etc.
-3. **Data Storage** – Persist data with SQLite, with different tables based on term of data stored.
-4. **Analysis/Visualization** – Clean and explore data.
-5. **Front End** – Create a front end website version of the project that continiously runs.
+1. **Data Ingestion**  
+   A Kafka producer connects to an API and streams live market tick data (`symbol`, `price`, `volume`, `timestamp`) into a Kafka topic.
 
----
+2. **Data Storage**  
+   A Kafka consumer validates, batches, and inserts tick data into ClickHouse tables.
 
-## Docker/Kafka Setup Instructions
+3. **Monitoring & Diagnostics**  
+   Metrics are periodically recorded and stored in diagnostics tables. Logging captures detailed system behavior for troubleshooting.
 
-### Prerequisites
+4. **Cloud Archival**  
+   All data is automatically archived to AWS S3 for long-term storage.
 
-- **Download Docker Desktop**  
+5. **Dashboard**  
+   A Streamlit app provides real-time visualizations of:
+   - Tick data
+   - Pipeline performance
+   - Diagnostic metrics
 
-- **Install Python dependencies**
-  ```bash
-  pip install kafka-python websocket-client
-  pip install clickhouse-connect
-  ```
+6. **Containerized Deployment**  
+   Managed with Docker Compose for reproducibility and production alignment.
 
-- **Launch Kafka and ZooKeeper with Docker Compose**
-  ```bash
-  docker-compose up -d
-  ```
+## Tech Stack
+- **Messaging/Streaming**: Apache Kafka  
+- **Database**: ClickHouse  
+- **Dashboard/UI**: Streamlit  
+- **Orchestration**: Docker Compose  
+- **Cloud Integration**: AWS S3  
+- **Monitoring/Logging**: Python logging + diagnostics tables  
 
-- **Create Kafka Topic**
-  
-  First, open a terminal inside your running Kafka container:
-  ```bash
-  docker exec -it 02project2-kafka-1 bash
-  ```
+## Getting Started
+- WIP
 
-  Then, inside the container shell, run:
-  ```bash
-  kafka-topics --create --topic price_ticks \
-    --bootstrap-server localhost:9092 \
-    --partitions 1 --replication-factor 1
-  ```
-
-- **Initiate Clickhouse**
-  ```bash
-  docker exec -it clickhouse clickhouse-client
-  ```
-
-- **Run the Data Pipeline**
-  ```bash
-  python main.py
-  ```
-
-  This will start the Kafka producer (WebSocket ingestion) and consumer (SQLite storage) in a multi-threaded setup.
-
-
-
-
-
-
-
-
-
+## Future Improvements
+- Create flowcharts demonstrating the process
+- Replace dashboard with Grafana
+- Deploy to cloud
+- Add email alerts
+- Add a portfolio/systemized ML strategies
+- Expand to bid/ask data and additional assets
+- Add CI/CD deployment

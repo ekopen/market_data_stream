@@ -26,7 +26,7 @@ s3 = boto3.client(
 )
 
 def migration_to_cloud(stop_event, duration):
-    time.sleep(duration * 2)  # pause before beginning the migration to let data populate
+    time.sleep(10)  # pause before beginning the migration to let data populate
 
     ch_client = new_client()
     parquet_dir = 'parquet_data'

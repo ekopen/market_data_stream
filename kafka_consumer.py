@@ -5,9 +5,12 @@ from kafka import KafkaConsumer
 import json, time
 from datetime import datetime, timezone
 from clickhouse import new_client
+import os
 
 import logging
 logger = logging.getLogger(__name__)
+
+BOOTSTRAP = os.getenv("KAFKA_BOOTSTRAP", "localhost:9092")
 
 # prepares the data for clickhouse
 def validate_and_parse(data):
@@ -31,7 +34,7 @@ def start_consumer(stop_event):
 
     consumer = KafkaConsumer(
         'price_ticks', # subscribe to the topic
-        bootstrap_servers='localhost:9092',
+        bootstrap_servers=BOOTSTRAP,
         group_id='ticks_ingestor',
         value_deserializer=lambda m: json.loads(m.decode('utf-8')),
         enable_auto_commit=True, #auto commit offsets
