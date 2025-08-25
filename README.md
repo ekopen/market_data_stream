@@ -36,6 +36,8 @@ The pipeline consists of the following components:
 6. **Containerized Deployment**  
    Managed with Docker Compose for reproducibility and production alignment.
 
+![Architecture Diagram](assets/architecture_complex.png)
+
 ## Tech Stack
 - **Messaging/Streaming**: Apache Kafka  
 - **Database**: ClickHouse  

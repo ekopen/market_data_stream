@@ -25,7 +25,7 @@ s3 = boto3.client(
     aws_secret_access_key=AWS_SECRET_ACCESS_KEY
 )
 
-def migration_to_cloud(stop_event, duration):
+def migration_to_cloud(stop_event, clickhouse_duration, archive_frequency):
     time.sleep(10)  # pause before beginning the migration to let data populate
 
     ch_client = new_client()
@@ -36,7 +36,7 @@ def migration_to_cloud(stop_event, duration):
     while not stop_event.is_set():
         logger.debug("Starting full migration cycle.")
         try:
-            cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=duration)
+            cutoff_time = datetime.now(timezone.utc) - timedelta(seconds=clickhouse_duration)
             cutoff_ms = int(cutoff_time.timestamp() * 1000)
             ts = datetime.now(timezone.utc).strftime('%Y%m%d_%H%M%S')
 
@@ -190,4 +190,4 @@ def migration_to_cloud(stop_event, duration):
         except Exception as e:
             logger.exception("Error during full_migration_to_cloud")
 
-        time.sleep(duration)
+        time.sleep(archive_frequency)
