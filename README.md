@@ -6,10 +6,11 @@ It simulates a simplified version of pipelines used in trading environments, fea
 
 - Kafka for streaming
 - ClickHouse for storage
-- Streamlit for dashboarding
+- Grafana for dashboarding
 - AWS S3 for archival
 - Monitoring and diagnostics for reliability
 
+### Simple Diagram of the Architecture
 ![Architecture Diagram](assets/architecture_simple.png)
 
 ## Architecture
@@ -28,20 +29,18 @@ The pipeline consists of the following components:
    All data is automatically archived to AWS S3 for long-term storage.
 
 5. **Dashboard**  
-   A Streamlit app provides real-time visualizations of:
-   - Tick data
-   - Pipeline performance
-   - Diagnostic metrics
+   A Grafana app provides real-time visualizations of tick data, pipeline performance, and logs.
 
 6. **Containerized Deployment**  
    Managed with Docker Compose for reproducibility and production alignment.
 
+### Detailed Diagram of the Architecture
 ![Architecture Diagram](assets/architecture_complex.png)
 
 ## Tech Stack
 - **Messaging/Streaming**: Apache Kafka  
 - **Database**: ClickHouse  
-- **Dashboard/UI**: Streamlit  
+- **Dashboard/UI**: Grafana  
 - **Orchestration**: Docker Compose  
 - **Cloud Integration**: AWS S3  
 - **Monitoring/Logging**: Python logging + diagnostics tables  
