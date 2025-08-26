@@ -61,3 +61,5 @@ The pipeline consists of the following components:
    - Add a portfolio/systemized ML strategies
    - Expand to bid/ask data and additional assets
    - Add CI/CD deployment
+- bugs
+   - log uploads are inconsistent

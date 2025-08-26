@@ -64,7 +64,7 @@ def start_consumer(stop_event):
                                 batch,
                                 column_names=['timestamp','timestamp_ms','symbol','price','volume','received_at']
                             )
-                            logger.info(f"Inserted {len(batch)} rows.")
+                            logger.info(f"Inserted {len(batch)} rows to ticks_db.")
                             batch.clear()
                             last_flush = time.time()
                     except Exception as e:
