@@ -133,6 +133,26 @@ def migration_to_cloud(stop_event, clickhouse_duration, archive_frequency):
             ''')
             logger.debug("Deleted migrated records from monitoring.")
 
+            # -------------------------- uptime_db -------------------------- #
+            old_uptime = ch_client.query(f'''
+                SELECT * FROM uptime_db
+                WHERE toUnixTimestamp64Milli(uptime_timestamp) < {cutoff_ms}
+            ''').result_rows
+            uptime_df = pd.DataFrame(old_uptime, columns=[
+                'uptime_timestamp', 'is_up'
+            ])
+            latest_file = f'{parquet_dir}/uptime.parquet'
+            archive_file = f'{parquet_dir}/uptime_{ts}.parquet'
+            uptime_df.to_parquet(latest_file, index=False)
+            uptime_df.to_parquet(archive_file, index=False)
+            logger.info(f"Written Parquet files: {latest_file} and {archive_file}")
+
+            ch_client.command(f'''
+                ALTER TABLE uptime_db
+                DELETE WHERE toUnixTimestamp64Milli(uptime_timestamp) < {cutoff_ms}
+            ''')
+            logger.debug("Deleted migrated records from uptime_db.")
+
             # -------------------------- log_data -------------------------- #
             for file in os.listdir(log_dir):
                 file_path = os.path.join(log_dir, file)
@@ -174,6 +194,7 @@ def migration_to_cloud(stop_event, clickhouse_duration, archive_frequency):
                 if parquet in {
                     "ticks.parquet", "ws_diagnostics.parquet",
                     "proc_diagnostics.parquet", "monitoring.parquet",
+                    "uptime.parquet",
                     "logs.parquet"
                 }:
                     continue

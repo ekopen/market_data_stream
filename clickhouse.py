@@ -87,3 +87,18 @@ def create_diagnostics_monitoring_db():
     ORDER BY monitoring_timestamp
     ''')
     logger.info("monitoring_db table created successfully.")
+
+def create_uptime_db():
+    logger.info("Creating uptime_db table.")
+    ch = new_client()
+    # ch.command('''DROP TABLE IF EXISTS uptime_db''')  # drop if exists to ensure fresh creation
+    ch.command('''
+    CREATE TABLE IF NOT EXISTS uptime_db(
+        uptime_timestamp   DateTime64(3, 'UTC'),
+        is_up              UInt8
+    )
+    ENGINE = MergeTree()
+    PARTITION BY toYYYYMMDD(uptime_timestamp)
+    ORDER BY uptime_timestamp
+    ''')
+    logger.info("uptime_db table created successfully.")

@@ -12,6 +12,7 @@ It simulates a simplified version of pipelines used in trading environments, fea
 
 ### Simple Diagram of the Architecture
 ![Architecture Diagram](assets/architecture_simple.png)
+(Detailed view provided below.)
 
 ## Architecture
 The pipeline consists of the following components:
@@ -49,10 +50,14 @@ The pipeline consists of the following components:
 - WIP
 
 ## Future Improvements
-- Create flowcharts demonstrating the process
-- Replace dashboard with Grafana
+- Create external downtime detector
 - Deploy to cloud
-- Add email alerts
-- Add a portfolio/systemized ML strategies
-- Expand to bid/ask data and additional assets
-- Add CI/CD deployment
+- Update README/Flowcharts as needed
+   - add promtail/loki log info
+   - get rid of old dashboard files 
+   - add info about tests
+- future add ons
+   - Add email alerts
+   - Add a portfolio/systemized ML strategies
+   - Expand to bid/ask data and additional assets
+   - Add CI/CD deployment

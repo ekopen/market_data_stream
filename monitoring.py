@@ -46,8 +46,6 @@ def ticks_monitoring(stop_event,duration):
                 df['received_at'] = pd.to_datetime(df['received_at'])
                 df['insert_time'] = pd.to_datetime(df['insert_time'])
 
-
-                # ----- diagnostics  ----- #
                 avg_timestamp = df['timestamp'].mean()
                 avg_received_at = df['received_at'].mean()
                 avg_insert_time = df['insert_time'].mean()
@@ -55,6 +53,7 @@ def ticks_monitoring(stop_event,duration):
                 proc_lag = (avg_insert_time - avg_received_at).total_seconds()
                 message_count = len(df)
 
+            # ----- diagnostics  ----- #
             ch.insert('websocket_diagnostics',
                 [(avg_timestamp, avg_received_at, ws_lag, message_count)],
                 column_names=['avg_timestamp', 'avg_received_at', 'avg_websocket_lag', 'message_count'])
@@ -62,6 +61,16 @@ def ticks_monitoring(stop_event,duration):
             ch.insert('processing_diagnostics',
                 [(avg_timestamp, avg_received_at, avg_insert_time, proc_lag, message_count)],
                 column_names=['avg_timestamp', 'avg_received_at', 'avg_processed_timestamp', 'avg_processing_lag', 'message_count'])
+            
+            # ---- update monitoring ----- #
+            is_up = 1 if message_count > 0 else 0
+            ch.insert(
+                'uptime_db',
+                [(current_time, is_up)],
+                column_names=['uptime_timestamp', 'is_up']
+            )
+            if not is_up:
+                logger.warning("No messages received in the last ticks monitoring cycle.")
 
             logger.info(f"Inserted ticks monitoring data for {message_count} messages.")
 
@@ -83,23 +92,13 @@ def diagnostics_monitoring(stop_event,duration,empty_limit, ws_lag_threshold, pr
             #--------------------------pipeline down--------------------------#
             
             rows = ch.query(f"""
-                SELECT message_count
-                FROM websocket_diagnostics
-                ORDER BY diagnostics_timestamp DESC
+                SELECT is_up
+                FROM uptime_db
+                ORDER BY uptime_timestamp DESC
                 LIMIT {int(empty_limit)}
             """).result_rows
 
-            summed_rows = ch.query(f"""
-                SELECT SUM(message_count)
-                FROM (
-                    SELECT message_count
-                    FROM websocket_diagnostics
-                    ORDER BY diagnostics_timestamp DESC
-                    LIMIT {int(empty_limit)}
-                )
-            """).result_rows
-
-            total = summed_rows[0][0] if summed_rows and summed_rows[0] else None
+            total = sum(r[0] for r in rows) if rows else None
 
             if total is not None and total == 0 and len(rows) >= empty_limit:
                 logger.warning(

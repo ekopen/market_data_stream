@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 load_dotenv()  # Load from .env file
 from config import SYMBOL, API_KEY, CLICKHOUSE_DURATION, ARCHIVE_FREQUENCY, HEARTBEAT_FREQUENCY, EMPTY_LIMIT, WS_LAG_THRESHOLD, PROC_LAG_THRESHOLD
 
-from clickhouse import create_ticks_db, create_diagnostics_db, create_diagnostics_monitoring_db, new_client
+from clickhouse import create_ticks_db, create_diagnostics_db, create_diagnostics_monitoring_db, create_uptime_db, new_client
 from cloud_migration import migration_to_cloud
 from kafka_producer import start_producer
 from kafka_consumer import start_consumer
@@ -54,6 +54,7 @@ if __name__ == "__main__":
         create_ticks_db()
         create_diagnostics_db()
         create_diagnostics_monitoring_db()
+        create_uptime_db()
 
         ch = new_client()
         ch.insert('monitoring_db',[("System started",)],column_names=['message'])
