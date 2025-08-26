@@ -10,8 +10,6 @@ import os
 import logging
 logger = logging.getLogger(__name__)
 
-BOOTSTRAP = os.getenv("KAFKA_BOOTSTRAP", "localhost:9092")
-
 # prepares the data for clickhouse
 def validate_and_parse(data):
 
@@ -34,7 +32,7 @@ def start_consumer(stop_event):
 
     consumer = KafkaConsumer(
         'price_ticks', # subscribe to the topic
-        bootstrap_servers=BOOTSTRAP,
+        bootstrap_servers="kafka:9092",
         group_id='ticks_ingestor',
         value_deserializer=lambda m: json.loads(m.decode('utf-8')),
         enable_auto_commit=True, #auto commit offsets

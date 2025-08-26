@@ -1,7 +1,7 @@
 # main.py
 # starts and stops the data pipeline
 
-import threading, time, sys, os
+import threading, time, sys, os, signal
 from dotenv import load_dotenv
 load_dotenv()  # Load from .env file
 from config import SYMBOL, API_KEY, CLICKHOUSE_DURATION, ARCHIVE_FREQUENCY, HEARTBEAT_FREQUENCY, EMPTY_LIMIT, WS_LAG_THRESHOLD, PROC_LAG_THRESHOLD
@@ -11,6 +11,7 @@ from cloud_migration import migration_to_cloud
 from kafka_producer import start_producer
 from kafka_consumer import start_consumer
 from monitoring import ticks_monitoring, diagnostics_monitoring
+from health_server import start_health_server
 
 # logging setup
 import logging
@@ -45,6 +46,13 @@ logger = logging.getLogger(__name__)
 # shutdown setup if we want to pass python main.py --stop
 stop_event = threading.Event()
 
+def handle_signal(signum, frame):
+    logger.info("Received stop signal. Shutting down...")
+    stop_event.set()
+
+signal.signal(signal.SIGTERM, handle_signal)
+signal.signal(signal.SIGINT, handle_signal)
+
 if __name__ == "__main__":
     
     try:
@@ -71,21 +79,16 @@ if __name__ == "__main__":
         threading.Thread(target=diagnostics_monitoring, args=(stop_event, HEARTBEAT_FREQUENCY, EMPTY_LIMIT, WS_LAG_THRESHOLD, PROC_LAG_THRESHOLD), daemon=True).start() 
         threading.Thread(target=migration_to_cloud, args=(stop_event,CLICKHOUSE_DURATION, ARCHIVE_FREQUENCY), daemon=True).start() 
 
+        start_health_server()
 
-        try:
-            while not stop_event.is_set():
-                time.sleep(1)
-        except KeyboardInterrupt:
-            logger.info("Stopping application via KeyboardInterrupt.")
-            ch.insert('monitoring_db',[("System closing",)],column_names=['message'])
-            stop_event.set()
-        finally:
-            # give non-daemon threads a moment to shut down cleanly
-            producer_thread.join(timeout=3)
-            consumer_thread.join(timeout=3)
-            logger.info("System shutdown complete.")
+        while not stop_event.is_set():
+            time.sleep(1)
 
-    except KeyboardInterrupt:
-        logger.info("Exiting application")
         ch.insert('monitoring_db',[("System closing",)],column_names=['message'])
+        producer_thread.join(timeout=3)
+        consumer_thread.join(timeout=3)
+        logger.info("System shutdown complete.")
+
+    except Exception as e:
+        logger.exception("Fatal error in main loop")
         

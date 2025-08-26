@@ -180,6 +180,9 @@ def migration_to_cloud(stop_event, clickhouse_duration, archive_frequency):
                         df_old.to_parquet(archive_file, index=False)
                         logger.info(f"Migrated {len(df_old)} log rows to {latest_file} and {archive_file}")
 
+                    else:
+                        logger.info(f"No log rows to migrate.")
+
                     df_new.to_csv(file_path, sep="|", header=False, index=False)
 
                 except Exception:

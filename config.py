@@ -6,8 +6,8 @@ import os
 API_KEY = os.getenv("FINNHUB_API_KEY")
 SYMBOL = 'BINANCE:ETHUSDT'
 
-CLICKHOUSE_DURATION = 600  # how old data can be in Clickhouse before it will be moved to a parquet (seconds)
-ARCHIVE_FREQUENCY = 60  # how often we check for old data to move to parquet and upload to cloud (seconds)
+CLICKHOUSE_DURATION = 6000  # how old data can be in Clickhouse before it will be moved to a parquet (seconds)
+ARCHIVE_FREQUENCY = 600  # how often we check for old data to move to parquet and upload to cloud (seconds)
 HEARTBEAT_FREQUENCY = 5 # seconds per heartbeat, where we record diagnostics and monitoring data 
 
 EMPTY_LIMIT = 6 #number of consecutive empty diagnostics records before restarting the system

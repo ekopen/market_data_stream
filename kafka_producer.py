@@ -10,13 +10,11 @@ import os
 import logging
 logger = logging.getLogger(__name__)
 
-BOOTSTRAP = os.getenv("KAFKA_BOOTSTRAP", "localhost:9092")
-
 # producer class
 producer = KafkaProducer(
-    bootstrap_servers=BOOTSTRAP,
+    bootstrap_servers="kafka:9092",
     value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-    linger_ms=0, # trades off latency for throughput, setting to 0 because it was throwing errors
+    linger_ms=1, # trades off latency for throughput
     retries=1, # retry once on failure
     request_timeout_ms=2000,# wait for 2 seconds for a response
     max_block_ms=2000  # max time to block on send
@@ -69,8 +67,8 @@ def start_producer(SYMBOL, API_KEY, stop_event):
         logger.info("Shutting down producer.")
         for action, func in [
             ("closing WebSocket", lambda: ws.close()),
-            ("flushing producer", lambda: producer.flush(timeout=2)),
-            ("closing producer", lambda: producer.close(timeout=2)),
+            ("flushing producer", lambda: producer.flush(timeout=5)),
+            ("closing producer", lambda: producer.close(timeout=5)),
         ]:
             try:
                 func()

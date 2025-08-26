@@ -50,11 +50,11 @@ The pipeline consists of the following components:
 - WIP
 
 ## Future Improvements
-- Create external downtime detector
 - Deploy to cloud
 - Update README/Flowcharts as needed
    - add promtail/loki log info
-   - get rid of old dashboard files 
+   - healthserver info
+   - general docker rereview
    - add info about tests
 - future add ons
    - Add email alerts

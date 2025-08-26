@@ -5,3 +5,7 @@ python-dotenv
 boto3
 websocket-client
 pytest
+fastapi
+uvicorn
+pyarrow
+fastparquet

@@ -12,10 +12,11 @@ logger = logging.getLogger(__name__)
 
 def new_client():
     return clickhouse_connect.get_client(
-        host=os.getenv("CLICKHOUSE_HOST", "localhost"),
-        port=int(os.getenv("CLICKHOUSE_PORT", "8123")),
-        username=os.getenv("CLICKHOUSE_USER", "default"),
-        password=os.getenv("CLICKHOUSE_PASSWORD", "mysecurepassword"),
+        host="clickhouse",  # 👈 service name from docker-compose.yml
+        port=8123,
+        username="default",
+        password="mysecurepassword",
+        database="default"
     )
 
 def create_ticks_db():
