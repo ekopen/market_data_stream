@@ -57,10 +57,13 @@ The pipeline consists of the following components:
    - healthserver info
    - general docker rereview
    - add info about tests
+- bugs
+   - log uploads are inconsistent
+   - restart loop / make sure its a proper docker restart
+   - grafana needs to be more easily ported
 - future add ons
    - Add email alerts
    - Add a portfolio/systemized ML strategies
    - Expand to bid/ask data and additional assets
    - CI/CD protocol
-- bugs
-   - log uploads are inconsistent
+
