@@ -3,8 +3,8 @@
 
 import os
 
-KAFKA_BOOTSTRAP_SERVER = "kafka:9092" #local development
-# KAFKA_BOOTSTRAP_SERVER="159.65.41.22:9092" #DNS development
+# KAFKA_BOOTSTRAP_SERVER = "kafka:9092" #local development
+KAFKA_BOOTSTRAP_SERVER="159.65.41.22:9092" #DNS development
 
 API_KEY = os.getenv("FINNHUB_API_KEY")
 SYMBOL = 'BINANCE:ETHUSDT'
