@@ -50,7 +50,6 @@ The pipeline consists of the following components:
 - WIP
 
 ## Future Improvements
-- Review entire configuration
 - Update README/Flowcharts as needed
    - add promtail/loki log info
    - prometheus/blackbox information
@@ -61,9 +60,12 @@ The pipeline consists of the following components:
    - log uploads are inconsistent
    - restart loop / make sure its a proper docker restart
    - grafana needs to be more easily ported
+   - pipeline uptime % looks the same across all times
+   - clickhouse, kafka, and websocket uptime seem inaccruate
 - future add ons
    - Add email alerts
    - Add a portfolio/systemized ML strategies
    - Expand to bid/ask data and additional assets
    - CI/CD protocol
+   - look into maximizing speed
 

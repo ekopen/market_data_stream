@@ -1,18 +1,13 @@
-# ticks_db.py
+# clickhouse.py
 # creates pricing database
 
 import clickhouse_connect
-import os
-from dotenv import load_dotenv
-load_dotenv()  # Load from .env file
-
 import logging
 logger = logging.getLogger(__name__)
 
-
 def new_client():
     return clickhouse_connect.get_client(
-        host="clickhouse",  # 👈 service name from docker-compose.yml
+        host="clickhouse", 
         port=8123,
         username="default",
         password="mysecurepassword",
@@ -22,7 +17,6 @@ def new_client():
 def create_ticks_db():
     logger.info("Creating ticks_db table.")
     ch = new_client()
-    # ch.command('''DROP TABLE IF EXISTS ticks_db''')  # drop if exists to ensure fresh creation
     ch.command('''
     CREATE TABLE IF NOT EXISTS ticks_db(
         timestamp       DateTime64(3, 'UTC'),
@@ -42,7 +36,6 @@ def create_ticks_db():
 def create_diagnostics_db():
     logger.info("Creating websocket_diagnostics table.")
     ch = new_client()
-    # ch.command('''DROP TABLE IF EXISTS websocket_diagnostics''')  # drop if exists to ensure fresh creation
     ch.command(f"""
     CREATE TABLE IF NOT EXISTS websocket_diagnostics (
         avg_timestamp Nullable(DateTime64(3, 'UTC')),
@@ -58,7 +51,6 @@ def create_diagnostics_db():
     logger.info("websocket_diagnostics table created successfully.")
 
     logger.info("Creating processing_diagnostics table.")
-    #ch.command('''DROP TABLE IF EXISTS processing_diagnostics''')  # drop if exists to ensure fresh creation
     ch.command(f"""
     CREATE TABLE IF NOT EXISTS processing_diagnostics (
         avg_timestamp Nullable(DateTime64(3, 'UTC')),
@@ -77,7 +69,6 @@ def create_diagnostics_db():
 def create_diagnostics_monitoring_db():
     logger.info("Creating monitoring_db table.")
     ch = new_client()
-    # ch.command('''DROP TABLE IF EXISTS monitoring_db''')  # drop if exists to ensure fresh creation
     ch.command('''
     CREATE TABLE IF NOT EXISTS monitoring_db(
         monitoring_timestamp     DateTime64(3, 'UTC') DEFAULT now64(3),
@@ -92,7 +83,6 @@ def create_diagnostics_monitoring_db():
 def create_uptime_db():
     logger.info("Creating uptime_db table.")
     ch = new_client()
-    # ch.command('''DROP TABLE IF EXISTS uptime_db''')  # drop if exists to ensure fresh creation
     ch.command('''
     CREATE TABLE IF NOT EXISTS uptime_db(
         uptime_timestamp   DateTime64(3, 'UTC'),

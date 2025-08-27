@@ -1,3 +1,5 @@
+# checks websocket,clickhouse, and kafka connectivity
+
 modules:
   http_2xx:
     prober: http

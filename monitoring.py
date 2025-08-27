@@ -2,12 +2,9 @@
 # records notable events and handles crashes
 
 from clickhouse import new_client
-import time
+import time, logging
 from datetime import datetime, timezone, timedelta
 import pandas as pd
-import threading
-import os, subprocess, sys
-import logging
 logger = logging.getLogger(__name__)
 
 def ticks_monitoring(stop_event,duration):
@@ -109,10 +106,16 @@ def diagnostics_monitoring(stop_event,duration,empty_limit, ws_lag_threshold, pr
                     [("System restart",)],
                     column_names=['message']
                 )
+
+                # this is to prevent a restart loop
+                current_time = datetime.now(timezone.utc)
+                ch.insert(
+                    'uptime_db',
+                    [(current_time, 1)],
+                    column_names=['uptime_timestamp', 'is_up']
+                )
                 
-                # Relaunch new process with same interpreter & args, then exit current one
-                # subprocess.Popen([sys.executable] + sys.argv)
-                # os._exit(0)
+                stop_event.set()
 
             #--------------------------websocket lag spike--------------------------#
             lag = ch.query(f"""

@@ -1,16 +1,11 @@
-# db_storage.py
+# cloud_migration.py
 # This module handles the migration of old data to cloud/storage
 
 from clickhouse import new_client
-import time, os
+import time, os, logging
 from datetime import timedelta, datetime, timezone
 import pandas as pd
 import boto3
-from dotenv import load_dotenv
-import logging
-
-load_dotenv()  # Load from .env file
-
 logger = logging.getLogger(__name__)
 
 AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')

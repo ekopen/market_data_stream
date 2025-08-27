@@ -3,12 +3,9 @@
 
 from config import KAFKA_BOOTSTRAP_SERVER
 from kafka import KafkaConsumer
-import json, time
+import json, time, logging
 from datetime import datetime, timezone
 from clickhouse import new_client
-import os
-
-import logging
 logger = logging.getLogger(__name__)
 
 # prepares the data for clickhouse
@@ -45,8 +42,8 @@ def start_consumer(stop_event):
     #using batching to improve performance
     batch = []
     last_flush = time.time()
-    BATCH_SIZE = 300
-    FLUSH_INTERVAL = .5  # seconds
+    BATCH_SIZE = 150
+    FLUSH_INTERVAL = .25  # seconds
 
     try:
         while not stop_event.is_set():

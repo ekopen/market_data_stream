@@ -3,12 +3,8 @@
 
 from config import KAFKA_BOOTSTRAP_SERVER
 from kafka import KafkaProducer
-import json, websocket, time
+import json, websocket, time, threading, logging
 from datetime import datetime, timezone
-import threading
-import os
-
-import logging
 logger = logging.getLogger(__name__)
 
 # producer class

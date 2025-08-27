@@ -1,13 +1,17 @@
 services:
 
+# ----------- real time data ----------------#
+
+  # zookeeper is necessary to manage Kafka metadata
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.0
     environment:
-      ZOOKEEPER_CLIENT_PORT: 2181
-      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_CLIENT_PORT: 2181 #kafka itself
+      ZOOKEEPER_TICK_TIME: 2000 # default heartbeat setting
     ports:
       - "2181:2181"
 
+  # kafka is needed to manage the datastream
   kafka:
     image: confluentinc/cp-kafka:7.6.0
     depends_on:
@@ -18,40 +22,26 @@ services:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-      # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      # KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092 # this is for local development
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://159.65.41.22:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-    healthcheck:
-      test: ["CMD-SHELL", "bash -c '</dev/tcp/localhost/9092'"]
-      interval: 10s
-      timeout: 3s
-      retries: 10
+
+# ----------- data storage ----------------#
 
   clickhouse:
     image: clickhouse/clickhouse-server:latest
     container_name: clickhouse
     ports:
-      - "8123:8123"
-      - "9000:9000"
-    ulimits:
-      nofile:
-        soft: 262144
-        hard: 262144
+      - "8123:8123" #HTTP interface
+      - "9000:9000" # native interface
     volumes:
       - clickhouse_data:/var/lib/clickhouse
     environment:
-      CLICKHOUSE_DB: default
       CLICKHOUSE_USER: default
       CLICKHOUSE_PASSWORD: mysecurepassword
-    depends_on:
-      - kafka
-    healthcheck:
-      test: ["CMD", "curl", "-sS", "http://localhost:8123/ping"]
-      interval: 10s
-      timeout: 3s
-      retries: 20
 
 # ----------- visualization ----------------#
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -68,7 +58,9 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
 
-# ----------- downtime monitoring ----------------#
+# ----------- monitoring ----------------#
+
+# checks if services (like health) are up
   blackbox:
     image: prom/blackbox-exporter:latest
     container_name: blackbox
@@ -80,6 +72,7 @@ services:
       - ./blackbox.yml:/etc/blackbox/blackbox.yml
     restart: unless-stopped
 
+# scrapes endpoints for metrics/alerts. the central "brain"
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
@@ -90,15 +83,9 @@ services:
     restart: unless-stopped
 
 
-# ----------- log monitoring ----------------#
-  loki:
-    image: grafana/loki:2.9.4
-    container_name: loki
-    command: -config.file=/etc/loki/local-config.yaml
-    ports:
-      - "3100:3100"
-    restart: unless-stopped
+# ----------- logs ----------------#
 
+# collects all logs and ships to loki
   promtail:
     image: grafana/promtail:2.9.4
     container_name: promtail
@@ -110,9 +97,21 @@ services:
       - loki
     restart: unless-stopped
 
+# aggregates all logs
+  loki:
+    image: grafana/loki:2.9.4
+    container_name: loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    restart: unless-stopped
+
+# ----------- code ----------------#
   pipeline:
     build: .
     container_name: pipeline
+    env_file:
+      - .env
     ports:
       - "8001:8001"
     depends_on:

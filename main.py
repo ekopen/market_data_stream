@@ -1,9 +1,8 @@
 # main.py
 # starts and stops the data pipeline
 
-import threading, time, sys, os, signal
-from dotenv import load_dotenv
-load_dotenv()  # Load from .env file
+# imports
+import threading, time, signal, logging
 from config import SYMBOL, API_KEY, CLICKHOUSE_DURATION, ARCHIVE_FREQUENCY, HEARTBEAT_FREQUENCY, EMPTY_LIMIT, WS_LAG_THRESHOLD, PROC_LAG_THRESHOLD
 
 from clickhouse import create_ticks_db, create_diagnostics_db, create_diagnostics_monitoring_db, create_uptime_db, new_client
@@ -13,56 +12,31 @@ from kafka_consumer import start_consumer
 from monitoring import ticks_monitoring, diagnostics_monitoring
 from health_server import start_health_server
 
-# logging setup
-import logging
-from logging.handlers import TimedRotatingFileHandler
-
-formatter = logging.Formatter("%(asctime)s | %(levelname)s | %(name)s | %(message)s")
-
-# File handler with daily rotation
-file_handler = TimedRotatingFileHandler(
-    filename=os.path.join("log_data/app.log"),
-    when="midnight",
-    backupCount=7,
-    encoding="utf-8"
+# logging 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+    handlers=[
+        logging.FileHandler("log_data/app.log", encoding="utf-8"),
+        logging.StreamHandler()
+    ]
 )
-file_handler.setLevel(logging.INFO)
-file_handler.setFormatter(formatter)
-
-# Console (stdout) handler
-console_handler = logging.StreamHandler(sys.stdout)
-console_handler.setLevel(logging.INFO)
-console_handler.setFormatter(formatter)
-
-# Root logger setup
-logger = logging.getLogger()
-logger.setLevel(logging.INFO)
-logger.handlers = []  # Clear default handlers
-logger.addHandler(file_handler)
-logger.addHandler(console_handler)
-
 logger = logging.getLogger(__name__)
 
-# shutdown setup if we want to pass python main.py --stop
+# shutdown
 stop_event = threading.Event()
-
 def handle_signal(signum, frame):
     logger.info("Received stop signal. Shutting down...")
     stop_event.set()
-
 signal.signal(signal.SIGTERM, handle_signal)
-signal.signal(signal.SIGINT, handle_signal)
 
+# start/stop loop
 if __name__ == "__main__":
-    
     try:
-
         logger.info("System starting.")
 
-        create_ticks_db()
-        create_diagnostics_db()
-        create_diagnostics_monitoring_db()
-        create_uptime_db()
+        # create clickhouse tables
+        create_ticks_db(), create_diagnostics_db(), create_diagnostics_monitoring_db(), create_uptime_db()
 
         ch = new_client()
         ch.insert('monitoring_db',[("System started",)],column_names=['message'])
@@ -70,19 +44,17 @@ if __name__ == "__main__":
         # start ingesting data from the websocket, feed to kafka, and insert to clickhouse
         producer_thread = threading.Thread(target=start_producer, args=(SYMBOL, API_KEY, stop_event))
         consumer_thread = threading.Thread(target=start_consumer, args=(stop_event,))
-        #need to start these seperately for graceful shutdown
-        producer_thread.start() 
-        consumer_thread.start()
-
+        producer_thread.start(), consumer_thread.start()
         # misc daemon aka background threads for diagnostics and cloud migration
         threading.Thread(target=ticks_monitoring, args=(stop_event,HEARTBEAT_FREQUENCY), daemon=True).start()
         threading.Thread(target=diagnostics_monitoring, args=(stop_event, HEARTBEAT_FREQUENCY, EMPTY_LIMIT, WS_LAG_THRESHOLD, PROC_LAG_THRESHOLD), daemon=True).start() 
         threading.Thread(target=migration_to_cloud, args=(stop_event,CLICKHOUSE_DURATION, ARCHIVE_FREQUENCY), daemon=True).start() 
 
+        # necessary for prometheus monitoring
         start_health_server()
 
         while not stop_event.is_set():
-            time.sleep(1)
+             time.sleep(1)
 
         ch.insert('monitoring_db',[("System closing",)],column_names=['message'])
         producer_thread.join(timeout=3)

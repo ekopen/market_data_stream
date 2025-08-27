@@ -1,3 +1,5 @@
+# scrapes itself and blackbox
+
 global:
   scrape_interval: 15s
 
