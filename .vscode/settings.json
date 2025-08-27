@@ -1,0 +1,16 @@
+{
+  "files.watcherExclude": {
+    "**/log_data/**": true,
+    "**/parquet_data/**": true,
+    "**/loki-data/**": true,
+    "**/promtail-positions/**": true,
+    "**/__pycache__/**": true,
+    "**/.git/**": true
+  },
+  "search.exclude": {
+    "**/log_data/**": true,
+    "**/parquet_data/**": true,
+    "**/loki-data/**": true,
+    "**/promtail-positions/**": true
+  }
+}
