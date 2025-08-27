@@ -1,6 +1,7 @@
 # kakfa_consumer.py
 # kafka consumer that reads from the price_ticks topic and inserts into clickhouse
 
+from config import KAFKA_BOOTSTRAP_SERVER
 from kafka import KafkaConsumer
 import json, time
 from datetime import datetime, timezone
@@ -9,8 +10,6 @@ import os
 
 import logging
 logger = logging.getLogger(__name__)
-
-BOOSTRAP_SERVER = os.getenv('KAFKA_BOOTSTRAP_SERVERS')
 
 # prepares the data for clickhouse
 def validate_and_parse(data):
@@ -34,7 +33,7 @@ def start_consumer(stop_event):
 
     consumer = KafkaConsumer(
         'price_ticks', # subscribe to the topic
-        bootstrap_servers=BOOSTRAP_SERVER,
+        bootstrap_servers=KAFKA_BOOTSTRAP_SERVER,
         group_id='ticks_ingestor',
         value_deserializer=lambda m: json.loads(m.decode('utf-8')),
         enable_auto_commit=True, #auto commit offsets
