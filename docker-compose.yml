@@ -1,4 +1,5 @@
 services:
+
   zookeeper:
     image: confluentinc/cp-zookeeper:7.6.0
     environment:
@@ -56,31 +57,13 @@ services:
     ports:
       - "3000:3000"
     environment:
-      - GF_SECURITY_ADMIN_USER=admin
-      - GF_SECURITY_ADMIN_PASSWORD=admin
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_INSTALL_PLUGINS: grafana-clickhouse-datasource
     volumes:
       - grafana-data:/var/lib/grafana
 
-  loki:
-    image: grafana/loki:2.9.0
-    container_name: loki
-    command: -config.file=/etc/loki/local-config.yaml
-    ports:
-      - "3100:3100"
-    volumes:
-      - ./loki-data:/loki
-      
-  promtail:
-    image: grafana/promtail:2.9.0
-    container_name: promtail
-    command: -config.file=/etc/promtail/promtail-config.yaml
-    volumes:
-      - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml:ro
-      - ./log_data:/var/log/app:ro          # <-- matches __path__
-      - ./promtail-positions:/promtail      # <-- for positions.yaml
-    depends_on:
-      - loki
-
+# ----------- downtime monitoring ----------------#
   blackbox:
     image: prom/blackbox-exporter:latest
     container_name: blackbox
@@ -101,6 +84,27 @@ services:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     restart: unless-stopped
 
+
+# ----------- log monitoring ----------------#
+  loki:
+    image: grafana/loki:2.9.4
+    container_name: loki
+    command: -config.file=/etc/loki/local-config.yaml
+    ports:
+      - "3100:3100"
+    restart: unless-stopped
+
+  promtail:
+    image: grafana/promtail:2.9.4
+    container_name: promtail
+    volumes:
+      - ./log_data:/var/log/pipeline:ro
+      - ./promtail-config.yml:/etc/promtail/config.yml:ro
+    command: -config.file=/etc/promtail/config.yml
+    depends_on:
+      - loki
+    restart: unless-stopped
+
   pipeline:
     build: .
     container_name: pipeline
@@ -110,7 +114,7 @@ services:
       - kafka
       - clickhouse
     volumes:
-      - ./log_data:/app/log_data   # so promtail can read logs
+      - ./log_data:/app/log_data
     restart: unless-stopped
 
 volumes:

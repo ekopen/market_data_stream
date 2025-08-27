@@ -50,10 +50,10 @@ The pipeline consists of the following components:
 - WIP
 
 ## Future Improvements
-- Deploy to cloud
-   - fix grafana variable issues with macros
+- Review entire configuration
 - Update README/Flowcharts as needed
    - add promtail/loki log info
+   - prometheus/blackbox information
    - healthserver info
    - general docker rereview
    - add info about tests
