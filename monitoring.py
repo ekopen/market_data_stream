@@ -111,8 +111,8 @@ def diagnostics_monitoring(stop_event,duration,empty_limit, ws_lag_threshold, pr
                 )
                 
                 # Relaunch new process with same interpreter & args, then exit current one
-                subprocess.Popen([sys.executable] + sys.argv)
-                os._exit(0)
+                # subprocess.Popen([sys.executable] + sys.argv)
+                # os._exit(0)
 
             #--------------------------websocket lag spike--------------------------#
             lag = ch.query(f"""

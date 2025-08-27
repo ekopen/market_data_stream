@@ -10,9 +10,11 @@ import os
 import logging
 logger = logging.getLogger(__name__)
 
+BOOSTRAP_SERVER = os.getenv('KAFKA_BOOTSTRAP_SERVERS')
+
 # producer class
 producer = KafkaProducer(
-    bootstrap_servers="kafka:9092",
+    bootstrap_servers=BOOSTRAP_SERVER,
     value_serializer=lambda v: json.dumps(v).encode('utf-8'),
     linger_ms=1, # trades off latency for throughput
     retries=1, # retry once on failure

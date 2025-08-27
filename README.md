@@ -51,6 +51,7 @@ The pipeline consists of the following components:
 
 ## Future Improvements
 - Deploy to cloud
+   - fix grafana variable issues with macros
 - Update README/Flowcharts as needed
    - add promtail/loki log info
    - healthserver info
@@ -60,6 +61,6 @@ The pipeline consists of the following components:
    - Add email alerts
    - Add a portfolio/systemized ML strategies
    - Expand to bid/ask data and additional assets
-   - Add CI/CD deployment
+   - CI/CD protocol
 - bugs
    - log uploads are inconsistent
