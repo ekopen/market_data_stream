@@ -17,20 +17,20 @@ Currently deployed on a DigitalOcean DNS server.
 ![Detailed Diagram](assets/architecture_complex.png)
 
 ## Tech Stack
- Docker • Python • Kafka • ClickHouse • Grafana  • Promtail/Loki • Blackbox/Prometheus •AWS S3  •  DigitalOcean DNS Hosting
+ Docker • Python • Kafka • ClickHouse • Grafana  • Promtail/Loki • Blackbox/Prometheus • AWS S3  •  DigitalOcean DNS Hosting
 
 ## Tests
 A small suite of unit tests is in the `tests/` folder.
 
 ## Future Improvements
-- **Ingestion:**
+**Ingestion:**
 -  Investigate log upload inconsistencies (potential error in the cloud migration file).
 -  Verify Docker restart loop works.
 -  Make Grafana dashboards easier to migrate/port.
 -  Verify pipeline uptime metrics are accurate.
 -  Verify ClickHouse/Kafka/WebSocket uptime is accurate.
 
-- **Planned Feature:**
+**Planned Feature:**
 - Track ClickHouse table size in Grafana.
 - Email alerts for downtime, lag, or critical errors.
 -  Benchmark and optimize Kafka/ClickHouse performance.
