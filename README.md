@@ -20,7 +20,7 @@ Currently deployed on a DigitalOcean DNS server.
  Docker • Python • Kafka • ClickHouse • Grafana  • Promtail/Loki • Blackbox/Prometheus • AWS S3  •  DigitalOcean DNS Hosting
 
 ## Tests
-A small suite of unit tests is in the `tests/` folder.
+A small suite of unit tests is in the tests folder.
 
 ## Future Improvements
 **Ingestion:**
@@ -30,7 +30,7 @@ A small suite of unit tests is in the `tests/` folder.
 -  Verify pipeline uptime metrics are accurate.
 -  Verify ClickHouse/Kafka/WebSocket uptime is accurate.
 
-**Planned Feature:**
+**Planned Features:**
 - Track ClickHouse table size in Grafana.
 - Email alerts for downtime, lag, or critical errors.
 -  Benchmark and optimize Kafka/ClickHouse performance.
