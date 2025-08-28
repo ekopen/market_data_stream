@@ -136,8 +136,8 @@ def migration_to_cloud(stop_event, clickhouse_duration, archive_frequency):
             uptime_df = pd.DataFrame(old_uptime, columns=[
                 'uptime_timestamp', 'is_up'
             ])
-            latest_file = f'{parquet_dir}/uptime.parquet'
-            archive_file = f'{parquet_dir}/uptime_{ts}.parquet'
+            latest_file = f'{parquet_dir}/uptime_diagnostics.parquet'
+            archive_file = f'{parquet_dir}/uptime_diagnostics_{ts}.parquet'
             uptime_df.to_parquet(latest_file, index=False)
             uptime_df.to_parquet(archive_file, index=False)
             logger.info(f"Written Parquet files: {latest_file} and {archive_file}")
@@ -192,7 +192,7 @@ def migration_to_cloud(stop_event, clickhouse_duration, archive_frequency):
                 if parquet in {
                     "ticks.parquet", "ws_diagnostics.parquet",
                     "proc_diagnostics.parquet", "monitoring.parquet",
-                    "uptime.parquet",
+                    "uptime_diagnostics.parquet",
                     "logs.parquet"
                 }:
                     continue

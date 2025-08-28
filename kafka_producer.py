@@ -20,6 +20,7 @@ producer = KafkaProducer(
 def start_producer(SYMBOL, API_KEY, stop_event):
 
     logger.info("Producer thread started.")
+    time.sleep(10) # wait for Kafka to get ready
 
     def on_message(ws, message):
         data = json.loads(message)

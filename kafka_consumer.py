@@ -26,6 +26,9 @@ def validate_and_parse(data):
 
 def start_consumer(stop_event):
 
+    logger.info("Kafka consumer started.")
+    time.sleep(10) # wait for Kafka to get ready
+    
     ch_client = new_client()
 
     consumer = KafkaConsumer(
@@ -37,7 +40,7 @@ def start_consumer(stop_event):
         consumer_timeout_ms=1000  # controls how long to wait if no messages
     )
 
-    logger.info("Kafka consumer started.")
+
 
     #using batching to improve performance
     batch = []
