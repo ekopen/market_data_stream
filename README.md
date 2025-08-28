@@ -24,7 +24,7 @@ A small suite of unit tests is in the tests folder.
 
 ## Future Improvements
 **Ingestion:**
--  Investigate log upload inconsistencies (potential error in the cloud migration file).
+-  Investigate log upload inconsistencies (potential error in the cloud migration file). Potentially all parquet file saves are broken.
 -  Verify Docker restart loop works.
 -  Make Grafana dashboards easier to migrate/port.
 -  Verify pipeline uptime metrics are accurate.
