@@ -68,4 +68,5 @@ The pipeline consists of the following components:
    - Expand to bid/ask data and additional assets
    - CI/CD protocol
    - look into maximizing speed
+   - size of clickhouse in grafana
 

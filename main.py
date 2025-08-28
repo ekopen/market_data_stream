@@ -45,13 +45,11 @@ if __name__ == "__main__":
         producer_thread = threading.Thread(target=start_producer, args=(SYMBOL, API_KEY, stop_event))
         consumer_thread = threading.Thread(target=start_consumer, args=(stop_event,))
         producer_thread.start(), consumer_thread.start()
-        # misc daemon aka background threads for diagnostics and cloud migration
+        # misc daemon aka background threads for diagnostics and cloud migration and prometheus monitoring
         threading.Thread(target=ticks_monitoring, args=(stop_event,HEARTBEAT_FREQUENCY), daemon=True).start()
         threading.Thread(target=diagnostics_monitoring, args=(stop_event, HEARTBEAT_FREQUENCY, EMPTY_LIMIT, WS_LAG_THRESHOLD, PROC_LAG_THRESHOLD), daemon=True).start() 
         threading.Thread(target=migration_to_cloud, args=(stop_event,CLICKHOUSE_DURATION, ARCHIVE_FREQUENCY), daemon=True).start() 
-
-        # necessary for prometheus monitoring
-        start_health_server()
+        threading.Thread(target=start_health_server, daemon=True).start()
 
         while not stop_event.is_set():
              time.sleep(1)
