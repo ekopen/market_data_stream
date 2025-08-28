@@ -1,72 +1,42 @@
 # Real-Time Market Data Pipeline
 
 ## Overview
-This project implements a real-time market data infrastructure designed for ingestion, processing, storage, monitoring, and visualization of financial tick data.  
-It simulates a simplified version of pipelines used in trading environments, featuring:
+A simplified, real-time market data pipeline for streaming, storing, monitoring, and visualizing financial tick data—similar to systems used in trading environments.  
+Currently deployed on a DigitalOcean DNS server.  
 
-- Kafka for streaming
-- ClickHouse for storage
-- Grafana for dashboarding
-- AWS S3 for archival
-- Monitoring and diagnostics for reliability
-
-### Simple Diagram of the Architecture
 ![Architecture Diagram](assets/architecture_simple.png)
-(Detailed view provided below.)
 
 ## Architecture
-The pipeline consists of the following components:
+- **Ingestion:** Kafka producer streams live market data from an API into a Kafka topic.  
+- **Storage:** Kafka consumer validates, batches, and inserts data into ClickHouse tables.  
+- **Monitoring:** Metrics and logs are tracked with Prometheus, Loki, and Python logging.  
+- **Archival:** Data is automatically backed up to AWS S3 for long-term storage.  
+- **Dashboard:** Grafana provides real-time views of tick data and pipeline health.  
+- **Deployment:** Docker Compose ensures reproducibility and simple scaling.  
 
-1. **Data Ingestion**  
-   A Kafka producer connects to an API and streams live market tick data (`symbol`, `price`, `volume`, `timestamp`) into a Kafka topic.
-
-2. **Data Storage**  
-   A Kafka consumer validates, batches, and inserts tick data into ClickHouse tables.
-
-3. **Monitoring & Diagnostics**  
-   Metrics are periodically recorded and stored in diagnostics tables. Logging captures detailed system behavior for troubleshooting.
-
-4. **Cloud Archival**  
-   All data is automatically archived to AWS S3 for long-term storage.
-
-5. **Dashboard**  
-   A Grafana app provides real-time visualizations of tick data, pipeline performance, and logs.
-
-6. **Containerized Deployment**  
-   Managed with Docker Compose for reproducibility and production alignment.
-
-### Detailed Diagram of the Architecture
-![Architecture Diagram](assets/architecture_complex.png)
+![Detailed Diagram](assets/architecture_complex.png)
 
 ## Tech Stack
-- **Messaging/Streaming**: Apache Kafka  
-- **Database**: ClickHouse  
-- **Dashboard/UI**: Grafana  
-- **Orchestration**: Docker Compose  
-- **Cloud Integration**: AWS S3  
-- **Monitoring/Logging**: Python logging + diagnostics tables  
+Kafka • ClickHouse • Grafana • Docker • AWS S3 • Prometheus/Loki • Python • DigitalOcean DNS Hosting
 
-## Getting Started
-- WIP
+## Tests
+A small suite of unit tests is in the `tests/` folder.
 
 ## Future Improvements
-- Update README/Flowcharts as needed
-   - add promtail/loki log info
-   - prometheus/blackbox information
-   - healthserver info
-   - general docker rereview
-   - add info about tests
-- bugs
-   - log uploads are inconsistent
-   - restart loop / make sure its a proper docker restart
-   - grafana needs to be more easily ported
-   - pipeline uptime % looks the same across all times
-   - clickhouse, kafka, and websocket uptime seem inaccruate
-- future add ons
-   - Add email alerts
-   - Add a portfolio/systemized ML strategies
-   - Expand to bid/ask data and additional assets
-   - CI/CD protocol
-   - look into maximizing speed
-   - size of clickhouse in grafana
+- **Ingestion:**
+ Investigate log upload inconsistencies (potential error in the cloud migration file).
+ Verify Docker restart loop works.
+ Make Grafana dashboards easier to migrate/port.
+ Verify pipeline uptime metrics are accurate.
+ Verify ClickHouse/Kafka/WebSocket uptime is accurate.
 
+- **Planned Feature:**
+Track ClickHouse table size in Grafana.
+ Email alerts for downtime, lag, or critical errors.
+ Benchmark and optimize Kafka/ClickHouse performance.
+
+ Expand to bid/ask data and other asset classes or other datasources.
+ Add a portfolio/systemized ML strategy layer.
+ Implement a CI/CD pipeline for automated testing and deployment.
+ 
+ 
