@@ -53,13 +53,21 @@ services:
       GF_SECURITY_ADMIN_USER: admin
       GF_SECURITY_ADMIN_PASSWORD: admin
       GF_INSTALL_PLUGINS: grafana-clickhouse-datasource
+
+      # === EMBEDDING + ANONYMOUS ACCESS ===
+      GF_SECURITY_ALLOW_EMBEDDING: "true"
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_ROLE: "Viewer"
       GF_AUTH_DISABLE_LOGIN_FORM: "true"
-      GF_SECURITY_ALLOW_EMBEDDING: "true"
+
+      # === URL SETTINGS ===
+      GF_SERVER_DOMAIN: grafana.erickopen.com
+      GF_SERVER_ROOT_URL: https://grafana.erickopen.com/
+      GF_SERVER_SERVE_FROM_SUB_PATH: "false"
     volumes:
       - grafana-data:/var/lib/grafana
     restart: unless-stopped
+
 
 # ----------- monitoring ----------------#
 
