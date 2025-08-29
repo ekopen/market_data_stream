@@ -3,3 +3,7 @@ __pycache__/clickhouse.cpython-312.pyc
 __pycache__/data_consumption.cpython-312.pyc
 __pycache__/data_ingestion.cpython-312.pyc
 .env
+.gitignore
+/old
+/.vscode
+/__pycache__
