@@ -31,11 +31,16 @@ A small suite of unit tests is in the tests folder.
 -  Verify ClickHouse/Kafka/WebSocket uptime is accurate.
 
 **Planned Features:**
+- containerization
 - Track ClickHouse table size in Grafana.
 - Email alerts for downtime, lag, or critical errors.
 -  Benchmark and optimize Kafka/ClickHouse performance.
 -  Expand to bid/ask data and other asset classes or other datasources.
 -  Add a portfolio/systemized ML strategy layer.
 -  Implement a CI/CD pipeline for automated testing and deployment.
+
+- documentation adding:
+    cAdvisor
+    DNS info
  
  

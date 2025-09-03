@@ -23,6 +23,12 @@ services:
       KAFKA_MIN_INSYNC_REPLICAS: 1
       KAFKA_BROKER_ID: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+      KAFKA_LOG_RETENTION_HOURS: 1           # keep messages for 1 hour
+      KAFKA_LOG_SEGMENT_BYTES: 1073741824     # 1 GB per segment
+      KAFKA_LOG_RETENTION_BYTES: 5368709120  # 5 GB max total
+      KAFKA_DELETE_TOPIC_ENABLE: "true"       # allow deleting topics
+
     volumes:
       - kafka-data:/var/lib/kafka/data       # <-- persist Kafka
     restart: unless-stopped
@@ -44,6 +50,7 @@ services:
 
 # ----------- visualization ----------------#
 
+  # http://159.65.41.22:3000
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -58,7 +65,7 @@ services:
       GF_SECURITY_ALLOW_EMBEDDING: "true"
       GF_AUTH_ANONYMOUS_ENABLED: "true"
       GF_AUTH_ANONYMOUS_ORG_ROLE: "Viewer"
-      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_AUTH_DISABLE_LOGIN_FORM: "false"
 
       # === URL SETTINGS ===
       GF_SERVER_DOMAIN: grafana.erickopen.com
@@ -67,32 +74,6 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
     restart: unless-stopped
-
-
-# ----------- monitoring ----------------#
-
-# checks if services (like health) are up
-  blackbox:
-    image: prom/blackbox-exporter:latest
-    container_name: blackbox
-    ports:
-      - "9115:9115"
-    command:
-      - "--config.file=/etc/blackbox/blackbox.yml"
-    volumes:
-      - ./blackbox.yml:/etc/blackbox/blackbox.yml
-    restart: unless-stopped
-
-# scrapes endpoints for metrics/alerts. the central "brain"
-  prometheus:
-    image: prom/prometheus:latest
-    container_name: prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-    restart: unless-stopped
-
 
 # ----------- logs ----------------#
 
@@ -107,7 +88,7 @@ services:
     depends_on:
       - loki
     restart: unless-stopped
-
+  
 # aggregates all logs
   loki:
     image: grafana/loki:2.9.4
@@ -117,7 +98,55 @@ services:
       - "3100:3100"
     restart: unless-stopped
 
-# ----------- code ----------------#
+# ----------- monitoring ----------------#
+
+# checks if services are up
+  blackbox:
+    image: prom/blackbox-exporter:latest
+    container_name: blackbox
+    ports:
+      - "9115:9115"
+    command:
+      - "--config.file=/etc/blackbox/blackbox.yml"
+    volumes:
+      - ./blackbox.yml:/etc/blackbox/blackbox.yml
+    restart: unless-stopped
+
+  # collects information for each continer
+  # will host at http://159.65.41.22:8080/metrics
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:latest
+    container_name: cadvisor
+    ports:
+      - "8080:8080"
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:ro
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    restart: unless-stopped
+
+  # tracks host level metrics
+  # http://159.65.41.22:9100/metrics
+  node_exporter:
+    image: prom/node-exporter:latest
+    container_name: node_exporter
+    ports:
+      - "9100:9100"
+    restart: unless-stopped    
+
+  # scrapes endpoints for metrics/alerts. the central "brain"
+  # http://159.65.41.22:9090/targets
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    restart: unless-stopped
+
+# ----------- data pipeline ----------------#
   pipeline:
     build: .
     container_name: pipeline
