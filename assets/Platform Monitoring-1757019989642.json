@@ -59,7 +59,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 8,
+        "w": 6,
         "x": 0,
         "y": 0
       },
@@ -125,6 +125,83 @@
               {
                 "color": "green",
                 "value": 0
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 5,
+        "x": 6,
+        "y": 0
+      },
+      "id": 9,
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "last"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "eewzst8pu8rnka"
+          },
+          "editorMode": "code",
+          "expr": "max(time() - container_start_time_seconds{image!=\"\"})",
+          "intervalFactor": 2,
+          "legendFormat": "",
+          "metric": "container_last_seen",
+          "range": true,
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "Docker Uptime",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "eewzst8pu8rnka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
               },
               {
                 "color": "red",
@@ -138,8 +215,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 8,
-        "x": 8,
+        "w": 5,
+        "x": 12,
         "y": 0
       },
       "id": 5,
@@ -219,8 +296,8 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 8,
-        "x": 16,
+        "w": 5,
+        "x": 17,
         "y": 0
       },
       "id": 6,
@@ -323,8 +400,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 24,
+        "h": 11,
+        "w": 12,
         "x": 0,
         "y": 3
       },
@@ -336,7 +413,7 @@
             "lastNotNull"
           ],
           "displayMode": "table",
-          "placement": "right",
+          "placement": "bottom",
           "showLegend": true
         },
         "tooltip": {
@@ -425,10 +502,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 24,
-        "x": 0,
-        "y": 10
+        "h": 11,
+        "w": 12,
+        "x": 12,
+        "y": 3
       },
       "id": 1,
       "options": {
@@ -438,7 +515,7 @@
             "lastNotNull"
           ],
           "displayMode": "table",
-          "placement": "right",
+          "placement": "bottom",
           "showLegend": true
         },
         "tooltip": {
@@ -465,6 +542,75 @@
       ],
       "title": "Memory Usage",
       "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "eewzst8pu8rnka"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 24,
+        "x": 0,
+        "y": 14
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "eewzst8pu8rnka"
+          },
+          "editorMode": "code",
+          "expr": "time() - container_start_time_seconds{image!=\"\"}",
+          "intervalFactor": 2,
+          "legendFormat": "{{name}}",
+          "metric": "cpu",
+          "range": true,
+          "refId": "A",
+          "step": 10
+        }
+      ],
+      "title": "Uptime By Service",
+      "transparent": true,
+      "type": "stat"
     },
     {
       "datasource": {
@@ -531,7 +677,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 17
+        "y": 20
       },
       "id": 3,
       "options": {
@@ -630,7 +776,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 17
+        "y": 20
       },
       "id": 4,
       "options": {
@@ -674,12 +820,12 @@
     "list": []
   },
   "time": {
-    "from": "now-3h",
+    "from": "now-5m",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
-  "title": "Docker Monitoring",
+  "title": "Platform Monitoring",
   "uid": "944fd6f9-38e7-46dc-8c3c-465f610b1f1e",
-  "version": 2
+  "version": 17
 }

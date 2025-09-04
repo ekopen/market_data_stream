@@ -17,14 +17,14 @@
   },
   "editable": true,
   "fiscalYearStartMonth": 0,
-  "graphTooltip": 0,
-  "id": 4,
+  "graphTooltip": 1,
+  "id": 10,
   "links": [],
   "panels": [
     {
       "datasource": {
         "type": "grafana-clickhouse-datasource",
-        "uid": "bewamdvw8wyrkb"
+        "uid": "cewzss78j3bi8a"
       },
       "description": "",
       "fieldConfig": {
@@ -49,7 +49,7 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 12,
+        "h": 8,
         "w": 4,
         "x": 0,
         "y": 0
@@ -77,7 +77,7 @@
         {
           "datasource": {
             "type": "grafana-clickhouse-datasource",
-            "uid": "bewamdvw8wyrkb"
+            "uid": "37fb53d0-bf32-4e50-b46e-3bf1a868e61e"
           },
           "editorType": "sql",
           "format": 1,
@@ -103,82 +103,7 @@
     {
       "datasource": {
         "type": "grafana-clickhouse-datasource",
-        "uid": "bewamdvw8wyrkb"
-      },
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "fieldMinMax": false,
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "red",
-                "value": 0
-              }
-            ]
-          },
-          "unit": "currencyUSD"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 3,
-        "x": 4,
-        "y": 0
-      },
-      "id": 6,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "min"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.1.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "grafana-clickhouse-datasource",
-            "uid": "bewamdvw8wyrkb"
-          },
-          "editorType": "sql",
-          "format": 1,
-          "meta": {
-            "builderOptions": {
-              "columns": [],
-              "database": "",
-              "limit": 1000,
-              "mode": "list",
-              "queryType": "table",
-              "table": ""
-            }
-          },
-          "pluginVersion": "4.10.2",
-          "queryType": "table",
-          "rawSql": "SELECT\r\n  timestamp AS time,\r\n  price\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\nORDER BY time",
-          "refId": "A"
-        }
-      ],
-      "title": "Min ETH Price",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "grafana-clickhouse-datasource",
-        "uid": "bewamdvw8wyrkb"
+        "uid": "cewzss78j3bi8a"
       },
       "description": "",
       "fieldConfig": {
@@ -238,9 +163,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 16,
-        "w": 14,
-        "x": 8,
+        "h": 15,
+        "w": 20,
+        "x": 4,
         "y": 0
       },
       "id": 1,
@@ -262,7 +187,7 @@
         {
           "datasource": {
             "type": "grafana-clickhouse-datasource",
-            "uid": "bewamdvw8wyrkb"
+            "uid": "37fb53d0-bf32-4e50-b46e-3bf1a868e61e"
           },
           "editorType": "sql",
           "format": 1,
@@ -288,47 +213,51 @@
     {
       "datasource": {
         "type": "grafana-clickhouse-datasource",
-        "uid": "bewamdvw8wyrkb"
+        "uid": "cewzss78j3bi8a"
       },
       "description": "",
       "fieldConfig": {
         "defaults": {
+          "decimals": 0,
           "fieldMinMax": false,
           "mappings": [],
           "thresholds": {
-            "mode": "absolute",
+            "mode": "percentage",
             "steps": [
               {
-                "color": "green",
+                "color": "text",
                 "value": 0
               }
             ]
           },
-          "unit": "currencyUSD"
+          "unit": "locale"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 6,
-        "w": 3,
-        "x": 4,
-        "y": 6
+        "w": 2,
+        "x": 0,
+        "y": 8
       },
-      "id": 8,
+      "id": 11,
       "options": {
-        "colorMode": "value",
+        "colorMode": "none",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
         "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
-            "max"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
         },
         "showPercentChange": false,
+        "text": {
+          "titleSize": 1
+        },
         "textMode": "auto",
         "wideLayout": true
       },
@@ -337,7 +266,7 @@
         {
           "datasource": {
             "type": "grafana-clickhouse-datasource",
-            "uid": "bewamdvw8wyrkb"
+            "uid": "37fb53d0-bf32-4e50-b46e-3bf1a868e61e"
           },
           "editorType": "sql",
           "format": 1,
@@ -353,17 +282,96 @@
           },
           "pluginVersion": "4.10.2",
           "queryType": "table",
-          "rawSql": "SELECT\r\n  timestamp AS time,\r\n  price\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\nORDER BY time",
+          "rawSql": "SELECT\r\n  SUM(volume) AS total_vol\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\n",
           "refId": "A"
         }
       ],
-      "title": "Max ETH Price",
+      "title": "Volume ",
       "type": "stat"
     },
     {
       "datasource": {
         "type": "grafana-clickhouse-datasource",
-        "uid": "bewamdvw8wyrkb"
+        "uid": "cewzss78j3bi8a"
+      },
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "decimals": 0,
+          "fieldMinMax": false,
+          "mappings": [],
+          "thresholds": {
+            "mode": "percentage",
+            "steps": [
+              {
+                "color": "text",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "currencyUSD"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 6,
+        "w": 2,
+        "x": 2,
+        "y": 8
+      },
+      "id": 12,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "text": {
+          "titleSize": 1
+        },
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-clickhouse-datasource",
+            "uid": "37fb53d0-bf32-4e50-b46e-3bf1a868e61e"
+          },
+          "editorType": "sql",
+          "format": 1,
+          "meta": {
+            "builderOptions": {
+              "columns": [],
+              "database": "",
+              "limit": 1000,
+              "mode": "list",
+              "queryType": "table",
+              "table": ""
+            }
+          },
+          "pluginVersion": "4.10.2",
+          "queryType": "table",
+          "rawSql": "SELECT\r\n  SUM(volume * price) AS total_vol_usd\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\n",
+          "refId": "A"
+        }
+      ],
+      "title": "Volume (USD)",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "grafana-clickhouse-datasource",
+        "uid": "cewzss78j3bi8a"
       },
       "description": "",
       "fieldConfig": {
@@ -403,7 +411,7 @@
             "properties": [
               {
                 "id": "custom.width",
-                "value": 205
+                "value": 182
               }
             ]
           },
@@ -442,14 +450,26 @@
                 "value": 92
               }
             ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "full_time"
+            },
+            "properties": [
+              {
+                "id": "custom.width",
+                "value": 251
+              }
+            ]
           }
         ]
       },
       "gridPos": {
-        "h": 26,
-        "w": 7,
+        "h": 18,
+        "w": 4,
         "x": 0,
-        "y": 12
+        "y": 14
       },
       "id": 10,
       "options": {
@@ -470,7 +490,7 @@
         {
           "datasource": {
             "type": "grafana-clickhouse-datasource",
-            "uid": "bewamdvw8wyrkb"
+            "uid": "37fb53d0-bf32-4e50-b46e-3bf1a868e61e"
           },
           "editorType": "sql",
           "format": 1,
@@ -486,17 +506,17 @@
           },
           "pluginVersion": "4.10.2",
           "queryType": "table",
-          "rawSql": "SELECT\r\n  toStartOfInterval(\r\n    timestamp,\r\n    INTERVAL toUInt32($__interval_ms * 5) MILLISECOND\r\n  ) AS time,\r\n  symbol,\r\n  price,\r\n  volume\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\nORDER BY time DESC\r\n",
+          "rawSql": "SELECT\r\n  price,\r\n  volume,\r\n    toStartOfInterval(\r\n    timestamp,\r\n    INTERVAL toUInt32($__interval_ms * 5) MILLISECOND\r\n  ) AS time\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\nORDER BY time DESC\r\n",
           "refId": "A"
         }
       ],
-      "title": "ETH Price Data Snippet",
+      "title": "Market Data Table",
       "type": "table"
     },
     {
       "datasource": {
         "type": "grafana-clickhouse-datasource",
-        "uid": "bewamdvw8wyrkb"
+        "uid": "cewzss78j3bi8a"
       },
       "description": "",
       "fieldConfig": {
@@ -555,10 +575,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 15,
-        "w": 14,
-        "x": 8,
-        "y": 16
+        "h": 11,
+        "w": 20,
+        "x": 4,
+        "y": 15
       },
       "id": 9,
       "options": {
@@ -587,7 +607,7 @@
         {
           "datasource": {
             "type": "grafana-clickhouse-datasource",
-            "uid": "bewamdvw8wyrkb"
+            "uid": "37fb53d0-bf32-4e50-b46e-3bf1a868e61e"
           },
           "editorType": "sql",
           "format": 1,
@@ -603,7 +623,7 @@
           },
           "pluginVersion": "4.10.2",
           "queryType": "table",
-          "rawSql": "SELECT\r\n  toStartOfInterval(\r\n    timestamp,\r\n    INTERVAL toUInt32($__interval_ms * 10) MILLISECOND\r\n  ) AS time,\r\n    any(price) AS open,\r\n    anyLast(price) AS close,\r\n    max(price) AS high,\r\n    min(price) AS low\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\nGROUP BY time\r\nORDER BY time\r\n\r\n\r\n",
+          "rawSql": "SELECT\r\n  toStartOfInterval(\r\n    timestamp,\r\n    INTERVAL toUInt32($__interval_ms * 25) MILLISECOND\r\n  ) AS time,\r\n    any(price) AS open,\r\n    anyLast(price) AS close,\r\n    max(price) AS high,\r\n    min(price) AS low\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\nGROUP BY time\r\nORDER BY time\r\n\r\n\r\n",
           "refId": "A"
         }
       ],
@@ -613,7 +633,7 @@
     {
       "datasource": {
         "type": "grafana-clickhouse-datasource",
-        "uid": "bewamdvw8wyrkb"
+        "uid": "cewzss78j3bi8a"
       },
       "description": "",
       "fieldConfig": {
@@ -672,10 +692,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 7,
-        "w": 14,
-        "x": 8,
-        "y": 31
+        "h": 6,
+        "w": 20,
+        "x": 4,
+        "y": 26
       },
       "id": 7,
       "options": {
@@ -696,7 +716,7 @@
         {
           "datasource": {
             "type": "grafana-clickhouse-datasource",
-            "uid": "bewamdvw8wyrkb"
+            "uid": "37fb53d0-bf32-4e50-b46e-3bf1a868e61e"
           },
           "editorType": "sql",
           "format": 1,
@@ -735,5 +755,5 @@
   "timezone": "browser",
   "title": "Market Data",
   "uid": "37fb53d0-bf32-4e50-b46e-3bf1a868e61e",
-  "version": 12
+  "version": 19
 }

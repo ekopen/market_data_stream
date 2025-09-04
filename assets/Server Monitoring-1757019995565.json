@@ -100,7 +100,7 @@
           "step": 240
         }
       ],
-      "title": "Uptime",
+      "title": "Server Uptime",
       "type": "stat"
     },
     {
@@ -157,9 +157,11 @@
       },
       "id": 10,
       "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -167,9 +169,9 @@
           "fields": "",
           "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
       "pluginVersion": "12.1.1",
       "targets": [
@@ -187,7 +189,7 @@
         }
       ],
       "title": "Disk Space Used",
-      "type": "gauge"
+      "type": "stat"
     },
     {
       "datasource": {
@@ -324,9 +326,11 @@
       },
       "id": 4,
       "options": {
-        "minVizHeight": 75,
-        "minVizWidth": 75,
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
         "orientation": "auto",
+        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -334,9 +338,9 @@
           "fields": "",
           "values": false
         },
-        "showThresholdLabels": false,
-        "showThresholdMarkers": true,
-        "sizing": "auto"
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
       },
       "pluginVersion": "12.1.1",
       "targets": [
@@ -354,7 +358,7 @@
         }
       ],
       "title": "CPU Busy",
-      "type": "gauge"
+      "type": "stat"
     },
     {
       "datasource": {
@@ -574,8 +578,8 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 24,
+        "h": 7,
+        "w": 12,
         "x": 0,
         "y": 4
       },
@@ -671,10 +675,10 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 8,
-        "w": 24,
-        "x": 0,
-        "y": 12
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 4
       },
       "id": 12,
       "options": {
@@ -793,9 +797,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 9,
+        "w": 10,
         "x": 0,
-        "y": 20
+        "y": 11
       },
       "id": 2,
       "options": {
@@ -885,9 +889,9 @@
       },
       "gridPos": {
         "h": 8,
-        "w": 15,
-        "x": 9,
-        "y": 20
+        "w": 14,
+        "x": 10,
+        "y": 11
       },
       "id": 1,
       "options": {
@@ -1078,8 +1082,8 @@
       },
       {
         "current": {
-          "text": "c83def826074",
-          "value": "c83def826074"
+          "text": "c8926d21c857",
+          "value": "c8926d21c857"
         },
         "datasource": {
           "type": "prometheus",
@@ -1102,12 +1106,12 @@
     ]
   },
   "time": {
-    "from": "now-30m",
+    "from": "now-24h",
     "to": "now"
   },
   "timepicker": {},
   "timezone": "",
   "title": "Server Monitoring",
   "uid": "blackbox-uptime",
-  "version": 34
+  "version": 38
 }

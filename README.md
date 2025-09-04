@@ -27,12 +27,10 @@ A small suite of unit tests is in the tests folder.
 -  Investigate log upload inconsistencies (potential error in the cloud migration file). Potentially all parquet file saves are broken.
 -  Verify Docker restart loop works.
 -  Make Grafana dashboards easier to migrate/port.
--  Verify pipeline uptime metrics are accurate.
--  Verify ClickHouse/Kafka/WebSocket uptime is accurate.
+- fix time zone entries differing
+
 
 **Planned Features:**
-- containerization
-- Track ClickHouse table size in Grafana.
 - Email alerts for downtime, lag, or critical errors.
 -  Benchmark and optimize Kafka/ClickHouse performance.
 -  Expand to bid/ask data and other asset classes or other datasources.

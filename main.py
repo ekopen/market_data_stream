@@ -10,7 +10,6 @@ from cloud_migration import migration_to_cloud
 from kafka_producer import start_producer
 from kafka_consumer import start_consumer
 from monitoring import ticks_monitoring, diagnostics_monitoring
-from health_server import start_health_server
 
 # logging 
 logging.basicConfig(
@@ -49,7 +48,6 @@ if __name__ == "__main__":
         threading.Thread(target=ticks_monitoring, args=(stop_event,HEARTBEAT_FREQUENCY), daemon=True).start()
         threading.Thread(target=diagnostics_monitoring, args=(stop_event, HEARTBEAT_FREQUENCY, EMPTY_LIMIT, WS_LAG_THRESHOLD, PROC_LAG_THRESHOLD), daemon=True).start() 
         threading.Thread(target=migration_to_cloud, args=(stop_event,CLICKHOUSE_DURATION, ARCHIVE_FREQUENCY), daemon=True).start() 
-        threading.Thread(target=start_health_server, daemon=True).start()
 
         while not stop_event.is_set():
              time.sleep(1)
