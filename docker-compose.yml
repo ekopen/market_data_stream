@@ -1,5 +1,10 @@
 services:
 
+# install docker first: 
+# curl -fsSL https://get.docker.com | sh
+# verify installation:
+# docker --version
+
 # ----------- real time data ----------------#
   kafka:
     image: confluentinc/cp-kafka:7.6.0
@@ -51,6 +56,7 @@ services:
 # ----------- visualization ----------------#
 
   # http://159.65.41.22:3000
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
@@ -68,9 +74,48 @@ services:
       GF_AUTH_DISABLE_LOGIN_FORM: "false"
 
       # === URL SETTINGS ===
+      # this is for if we do not want to view it on a local, unsecured connection.
+
       GF_SERVER_DOMAIN: grafana.erickopen.com
       GF_SERVER_ROOT_URL: https://grafana.erickopen.com/
       GF_SERVER_SERVE_FROM_SUB_PATH: "false"
+
+      # requires nginx to be installed on the server to view via grafana.erickopen.com
+
+      # INSTALL NGINX
+      # install nginx
+      # sudo apt update
+      # sudo apt install nginx -y
+
+      # CREATE CONFIG
+      # Nginx config
+        # cd /etc/nginx/sites-available
+        # nano grafana
+
+        # server {
+        #     listen 80;
+        #     server_name grafana.erickopen.com;
+
+        #     location / {
+        #         proxy_pass http://localhost:3000;
+        #         proxy_set_header Host $host;
+        #         proxy_set_header X-Real-IP $remote_addr;
+        #         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        #         proxy_set_header X-Forwarded-Proto $scheme;
+        #     }
+        # }
+
+        # ln -s /etc/nginx/sites-available/grafana /etc/nginx/sites-enabled/
+
+      # ENABLE NGINX
+      # sudo ln -s /etc/nginx/sites-available/grafana /etc/nginx/sites-enabled/
+      # sudo nginx -t
+      # sudo systemctl reload nginx
+
+      # ADD HTTPS (with Certbot)
+      # sudo apt install certbot python3-certbot-nginx -y
+      # sudo certbot --nginx -d grafana.erickopen.com
+
     volumes:
       - grafana-data:/var/lib/grafana
     restart: unless-stopped

@@ -1,8 +1,8 @@
 # Real-Time Market Data Pipeline
 
 ## Overview
-A simplified, real-time market data pipeline for streaming, storing, monitoring, and visualizing financial tick data—similar to systems used in trading environments.  
-Currently deployed on a DigitalOcean DNS server.  
+A simplified, real-time market data pipeline for streaming, storing, monitoring, and visualizing financial tick data, similar to systems used in trading environments.  
+Currently deployed via Docker on a DigitalOcean server.  
 
 ![Architecture Diagram](assets/architecture_simple.png)
 
@@ -42,5 +42,6 @@ A small suite of unit tests is in the tests folder.
 - documentation adding:
     cAdvisor
     DNS info
+        mention the grafana set up with porting 
  
  
