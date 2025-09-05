@@ -21,11 +21,12 @@
   "graphTooltip": 0,
   "id": 6,
   "links": [],
+  "liveNow": true,
   "panels": [
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "eewzst8pu8rnka"
+        "uid": "${ds_prometheus}"
       },
       "description": "",
       "fieldConfig": {
@@ -90,6 +91,10 @@
       "pluginVersion": "12.1.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds_prometheus}"
+          },
           "editorMode": "code",
           "exemplar": false,
           "expr": "node_time_seconds{instance=\"$node\",job=\"$job\"} - node_boot_time_seconds{instance=\"$node\",job=\"$job\"}",
@@ -106,7 +111,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "eewzst8pu8rnka"
+        "uid": "${ds_prometheus}"
       },
       "description": "Overall Disk Space used",
       "fieldConfig": {
@@ -176,6 +181,10 @@
       "pluginVersion": "12.1.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds_prometheus}"
+          },
           "editorMode": "code",
           "exemplar": false,
           "expr": "(sum(node_filesystem_size_bytes{instance=\"$node\", job=\"$job\", device!~\"rootfs\"})\r\n - sum(node_filesystem_avail_bytes{instance=\"$node\", job=\"$job\", device!~\"rootfs\"}))\r\n / sum(node_filesystem_size_bytes{instance=\"$node\", job=\"$job\", device!~\"rootfs\"}) * 100\r\n",
@@ -194,7 +203,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "eewzst8pu8rnka"
+        "uid": "${ds_prometheus}"
       },
       "description": "",
       "fieldConfig": {
@@ -259,6 +268,10 @@
       "pluginVersion": "12.1.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds_prometheus}"
+          },
           "editorMode": "code",
           "exemplar": false,
           "expr": "sum by (instance) (\r\n  node_filesystem_size_bytes{device=\"/dev/vda1\", fstype=\"ext4\"}\r\n) / 3\r\n",
@@ -275,7 +288,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "eewzst8pu8rnka"
+        "uid": "${ds_prometheus}"
       },
       "description": "Overall CPU busy percentage (averaged across all cores)",
       "fieldConfig": {
@@ -345,6 +358,10 @@
       "pluginVersion": "12.1.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds_prometheus}"
+          },
           "editorMode": "code",
           "exemplar": false,
           "expr": "100 * (1 - avg(rate(node_cpu_seconds_total{mode=\"idle\", instance=\"$node\"}[$__rate_interval])))",
@@ -363,7 +380,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "eewzst8pu8rnka"
+        "uid": "${ds_prometheus}"
       },
       "description": "",
       "fieldConfig": {
@@ -423,6 +440,10 @@
       "pluginVersion": "12.1.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds_prometheus}"
+          },
           "editorMode": "code",
           "exemplar": false,
           "expr": "count(count(node_cpu_seconds_total{instance=\"$node\",job=\"$job\"}) by (cpu))",
@@ -438,7 +459,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "eewzst8pu8rnka"
+        "uid": "${ds_prometheus}"
       },
       "description": "",
       "fieldConfig": {
@@ -503,6 +524,10 @@
       "pluginVersion": "12.1.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds_prometheus}"
+          },
           "editorMode": "code",
           "exemplar": false,
           "expr": "node_memory_MemTotal_bytes{instance=\"$node\",job=\"$job\"}",
@@ -519,7 +544,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "eewzst8pu8rnka"
+        "uid": "${ds_prometheus}"
       },
       "description": "Percentage of filesystem space used.",
       "fieldConfig": {
@@ -600,6 +625,10 @@
       "pluginVersion": "12.1.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds_prometheus}"
+          },
           "editorMode": "code",
           "expr": "(sum(node_filesystem_size_bytes{instance=\"$node\", job=\"$job\", device!~\"rootfs\"})\r\n - sum(node_filesystem_avail_bytes{instance=\"$node\", job=\"$job\", device!~\"rootfs\"}))\r\n / sum(node_filesystem_size_bytes{instance=\"$node\", job=\"$job\", device!~\"rootfs\"}) * 100\r\n",
           "format": "time_series",
@@ -616,7 +645,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "eewzst8pu8rnka"
+        "uid": "${ds_prometheus}"
       },
       "description": "",
       "fieldConfig": {
@@ -697,6 +726,10 @@
       "pluginVersion": "12.1.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds_prometheus}"
+          },
           "editorMode": "code",
           "expr": "100 * (1 - avg(rate(node_cpu_seconds_total{mode=\"idle\", instance=\"$node\"}[$__rate_interval])))",
           "format": "time_series",
@@ -713,7 +746,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "eewzst8pu8rnka"
+        "uid": "${ds_prometheus}"
       },
       "fieldConfig": {
         "defaults": {
@@ -817,6 +850,10 @@
       "pluginVersion": "12.1.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds_prometheus}"
+          },
           "expr": "max by (instance) (probe_success{instance=~\"$target\"})",
           "format": "table",
           "instant": true,
@@ -829,7 +866,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "eewzst8pu8rnka"
+        "uid": "${ds_prometheus}"
       },
       "fieldConfig": {
         "defaults": {
@@ -912,7 +949,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "eewzst8pu8rnka"
+            "uid": "${ds_prometheus}"
           },
           "expr": "probe_duration_seconds{instance=~\"$target\"}",
           "format": "time_series",
@@ -1102,6 +1139,19 @@
         "regex": "",
         "sort": 1,
         "type": "query"
+      },
+      {
+        "current": {
+          "text": "prometheus",
+          "value": "eewzst8pu8rnka"
+        },
+        "description": "Prometheus db",
+        "name": "ds_prometheus",
+        "options": [],
+        "query": "prometheus",
+        "refresh": 1,
+        "regex": "",
+        "type": "datasource"
       }
     ]
   },
@@ -1109,9 +1159,13 @@
     "from": "now-24h",
     "to": "now"
   },
-  "timepicker": {},
+  "timepicker": {
+    "refresh_intervals": [
+      "30s"
+    ]
+  },
   "timezone": "",
   "title": "Server Monitoring",
   "uid": "blackbox-uptime",
-  "version": 38
+  "version": 41
 }

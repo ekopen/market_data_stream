@@ -1,45 +1,35 @@
 # Real-Time Market Data Pipeline
 
 ## Overview
-A simplified, real-time market data pipeline for streaming, storing, monitoring, and visualizing financial tick data, similar to systems used in trading environments.  
-Currently deployed via Docker on a DigitalOcean server.  
-
-![Architecture Diagram](assets/architecture_simple.png)
+A real-time market data pipeline for streaming, storing, monitoring, and visualizing financial tick data, designed as simplified recreation to systems used in trading environments. The pipeline is live and displayed on my personal website, www.erickopen.com. I continuously monitor and improve it in my free time.  
 
 ## Architecture
-- **Ingestion:** Kafka producer streams live market data from an API into a Kafka topic.  
-- **Storage:** Kafka consumer validates, batches, and inserts data into ClickHouse tables.  
-- **Monitoring:** Metrics and logs are tracked with Prometheus, Loki, and Python logging.  
-- **Archival:** Data is automatically backed up to AWS S3 for long-term storage.  
-- **Dashboard:** Grafana provides real-time views of tick data and pipeline health.  
-- **Deployment:** Docker Compose ensures reproducibility and simple scaling.  
+- **Configuration** This project is orchestrated via Docker and deployed on a Digital Ocean server. NGINX was used to display Grafana dashboards on erickopen.com.
+- **Ingestion:** A Kafka producer connects to a Finnhub API websocket, which streams exchange data from Binance. This data is fed into a Kafka topic.  
+- **Storage:** A Kafka consumer validates, batches, and inserts data into a ClickHouse table.  
+- **Monitoring:** The pipeline itself is monitored via standard logging and a periodic diagnostic/monitoring queries (which are stored in seperate Clickhouse tables). Status of the Digital Ocean server and Docker are monitored by a variety of tools that feed into Prometheus.   
+- **Archival:** Market data, logging data, and diagnostic/monitoring data gathered from the pipeline are archived to parquets after a day, which are then automatically uploaded to AWS S3 for long term storage.
+- **Dashboard:** Grafana dashboards highlight various metrics related to the status of the server, Docker, and pipeline. Additionally, market data captured is displayed for informative purposes.
 
 ![Detailed Diagram](assets/architecture_complex.png)
 
-## Tech Stack
- Docker • Python • Kafka • ClickHouse • Grafana  • Promtail/Loki • Blackbox/Prometheus • AWS S3  •  DigitalOcean DNS Hosting
-
-## Tests
-A small suite of unit tests is in the tests folder.
 
 ## Future Improvements
-**Ingestion:**
--  Investigate log upload inconsistencies (potential error in the cloud migration file). Potentially all parquet file saves are broken.
--  Verify Docker restart loop works.
--  Make Grafana dashboards easier to migrate/port.
-- fix time zone entries differing
-
-
 **Planned Features:**
-- Email alerts for downtime, lag, or critical errors.
--  Benchmark and optimize Kafka/ClickHouse performance.
--  Expand to bid/ask data and other asset classes or other datasources.
--  Add a portfolio/systemized ML strategy layer.
--  Implement a CI/CD pipeline for automated testing and deployment.
-
-- documentation adding:
-    cAdvisor
-    DNS info
-        mention the grafana set up with porting 
+- Expand data intake to include other websocket/api sources that all pull concurrently, broadening the asset classes, instruments, and breadth of information captured in the data stream.
+- Create email alerts via Grafana for downtime, lag, or critical errors that occur in the pipeline.
+- Track, benchmark, and optimize the performance of features like Kafka and Clickhouse to minimize lag.
+- Build a module that uses the data stream to continiously retrain and implemenmt machine learning based trading strategies.
+- Implement a CI/CD pipeline for automated testing and deployment.
+- Once the complexity justifies it, introduce Kubernetes.
  
+**Known Issues:**
+-  Log data appears to be inconsistenly sent to parquet format. Additionally, I am not sure if other Clickhouse tables are being saved as parquets when expired. Possibly due to configuration issues on Digital Ocean.
+-  Verify Docker restart loop works via testing.
+- There are time zone inconsistencies across different sources, apparent in Grafana. Make sure these are all in sync.
+
+## Comments
+- A small suite of unit tests is in the tests folder.
+- In order to manage costs, the actual upload to S3 is deactivated
+
  
