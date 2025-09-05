@@ -522,7 +522,7 @@
             "mode": "palette-classic"
           },
           "custom": {
-            "axisBorderShow": false,
+            "axisBorderShow": true,
             "axisCenteredZero": false,
             "axisColorMode": "text",
             "axisLabel": "",
@@ -567,7 +567,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "currencyUSD"
         },
         "overrides": []
       },
@@ -770,5 +771,5 @@
   "timezone": "browser",
   "title": "Market Data",
   "uid": "37fb53d0-bf32-4e50-b46e-3bf1a868e61e",
-  "version": 31
+  "version": 32
 }

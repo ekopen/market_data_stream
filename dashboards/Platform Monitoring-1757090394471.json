@@ -19,7 +19,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 5,
+  "id": 3,
   "links": [],
   "liveNow": true,
   "panels": [
@@ -599,14 +599,18 @@
             "type": "prometheus",
             "uid": "${ds_prometheus}"
           },
+          "disableTextWrap": false,
           "editorMode": "code",
-          "expr": "time() - container_start_time_seconds{image!=\"\"}",
+          "expr": "max by (name) (\r\n  time() - container_start_time_seconds{image!=\"\"}\r\n)",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
           "metric": "cpu",
           "range": true,
           "refId": "A",
-          "step": 10
+          "step": 10,
+          "useBackend": false
         }
       ],
       "title": "Uptime By Service",
@@ -846,5 +850,5 @@
   "timezone": "browser",
   "title": "Platform Monitoring",
   "uid": "944fd6f9-38e7-46dc-8c3c-465f610b1f1e",
-  "version": 22
+  "version": 1
 }

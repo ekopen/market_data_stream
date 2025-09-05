@@ -602,6 +602,7 @@
           "direction": "backward",
           "editorMode": "code",
           "expr": "{app=\"pipeline\"} | pattern `<time> | <level> | <logger> | <msg>`",
+          "maxLines": 500,
           "queryType": "range",
           "refId": "A"
         }
@@ -646,6 +647,7 @@
           "direction": "backward",
           "editorMode": "code",
           "expr": "{app=\"pipeline\"} |= \"Uploaded\"",
+          "maxLines": 100,
           "queryType": "range",
           "refId": "A"
         }
@@ -690,6 +692,7 @@
           "direction": "backward",
           "editorMode": "code",
           "expr": "{app=\"pipeline\"} |= \"WARNING\"",
+          "maxLines": 100,
           "queryType": "range",
           "refId": "A"
         }
@@ -734,6 +737,7 @@
           "direction": "backward",
           "editorMode": "code",
           "expr": "{app=\"pipeline\"} |= \"WARNING\"",
+          "maxLines": 100,
           "queryType": "range",
           "refId": "A"
         }
@@ -972,5 +976,5 @@
   "timezone": "browser",
   "title": "Pipeline Monitoring",
   "uid": "087f3f78-11c9-4259-96ac-916af471a99c",
-  "version": 34
+  "version": 35
 }
