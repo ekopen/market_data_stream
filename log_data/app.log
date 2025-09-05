@@ -8371,3 +8371,134 @@
 2025-09-05 19:56:46,700 | INFO | kafka_consumer | Inserted 12 rows to ticks_db.
 2025-09-05 19:56:47,113 | INFO | monitoring | Inserted ticks monitoring data for 18 messages.
 2025-09-05 19:56:47,719 | INFO | kafka_consumer | Inserted 3 rows to ticks_db.
+2025-09-05 19:56:48,488 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:56:49,771 | INFO | kafka_consumer | Inserted 1 rows to ticks_db.
+2025-09-05 19:56:50,795 | INFO | kafka_consumer | Inserted 51 rows to ticks_db.
+2025-09-05 19:56:51,764 | INFO | kafka_consumer | Inserted 102 rows to ticks_db.
+2025-09-05 19:56:52,181 | INFO | monitoring | Inserted ticks monitoring data for 157 messages.
+2025-09-05 19:56:52,767 | INFO | kafka_consumer | Inserted 6 rows to ticks_db.
+2025-09-05 19:56:53,545 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:56:54,806 | INFO | kafka_consumer | Inserted 8 rows to ticks_db.
+2025-09-05 19:56:55,823 | INFO | kafka_consumer | Inserted 13 rows to ticks_db.
+2025-09-05 19:56:56,832 | INFO | kafka_consumer | Inserted 44 rows to ticks_db.
+2025-09-05 19:56:57,249 | INFO | monitoring | Inserted ticks monitoring data for 71 messages.
+2025-09-05 19:56:57,900 | INFO | kafka_consumer | Inserted 17 rows to ticks_db.
+2025-09-05 19:56:57,959 | INFO | kafka_consumer | Inserted 150 rows to ticks_db.
+2025-09-05 19:56:58,586 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:56:58,850 | INFO | kafka_consumer | Inserted 119 rows to ticks_db.
+2025-09-05 19:56:59,894 | INFO | kafka_consumer | Inserted 75 rows to ticks_db.
+2025-09-05 19:57:00,900 | INFO | kafka_consumer | Inserted 2 rows to ticks_db.
+2025-09-05 19:57:02,322 | INFO | monitoring | Inserted ticks monitoring data for 363 messages.
+2025-09-05 19:57:02,910 | INFO | kafka_consumer | Inserted 1 rows to ticks_db.
+2025-09-05 19:57:03,635 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:57:03,942 | INFO | kafka_consumer | Inserted 1 rows to ticks_db.
+2025-09-05 19:57:04,976 | INFO | kafka_consumer | Inserted 24 rows to ticks_db.
+2025-09-05 19:57:05,958 | INFO | kafka_consumer | Inserted 52 rows to ticks_db.
+2025-09-05 19:57:07,404 | INFO | monitoring | Inserted ticks monitoring data for 78 messages.
+2025-09-05 19:57:08,006 | INFO | kafka_consumer | Inserted 1 rows to ticks_db.
+2025-09-05 19:57:08,687 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:57:10,042 | INFO | kafka_consumer | Inserted 2 rows to ticks_db.
+2025-09-05 19:57:12,135 | INFO | kafka_consumer | Inserted 3 rows to ticks_db.
+2025-09-05 19:57:12,469 | INFO | monitoring | Inserted ticks monitoring data for 6 messages.
+2025-09-05 19:57:13,134 | INFO | kafka_consumer | Inserted 50 rows to ticks_db.
+2025-09-05 19:57:13,730 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:57:15,201 | INFO | kafka_consumer | Inserted 2 rows to ticks_db.
+2025-09-05 19:57:16,281 | INFO | kafka_consumer | Inserted 28 rows to ticks_db.
+2025-09-05 19:57:16,320 | INFO | kafka_consumer | Inserted 150 rows to ticks_db.
+2025-09-05 19:57:17,222 | INFO | kafka_consumer | Inserted 117 rows to ticks_db.
+2025-09-05 19:57:17,602 | INFO | monitoring | Inserted ticks monitoring data for 347 messages.
+2025-09-05 19:57:18,253 | INFO | kafka_consumer | Inserted 53 rows to ticks_db.
+2025-09-05 19:57:18,781 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:57:19,259 | INFO | kafka_consumer | Inserted 36 rows to ticks_db.
+2025-09-05 19:57:21,281 | INFO | kafka_consumer | Inserted 49 rows to ticks_db.
+2025-09-05 19:57:22,684 | INFO | kafka_consumer | Inserted 88 rows to ticks_db.
+2025-09-05 19:57:22,710 | INFO | monitoring | Inserted ticks monitoring data for 138 messages.
+2025-09-05 19:57:23,592 | INFO | kafka_consumer | Inserted 65 rows to ticks_db.
+2025-09-05 19:57:23,833 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:57:24,587 | INFO | kafka_consumer | Inserted 8 rows to ticks_db.
+2025-09-05 19:57:25,608 | INFO | kafka_consumer | Inserted 1 rows to ticks_db.
+2025-09-05 19:57:26,630 | INFO | kafka_consumer | Inserted 3 rows to ticks_db.
+2025-09-05 19:57:27,633 | INFO | kafka_consumer | Inserted 27 rows to ticks_db.
+2025-09-05 19:57:27,785 | INFO | monitoring | Inserted ticks monitoring data for 104 messages.
+2025-09-05 19:57:28,638 | INFO | kafka_consumer | Inserted 37 rows to ticks_db.
+2025-09-05 19:57:28,877 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:57:29,637 | INFO | kafka_consumer | Inserted 28 rows to ticks_db.
+2025-09-05 19:57:30,649 | INFO | kafka_consumer | Inserted 24 rows to ticks_db.
+2025-09-05 19:57:31,784 | INFO | kafka_consumer | Inserted 45 rows to ticks_db.
+2025-09-05 19:57:32,793 | INFO | kafka_consumer | Inserted 9 rows to ticks_db.
+2025-09-05 19:57:32,870 | INFO | monitoring | Inserted ticks monitoring data for 143 messages.
+2025-09-05 19:57:33,818 | INFO | kafka_consumer | Inserted 30 rows to ticks_db.
+2025-09-05 19:57:33,924 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:57:37,936 | INFO | monitoring | Inserted ticks monitoring data for 30 messages.
+2025-09-05 19:57:38,288 | INFO | kafka_consumer | Inserted 83 rows to ticks_db.
+2025-09-05 19:57:38,970 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:57:39,295 | INFO | kafka_consumer | Inserted 2 rows to ticks_db.
+2025-09-05 19:57:40,348 | INFO | kafka_consumer | Inserted 16 rows to ticks_db.
+2025-09-05 19:57:43,000 | INFO | monitoring | Inserted ticks monitoring data for 101 messages.
+2025-09-05 19:57:44,027 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:57:45,389 | INFO | kafka_consumer | Inserted 19 rows to ticks_db.
+2025-09-05 19:57:46,432 | INFO | kafka_consumer | Inserted 116 rows to ticks_db.
+2025-09-05 19:57:47,465 | INFO | kafka_consumer | Inserted 14 rows to ticks_db.
+2025-09-05 19:57:48,073 | INFO | monitoring | Inserted ticks monitoring data for 149 messages.
+2025-09-05 19:57:48,563 | INFO | kafka_consumer | Inserted 9 rows to ticks_db.
+2025-09-05 19:57:49,072 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:57:49,532 | INFO | kafka_consumer | Inserted 136 rows to ticks_db.
+2025-09-05 19:57:50,605 | INFO | kafka_consumer | Inserted 77 rows to ticks_db.
+2025-09-05 19:57:51,607 | INFO | kafka_consumer | Inserted 6 rows to ticks_db.
+2025-09-05 19:57:52,643 | INFO | kafka_consumer | Inserted 1 rows to ticks_db.
+2025-09-05 19:57:53,168 | INFO | monitoring | Inserted ticks monitoring data for 229 messages.
+2025-09-05 19:57:53,677 | INFO | kafka_consumer | Inserted 36 rows to ticks_db.
+2025-09-05 19:57:54,126 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:57:54,652 | INFO | kafka_consumer | Inserted 149 rows to ticks_db.
+2025-09-05 19:57:55,667 | INFO | kafka_consumer | Inserted 1 rows to ticks_db.
+2025-09-05 19:57:56,653 | INFO | kafka_consumer | Inserted 37 rows to ticks_db.
+2025-09-05 19:57:58,247 | INFO | monitoring | Inserted ticks monitoring data for 223 messages.
+2025-09-05 19:57:59,176 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:57:59,197 | INFO | kafka_consumer | Inserted 2 rows to ticks_db.
+2025-09-05 19:58:00,273 | INFO | kafka_consumer | Inserted 3 rows to ticks_db.
+2025-09-05 19:58:00,307 | INFO | kafka_consumer | Inserted 150 rows to ticks_db.
+2025-09-05 19:58:01,237 | INFO | kafka_consumer | Inserted 6 rows to ticks_db.
+2025-09-05 19:58:02,224 | INFO | kafka_consumer | Inserted 68 rows to ticks_db.
+2025-09-05 19:58:03,256 | INFO | kafka_consumer | Inserted 27 rows to ticks_db.
+2025-09-05 19:58:03,325 | INFO | monitoring | Inserted ticks monitoring data for 256 messages.
+2025-09-05 19:58:04,222 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:58:05,414 | INFO | kafka_consumer | Inserted 94 rows to ticks_db.
+2025-09-05 19:58:06,454 | INFO | kafka_consumer | Inserted 1 rows to ticks_db.
+2025-09-05 19:58:07,477 | INFO | kafka_consumer | Inserted 62 rows to ticks_db.
+2025-09-05 19:58:08,405 | INFO | monitoring | Inserted ticks monitoring data for 157 messages.
+2025-09-05 19:58:08,459 | INFO | kafka_consumer | Inserted 113 rows to ticks_db.
+2025-09-05 19:58:09,273 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:58:09,511 | INFO | kafka_consumer | Inserted 47 rows to ticks_db.
+2025-09-05 19:58:10,507 | INFO | kafka_consumer | Inserted 50 rows to ticks_db.
+2025-09-05 19:58:11,861 | INFO | kafka_consumer | Inserted 52 rows to ticks_db.
+2025-09-05 19:58:13,550 | INFO | kafka_consumer | Inserted 113 rows to ticks_db.
+2025-09-05 19:58:13,607 | INFO | monitoring | Inserted ticks monitoring data for 262 messages.
+2025-09-05 19:58:13,626 | INFO | kafka_consumer | Inserted 150 rows to ticks_db.
+2025-09-05 19:58:13,659 | INFO | kafka_consumer | Inserted 150 rows to ticks_db.
+2025-09-05 19:58:14,318 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:58:14,549 | INFO | kafka_consumer | Inserted 43 rows to ticks_db.
+2025-09-05 19:58:14,589 | INFO | kafka_consumer | Inserted 150 rows to ticks_db.
+2025-09-05 19:58:15,508 | INFO | kafka_consumer | Inserted 121 rows to ticks_db.
+2025-09-05 19:58:16,556 | INFO | kafka_consumer | Inserted 49 rows to ticks_db.
+2025-09-05 19:58:17,530 | INFO | kafka_consumer | Inserted 99 rows to ticks_db.
+2025-09-05 19:58:18,550 | INFO | kafka_consumer | Inserted 30 rows to ticks_db.
+2025-09-05 19:58:18,700 | INFO | monitoring | Inserted ticks monitoring data for 792 messages.
+2025-09-05 19:58:19,369 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:58:19,532 | INFO | kafka_consumer | Inserted 91 rows to ticks_db.
+2025-09-05 19:58:20,586 | INFO | kafka_consumer | Inserted 27 rows to ticks_db.
+2025-09-05 19:58:20,625 | INFO | kafka_consumer | Inserted 150 rows to ticks_db.
+2025-09-05 19:58:22,611 | INFO | kafka_consumer | Inserted 26 rows to ticks_db.
+2025-09-05 19:58:23,623 | INFO | kafka_consumer | Inserted 80 rows to ticks_db.
+2025-09-05 19:58:23,796 | INFO | monitoring | Inserted ticks monitoring data for 374 messages.
+2025-09-05 19:58:24,417 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:58:24,633 | INFO | kafka_consumer | Inserted 112 rows to ticks_db.
+2025-09-05 19:58:25,625 | INFO | kafka_consumer | Inserted 46 rows to ticks_db.
+2025-09-05 19:58:27,161 | INFO | kafka_consumer | Inserted 1 rows to ticks_db.
+2025-09-05 19:58:28,155 | INFO | kafka_consumer | Inserted 1 rows to ticks_db.
+2025-09-05 19:58:28,870 | INFO | monitoring | Inserted ticks monitoring data for 160 messages.
+2025-09-05 19:58:29,459 | INFO | monitoring | Completed a monitoring cycle.
+2025-09-05 19:58:31,160 | INFO | kafka_consumer | Inserted 8 rows to ticks_db.
+2025-09-05 19:58:32,182 | INFO | kafka_consumer | Inserted 1 rows to ticks_db.
+2025-09-05 19:58:33,938 | INFO | monitoring | Inserted ticks monitoring data for 9 messages.
+2025-09-05 19:58:34,189 | INFO | kafka_consumer | Inserted 36 rows to ticks_db.
+2025-09-05 19:58:34,507 | INFO | monitoring | Completed a monitoring cycle.
