@@ -4,13 +4,14 @@
 A real-time market data pipeline for streaming, storing, monitoring, and visualizing financial tick data, designed as simplified recreation to systems used in trading environments. The pipeline is live and displayed on my personal website, www.erickopen.com. I continuously monitor and improve it in my free time.  
 
 ## Architecture
-- **Configuration** This project is orchestrated via Docker and deployed on a Digital Ocean server. NGINX was used to display Grafana dashboards on erickopen.com.
+- **Configuration** This project is orchestrated via Docker and deployed on a Digital Ocean server. NGINX was used to display Grafana dashboards on www.erickopen.com.
 - **Ingestion:** A Kafka producer connects to a Finnhub API websocket, which streams exchange data from Binance. This data is fed into a Kafka topic.  
 - **Storage:** A Kafka consumer validates, batches, and inserts data into a ClickHouse table.  
 - **Monitoring:** The pipeline itself is monitored via standard logging and a periodic diagnostic/monitoring queries (which are stored in seperate Clickhouse tables). Status of the Digital Ocean server and Docker are monitored by a variety of tools that feed into Prometheus.   
 - **Archival:** Market data, logging data, and diagnostic/monitoring data gathered from the pipeline are archived to parquets after a day, which are then automatically uploaded to AWS S3 for long term storage.
 - **Dashboard:** Grafana dashboards highlight various metrics related to the status of the server, Docker, and pipeline. Additionally, market data captured is displayed for informative purposes.
 
+## Diagram
 ![Detailed Diagram](assets/architecture_complex.png)
 
 
