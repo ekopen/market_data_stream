@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 9,
+  "id": 2,
   "links": [],
   "liveNow": true,
   "panels": [
@@ -92,7 +92,7 @@
           "refId": "A"
         }
       ],
-      "title": "Ticks / Min",
+      "title": "Rows Inserted / Minute",
       "type": "stat"
     },
     {
@@ -198,7 +198,7 @@
           "refId": "A"
         }
       ],
-      "title": "Ticks Per Minute Time Series",
+      "title": "Rows Inserted Over Time",
       "type": "timeseries"
     },
     {
@@ -380,7 +380,7 @@
           "refId": "A"
         }
       ],
-      "title": "Websocket Lag Time Series",
+      "title": "Websocket Lag Over Time",
       "type": "timeseries"
     },
     {
@@ -562,7 +562,7 @@
           "refId": "A"
         }
       ],
-      "title": "Processing Lag Time Series",
+      "title": "Processing Lag Over Time",
       "type": "timeseries"
     },
     {
@@ -976,5 +976,5 @@
   "timezone": "browser",
   "title": "Pipeline Monitoring",
   "uid": "087f3f78-11c9-4259-96ac-916af471a99c",
-  "version": 35
+  "version": 1
 }

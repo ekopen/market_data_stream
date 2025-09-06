@@ -18,7 +18,7 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
-  "id": 10,
+  "id": 1,
   "links": [],
   "liveNow": true,
   "panels": [
@@ -65,7 +65,7 @@
           "fields": "",
           "values": false
         },
-        "showPercentChange": true,
+        "showPercentChange": false,
         "textMode": "auto",
         "wideLayout": true
       },
@@ -90,7 +90,7 @@
           },
           "pluginVersion": "4.10.2",
           "queryType": "table",
-          "rawSql": "(\r\n  SELECT\r\n    timestamp AS time,\r\n    price\r\n  FROM ticks_db\r\n  WHERE $__timeFilter(timestamp)\r\n  ORDER BY time ASC\r\n  LIMIT 1\r\n)\r\nUNION ALL\r\n(\r\n  SELECT\r\n    timestamp AS time,\r\n    price\r\n  FROM ticks_db\r\n  WHERE $__timeFilter(timestamp)\r\n  ORDER BY time DESC\r\n  LIMIT 1\r\n);\r\n",
+          "rawSql": "SELECT price, timestamp\r\nFROM ticks_db\r\nORDER BY timestamp DESC\r\nLIMIT 1",
           "refId": "A"
         }
       ],
@@ -200,7 +200,7 @@
           },
           "pluginVersion": "4.10.2",
           "queryType": "table",
-          "rawSql": "SELECT\r\n  toStartOfInterval(\r\n    timestamp,\r\n    INTERVAL toUInt32($__interval_ms * 5) MILLISECOND\r\n  ) AS time,\r\n  avg(price) AS price\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\nGROUP BY time\r\nORDER BY time",
+          "rawSql": "SELECT\r\n  toStartOfInterval(\r\n    timestamp,\r\n    INTERVAL toUInt32($__interval_ms * 1) MILLISECOND\r\n  ) AS time,\r\n  avg(price) AS price\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\nGROUP BY time\r\nORDER BY time",
           "refId": "A"
         }
       ],
@@ -621,7 +621,7 @@
           },
           "pluginVersion": "4.10.2",
           "queryType": "table",
-          "rawSql": "SELECT\r\n  toStartOfInterval(\r\n    timestamp,\r\n    INTERVAL toUInt32($__interval_ms * 25) MILLISECOND\r\n  ) AS time,\r\n    any(price) AS open,\r\n    anyLast(price) AS close,\r\n    max(price) AS high,\r\n    min(price) AS low\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\nGROUP BY time\r\nORDER BY time\r\n\r\n\r\n",
+          "rawSql": "SELECT\r\n  toStartOfInterval(\r\n    timestamp,\r\n    INTERVAL toUInt32($__interval_ms * 15) MILLISECOND\r\n  ) AS time,\r\n    any(price) AS open,\r\n    anyLast(price) AS close,\r\n    max(price) AS high,\r\n    min(price) AS low\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\nGROUP BY time\r\nORDER BY time\r\n\r\n\r\n",
           "refId": "A"
         }
       ],
@@ -730,7 +730,7 @@
           },
           "pluginVersion": "4.10.2",
           "queryType": "table",
-          "rawSql": "SELECT\r\n  toStartOfInterval(\r\n    timestamp,\r\n    INTERVAL toUInt32($__interval_ms * 10) MILLISECOND\r\n  ) AS time,\r\n  sum(volume) as volume\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\nGROUP BY time\r\nORDER BY time\r\n\r\n\r\n",
+          "rawSql": "SELECT\r\n  toStartOfInterval(\r\n    timestamp,\r\n    INTERVAL toUInt32($__interval_ms * 20) MILLISECOND\r\n  ) AS time,\r\n  sum(volume) as volume\r\nFROM ticks_db\r\nWHERE $__timeFilter(timestamp)\r\nGROUP BY time\r\nORDER BY time\r\n\r\n\r\n",
           "refId": "A"
         }
       ],
@@ -771,5 +771,5 @@
   "timezone": "browser",
   "title": "Market Data",
   "uid": "37fb53d0-bf32-4e50-b46e-3bf1a868e61e",
-  "version": 32
+  "version": 4
 }

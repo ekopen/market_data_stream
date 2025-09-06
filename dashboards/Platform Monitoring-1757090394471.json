@@ -47,85 +47,6 @@
               {
                 "color": "green",
                 "value": 0
-              },
-              {
-                "color": "red",
-                "value": 80
-              }
-            ]
-          },
-          "unit": "none"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 3,
-        "w": 6,
-        "x": 0,
-        "y": 0
-      },
-      "id": 7,
-      "maxDataPoints": 100,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "horizontal",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "mean"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.1.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${ds_prometheus}"
-          },
-          "expr": "count(container_last_seen{image!=\"\"})",
-          "intervalFactor": 2,
-          "legendFormat": "",
-          "metric": "container_last_seen",
-          "refId": "A",
-          "step": 240
-        }
-      ],
-      "title": "Running containers",
-      "transparent": true,
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${ds_prometheus}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "mappings": [
-            {
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "N/A"
-                }
-              },
-              "type": "special"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
               }
             ]
           },
@@ -134,9 +55,9 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 3,
-        "w": 5,
-        "x": 6,
+        "h": 4,
+        "w": 2,
+        "x": 0,
         "y": 0
       },
       "id": 9,
@@ -176,7 +97,6 @@
         }
       ],
       "title": "Docker Uptime",
-      "transparent": true,
       "type": "stat"
     },
     {
@@ -210,20 +130,172 @@
               }
             ]
           },
-          "unit": "mbytes"
+          "unit": "none"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 2,
+        "x": 2,
+        "y": 0
+      },
+      "id": 7,
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "mean"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds_prometheus}"
+          },
+          "expr": "count(container_last_seen{image!=\"\"})",
+          "intervalFactor": 2,
+          "legendFormat": "",
+          "metric": "container_last_seen",
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "Running containers",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${ds_prometheus}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              }
+            ]
+          },
+          "unit": "s"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 4,
+        "w": 20,
+        "x": 4,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "colorMode": "none",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "vertical",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds_prometheus}"
+          },
+          "disableTextWrap": false,
+          "editorMode": "code",
+          "expr": "max by (name) (\r\n  time() - container_start_time_seconds{image!=\"\"}\r\n)",
+          "fullMetaSearch": false,
+          "includeNullMetadata": true,
+          "intervalFactor": 2,
+          "legendFormat": "{{name}}",
+          "metric": "cpu",
+          "range": true,
+          "refId": "A",
+          "step": 10,
+          "useBackend": false
+        }
+      ],
+      "title": "Uptime By Service",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${ds_prometheus}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "max": 100,
+          "min": 0,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
         },
         "overrides": []
       },
       "gridPos": {
         "h": 3,
-        "w": 5,
-        "x": 12,
-        "y": 0
+        "w": 8,
+        "x": 0,
+        "y": 4
       },
-      "id": 5,
+      "id": 11,
       "maxDataPoints": 100,
       "options": {
-        "colorMode": "none",
+        "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "horizontal",
@@ -246,15 +318,17 @@
             "type": "prometheus",
             "uid": "${ds_prometheus}"
           },
-          "expr": "sum(container_memory_usage_bytes{image!=\"\"})/1024/1024",
+          "editorMode": "code",
+          "expr": "sum(\r\n  container_fs_usage_bytes{image!=\"\"}\r\n/\r\n  container_fs_limit_bytes{image!=\"\"}\r\n) * 100\r\n",
           "intervalFactor": 2,
           "legendFormat": "",
           "metric": "container_memory_usage_bytes",
+          "range": true,
           "refId": "A",
           "step": 240
         }
       ],
-      "title": "Total Memory Usage",
+      "title": "Disk Space Used",
       "transparent": true,
       "type": "stat"
     },
@@ -297,14 +371,14 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 5,
-        "x": 17,
-        "y": 0
+        "w": 8,
+        "x": 8,
+        "y": 4
       },
       "id": 6,
       "maxDataPoints": 100,
       "options": {
-        "colorMode": "none",
+        "colorMode": "value",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "horizontal",
@@ -335,9 +409,196 @@
           "step": 240
         }
       ],
-      "title": "Total CPU Usage",
+      "title": "CPU Busy",
       "transparent": true,
       "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${ds_prometheus}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "mappings": [
+            {
+              "options": {
+                "match": "null",
+                "result": {
+                  "text": "N/A"
+                }
+              },
+              "type": "special"
+            }
+          ],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "percent"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 8,
+        "x": 16,
+        "y": 4
+      },
+      "id": 5,
+      "maxDataPoints": 100,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "horizontal",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds_prometheus}"
+          },
+          "editorMode": "code",
+          "expr": "(\r\n  (node_memory_MemTotal_bytes - node_memory_MemAvailable_bytes)\r\n/\r\n  node_memory_MemTotal_bytes\r\n) * 100\r\n",
+          "intervalFactor": 2,
+          "legendFormat": "",
+          "metric": "container_memory_usage_bytes",
+          "range": true,
+          "refId": "A",
+          "step": 240
+        }
+      ],
+      "title": "Memory Busy",
+      "transparent": true,
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "${ds_prometheus}"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 10,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 2,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "never",
+            "spanNulls": true,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "bytes"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 8,
+        "x": 0,
+        "y": 7
+      },
+      "id": 10,
+      "options": {
+        "legend": {
+          "calcs": [
+            "mean",
+            "lastNotNull"
+          ],
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "multi",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "12.1.1",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "${ds_prometheus}"
+          },
+          "editorMode": "code",
+          "exemplar": false,
+          "expr": "container_fs_usage_bytes{image!=\"\"}",
+          "hide": false,
+          "intervalFactor": 2,
+          "legendFormat": "{{name}}",
+          "metric": "container_memory_usage_bytes",
+          "range": true,
+          "refId": "A",
+          "step": 10
+        }
+      ],
+      "title": "Disk Space Used",
+      "type": "timeseries"
     },
     {
       "datasource": {
@@ -402,9 +663,9 @@
       },
       "gridPos": {
         "h": 11,
-        "w": 12,
-        "x": 0,
-        "y": 3
+        "w": 8,
+        "x": 8,
+        "y": 7
       },
       "id": 2,
       "options": {
@@ -438,7 +699,7 @@
           "step": 10
         }
       ],
-      "title": "CPU Usage",
+      "title": "CPU Busy",
       "type": "timeseries"
     },
     {
@@ -504,9 +765,9 @@
       },
       "gridPos": {
         "h": 11,
-        "w": 12,
-        "x": 12,
-        "y": 3
+        "w": 8,
+        "x": 16,
+        "y": 7
       },
       "id": 1,
       "options": {
@@ -532,90 +793,19 @@
             "type": "prometheus",
             "uid": "${ds_prometheus}"
           },
+          "editorMode": "code",
           "expr": "container_memory_usage_bytes{image!=\"\"}",
           "hide": false,
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
           "metric": "container_memory_usage_bytes",
+          "range": true,
           "refId": "A",
           "step": 10
         }
       ],
-      "title": "Memory Usage",
+      "title": "Memory Busy",
       "type": "timeseries"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${ds_prometheus}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
-          "mappings": [],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "green",
-                "value": 0
-              }
-            ]
-          },
-          "unit": "s"
-        },
-        "overrides": []
-      },
-      "gridPos": {
-        "h": 6,
-        "w": 24,
-        "x": 0,
-        "y": 14
-      },
-      "id": 8,
-      "options": {
-        "colorMode": "none",
-        "graphMode": "none",
-        "justifyMode": "auto",
-        "orientation": "vertical",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.1.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${ds_prometheus}"
-          },
-          "disableTextWrap": false,
-          "editorMode": "code",
-          "expr": "max by (name) (\r\n  time() - container_start_time_seconds{image!=\"\"}\r\n)",
-          "fullMetaSearch": false,
-          "includeNullMetadata": true,
-          "intervalFactor": 2,
-          "legendFormat": "{{name}}",
-          "metric": "cpu",
-          "range": true,
-          "refId": "A",
-          "step": 10,
-          "useBackend": false
-        }
-      ],
-      "title": "Uptime By Service",
-      "transparent": true,
-      "type": "stat"
     },
     {
       "datasource": {
@@ -682,7 +872,7 @@
         "h": 7,
         "w": 12,
         "x": 0,
-        "y": 20
+        "y": 18
       },
       "id": 3,
       "options": {
@@ -781,7 +971,7 @@
         "h": 7,
         "w": 12,
         "x": 12,
-        "y": 20
+        "y": 18
       },
       "id": 4,
       "options": {
@@ -850,5 +1040,5 @@
   "timezone": "browser",
   "title": "Platform Monitoring",
   "uid": "944fd6f9-38e7-46dc-8c3c-465f610b1f1e",
-  "version": 1
+  "version": 3
 }
