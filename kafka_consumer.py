@@ -27,8 +27,7 @@ def validate_and_parse(data):
 def start_consumer(stop_event):
 
     logger.info("Kafka consumer started.")
-    time.sleep(10) # wait for Kafka to get ready
-    
+
     ch_client = new_client()
 
     consumer = KafkaConsumer(

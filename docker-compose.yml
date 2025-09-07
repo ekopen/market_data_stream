@@ -38,6 +38,12 @@ services:
       - kafka-data:/var/lib/kafka/data       # <-- persist Kafka
     restart: unless-stopped
 
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-broker-api-versions --bootstrap-server localhost:9092 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
 # ----------- data storage ----------------#
 
   clickhouse:
@@ -52,6 +58,12 @@ services:
       CLICKHOUSE_USER: default
       CLICKHOUSE_PASSWORD: mysecurepassword
     restart: unless-stopped
+
+    healthcheck:
+      test: ["CMD-SHELL", "clickhouse-client --query 'SELECT 1' --user=default --password=mysecurepassword || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
 
 # ----------- visualization ----------------#
 
@@ -224,8 +236,10 @@ services:
     ports:
       - "8001:8001"
     depends_on:
-      - kafka
-      - clickhouse
+      kafka:
+        condition: service_healthy
+      clickhouse:
+        condition: service_started
     volumes:
       - ./log_data:/app/log_data
     restart: unless-stopped
