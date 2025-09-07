@@ -28,6 +28,7 @@ A real-time market data pipeline for streaming, storing, monitoring, and visuali
 -  Log data appears to be inconsistenly sent to parquet format. Additionally, I am not sure if other Clickhouse tables are being saved as parquets when expired. Possibly due to configuration issues on Digital Ocean.
 -  Verify Docker restart loop works via testing.
 - There are time zone inconsistencies across different sources, apparent in Grafana. Make sure these are all in sync.
+- Security is not optimal. I am using several default passwords that are pasted in my code.
 
 ## Comments
 - A small suite of unit tests is in the tests folder.

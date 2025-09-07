@@ -225,6 +225,11 @@ services:
       - "9090:9090"
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:                          
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=2d" # keep data for 2 days
     restart: unless-stopped
 
 # ----------- data pipeline ----------------#
@@ -249,3 +254,4 @@ volumes:
   clickhouse_data:
   grafana-data:
   kafka-data:
+  prometheus-data:
