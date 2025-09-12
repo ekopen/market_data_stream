@@ -23,6 +23,7 @@ A real-time market data pipeline for streaming, storing, monitoring, and visuali
 - Build a module that uses the data stream to continiously retrain and implemenmt machine learning based trading strategies.
 - Implement a CI/CD pipeline for automated testing and deployment.
 - Once the complexity justifies it, introduce Kubernetes.
+- Have Kafka run on a different server, as mixing it with Clickhouse is a bit inefficient.
  
 **Known Issues:**
 -  Log data appears to be inconsistenly sent to parquet format. Additionally, I am not sure if other Clickhouse tables are being saved as parquets when expired. Possibly due to configuration issues on Digital Ocean.
@@ -31,6 +32,7 @@ A real-time market data pipeline for streaming, storing, monitoring, and visuali
 - Security is not optimal. I am using several default passwords that are pasted in my code.
 - Disk space continues to grow over time, due to nuances with docker. May need to run a regular cron job: docker compose down && docker system prune -af --volumes && docker compose up -d
 - Pipeline is shown to be down via prometheus but this is not accurate in reality.
+- Visualization needs to show correct heartbeat frequency.
 
 ## Comments
 - A small suite of unit tests is in the tests folder.
