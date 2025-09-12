@@ -30,8 +30,8 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
       KAFKA_LOG_RETENTION_HOURS: 1           # keep messages for 1 hour
-      KAFKA_LOG_SEGMENT_BYTES: 1073741824     # 1 GB per segment
-      KAFKA_LOG_RETENTION_BYTES: 5368709120  # 5 GB max total
+      KAFKA_LOG_SEGMENT_BYTES: 604857600     # 600 MB per segment
+      KAFKA_LOG_RETENTION_BYTES: 1804857600  # 1.8GB max total
       KAFKA_DELETE_TOPIC_ENABLE: "true"       # allow deleting topics
 
     volumes:
@@ -43,6 +43,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
 
 # ----------- data storage ----------------#
 
@@ -64,6 +70,12 @@ services:
       interval: 10s
       timeout: 5s
       retries: 10
+    
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
 
 # ----------- visualization ----------------#
 
@@ -156,6 +168,12 @@ services:
       - ./dashboards:/var/lib/grafana/dashboards
     restart: unless-stopped
 
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
 # ----------- logs ----------------#
 
 # collects all logs and ships to loki
@@ -169,6 +187,11 @@ services:
     depends_on:
       - loki
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
   
 # aggregates all logs
   loki:
@@ -178,6 +201,11 @@ services:
     ports:
       - "3100:3100"
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
 
 # ----------- monitoring ----------------#
 
@@ -192,6 +220,11 @@ services:
     volumes:
       - ./blackbox.yml:/etc/blackbox/blackbox.yml
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
 
   # collects information for each continer
   # will host at http://159.65.41.22:8080/metrics
@@ -206,6 +239,11 @@ services:
       - /sys:/sys:ro
       - /var/lib/docker/:/var/lib/docker:ro
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
 
   # tracks host level metrics
   # http://159.65.41.22:9100/metrics
@@ -215,6 +253,11 @@ services:
     ports:
       - "9100:9100"
     restart: unless-stopped    
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
 
   # scrapes endpoints for metrics/alerts. the central "brain"
   # http://159.65.41.22:9090/targets
@@ -231,6 +274,11 @@ services:
       - "--storage.tsdb.path=/prometheus"
       - "--storage.tsdb.retention.time=2d" # keep data for 2 days
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
 
 # ----------- data pipeline ----------------#
   pipeline:
@@ -249,6 +297,13 @@ services:
       - ./log_data:/app/log_data
     restart: unless-stopped
     stop_grace_period: 20s
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+# ----------- log rotation --------- #
 
 volumes:
   clickhouse_data:

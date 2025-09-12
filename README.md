@@ -29,6 +29,8 @@ A real-time market data pipeline for streaming, storing, monitoring, and visuali
 -  Verify Docker restart loop works via testing.
 - There are time zone inconsistencies across different sources, apparent in Grafana. Make sure these are all in sync.
 - Security is not optimal. I am using several default passwords that are pasted in my code.
+- Disk space continues to grow over time, due to nuances with docker. May need to run a regular cron job: docker compose down && docker system prune -af --volumes && docker compose up -d
+- Pipeline is shown to be down via prometheus but this is not accurate in reality.
 
 ## Comments
 - A small suite of unit tests is in the tests folder.
