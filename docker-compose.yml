@@ -28,10 +28,11 @@ services:
       KAFKA_MIN_INSYNC_REPLICAS: 1
       KAFKA_BROKER_ID: 1
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_HEAP_OPTS: "-Xmx256M -Xms128M"
 
-      KAFKA_LOG_RETENTION_HOURS: 1           # keep messages for 1 hour
-      KAFKA_LOG_SEGMENT_BYTES: 604857600     # 600 MB per segment
-      KAFKA_LOG_RETENTION_BYTES: 1804857600  # 1.8GB max total
+      KAFKA_LOG_RETENTION_MINUTES: 15           # keep messages for 15 min
+      KAFKA_LOG_SEGMENT_BYTES: 77428800       # 50 MB per segment
+      KAFKA_LOG_RETENTION_BYTES: 268435456  # 256 MB total
       KAFKA_DELETE_TOPIC_ENABLE: "true"       # allow deleting topics
 
     volumes:
@@ -44,33 +45,6 @@ services:
       timeout: 5s
       retries: 10
 
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
-        max-file: "3"
-
-# ----------- data storage ----------------#
-
-  clickhouse:
-    image: clickhouse/clickhouse-server:latest
-    container_name: clickhouse
-    ports:
-      - "8123:8123" #HTTP interface
-      - "9000:9000" # native interface
-    volumes:
-      - clickhouse_data:/var/lib/clickhouse
-    environment:
-      CLICKHOUSE_USER: default
-      CLICKHOUSE_PASSWORD: mysecurepassword
-    restart: unless-stopped
-
-    healthcheck:
-      test: ["CMD-SHELL", "clickhouse-client --query 'SELECT 1' --user=default --password=mysecurepassword || exit 1"]
-      interval: 10s
-      timeout: 5s
-      retries: 10
-    
     logging:
       driver: "json-file"
       options:
@@ -181,11 +155,10 @@ services:
     image: grafana/promtail:2.9.4
     container_name: promtail
     volumes:
-      - ./log_data:/var/log/pipeline:ro
+      - ./log_data:/var/log/main_app:ro
       - ./promtail-config.yml:/etc/promtail/config.yml:ro
-    command: -config.file=/etc/promtail/config.yml
-    depends_on:
-      - loki
+    command: 
+      - -config.file=/etc/promtail/config.yml
     restart: unless-stopped
     logging:
       driver: "json-file"
@@ -269,21 +242,22 @@ services:
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
       - prometheus-data:/prometheus
-    command:                          
+    command:
       - "--config.file=/etc/prometheus/prometheus.yml"
       - "--storage.tsdb.path=/prometheus"
-      - "--storage.tsdb.retention.time=2d" # keep data for 2 days
-    restart: unless-stopped
+      - "--storage.tsdb.retention.time=12h"
+      - "--storage.tsdb.min-block-duration=2h"
+      - "--storage.tsdb.max-block-duration=2h"
     logging:
       driver: "json-file"
       options:
         max-size: "50m"
         max-file: "3"
 
-# ----------- data pipeline ----------------#
-  pipeline:
+# ----------- main_app ----------------#
+  main_app:
     build: .
-    container_name: pipeline
+    container_name: main_app
     env_file:
       - .env
     ports:
@@ -291,8 +265,6 @@ services:
     depends_on:
       kafka:
         condition: service_healthy
-      clickhouse:
-        condition: service_started
     volumes:
       - ./log_data:/app/log_data
     restart: unless-stopped
@@ -306,7 +278,6 @@ services:
 # ----------- log rotation --------- #
 
 volumes:
-  clickhouse_data:
   grafana-data:
   kafka-data:
   prometheus-data:

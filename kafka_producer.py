@@ -11,7 +11,8 @@ logger = logging.getLogger(__name__)
 producer = KafkaProducer(
     bootstrap_servers=KAFKA_BOOTSTRAP_SERVER,
     value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-    linger_ms=1, # trades off latency for throughput
+    linger_ms=100, # trades off latency for throughput
+    batch_size=32768,
     retries=1, # retry once on failure
     request_timeout_ms=2000,# wait for 2 seconds for a response
     max_block_ms=2000  # max time to block on send
@@ -48,18 +49,30 @@ def start_producer(SYMBOL, API_KEY, stop_event):
         logger.info("WebSocket closed: code=%s msg=%s", close_status_code, close_msg)
     def on_error(ws, err):
         logger.exception(f"WebSocket error: {err}")
-    ws = websocket.WebSocketApp(f"wss://ws.finnhub.io?token={API_KEY}",
-                                on_message=on_message,
-                                on_open=on_open,
-                                on_close=on_close,
-                                on_error=on_error)
+    def connect_ws():
+        while not stop_event.is_set():
+            try:
+                ws = websocket.WebSocketApp(
+                    f"wss://ws.finnhub.io?token={API_KEY}",
+                    on_message=on_message,
+                    on_open=on_open,
+                    on_close=on_close,
+                    on_error=on_error
+                )
+                logger.info("Starting WebSocket connection...")
+                ws.run_forever()
+            except Exception as e:
+                logger.exception(f"WebSocket crashed: {e}")
+            if not stop_event.is_set():
+                logger.warning("WebSocket disconnected. Reconnecting in 5 seconds...")
+                time.sleep(5)
 
     # sub thread to keep the websocket alive
-    threading.Thread(target=ws.run_forever, daemon=True).start()
+    threading.Thread(target=connect_ws, daemon=True).start()
 
     try:
         while not stop_event.is_set(): # keep the producer running
-            time.sleep(0.1)
+            time.sleep(1)
     finally:
         logger.info("Shutting down producer.")
         for action, func in [
