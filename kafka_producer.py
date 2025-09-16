@@ -60,12 +60,15 @@ def start_producer(SYMBOL, API_KEY, stop_event):
                     on_error=on_error
                 )
                 logger.info("Starting WebSocket connection...")
-                ws.run_forever()
+                ws.run_forever(
+                    ping_interval=60,
+                    ping_timeout = 30
+                )
             except Exception as e:
                 logger.exception(f"WebSocket crashed: {e}")
             if not stop_event.is_set():
                 logger.warning("WebSocket disconnected. Reconnecting in 5 seconds...")
-                time.sleep(5)
+                time.sleep(10)
 
     # sub thread to keep the websocket alive
     threading.Thread(target=connect_ws, daemon=True).start()

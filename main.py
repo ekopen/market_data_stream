@@ -6,12 +6,18 @@ import threading, time, signal, logging
 from config import SYMBOL, API_KEY
 from kafka_producer import start_producer
 
+from logging.handlers import RotatingFileHandler
 # logging 
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
     handlers=[
-        logging.FileHandler("log_data/app.log", encoding="utf-8"),
+        RotatingFileHandler(
+            "log_data/app.log",
+            maxBytes=5 * 1024 * 1024,  # 5 MB per file
+            backupCount=3,
+            encoding="utf-8"
+        ),
         logging.StreamHandler()
     ]
 )

@@ -150,7 +150,7 @@
         "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
-            "mean"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
@@ -166,10 +166,12 @@
             "type": "prometheus",
             "uid": "${ds_prometheus}"
           },
-          "expr": "count(container_last_seen{image!=\"\"})",
+          "editorMode": "code",
+          "expr": "count(\r\n  max by (name) (\r\n    container_memory_working_set_bytes{image!=\"\"}\r\n  )\r\n)",
           "intervalFactor": 2,
           "legendFormat": "",
           "metric": "container_last_seen",
+          "range": true,
           "refId": "A",
           "step": 240
         }
@@ -570,7 +572,9 @@
           ],
           "displayMode": "table",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": true,
+          "sortBy": "Mean",
+          "sortDesc": true
         },
         "tooltip": {
           "hideZeros": false,
@@ -587,7 +591,7 @@
           },
           "editorMode": "code",
           "exemplar": false,
-          "expr": "container_fs_usage_bytes{image!=\"\"}",
+          "expr": "sum(container_fs_usage_bytes{image!=\"\"}) by (name)",
           "hide": false,
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
@@ -676,7 +680,9 @@
           ],
           "displayMode": "table",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": true,
+          "sortBy": "Mean",
+          "sortDesc": true
         },
         "tooltip": {
           "hideZeros": false,
@@ -691,10 +697,12 @@
             "type": "prometheus",
             "uid": "${ds_prometheus}"
           },
-          "expr": "rate(container_cpu_user_seconds_total{image!=\"\"}[5m]) * 100",
+          "editorMode": "code",
+          "expr": "sum(rate(container_cpu_user_seconds_total{image!=\"\"}[5m]) * 100) by (name)\r\n",
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
           "metric": "cpu",
+          "range": true,
           "refId": "A",
           "step": 10
         }
@@ -778,7 +786,9 @@
           ],
           "displayMode": "table",
           "placement": "bottom",
-          "showLegend": true
+          "showLegend": true,
+          "sortBy": "Mean",
+          "sortDesc": true
         },
         "tooltip": {
           "hideZeros": false,
@@ -794,7 +804,7 @@
             "uid": "${ds_prometheus}"
           },
           "editorMode": "code",
-          "expr": "container_memory_usage_bytes{image!=\"\"}",
+          "expr": "sum(container_memory_usage_bytes{image!=\"\"}) by (name)\r\n",
           "hide": false,
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
@@ -895,10 +905,12 @@
             "type": "prometheus",
             "uid": "${ds_prometheus}"
           },
-          "expr": "irate(container_network_receive_bytes_total{image!=\"\"}[5m])",
+          "editorMode": "code",
+          "expr": "sum(irate(container_network_receive_bytes_total{image!=\"\"}[5m])) by (name)",
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
           "metric": "container_network_receive_bytes_total",
+          "range": true,
           "refId": "A",
           "step": 20
         }
@@ -994,9 +1006,11 @@
             "type": "prometheus",
             "uid": "${ds_prometheus}"
           },
-          "expr": "irate(container_network_transmit_bytes_total{image!=\"\"}[5m])",
+          "editorMode": "code",
+          "expr": "sum(irate(container_network_transmit_bytes_total{image!=\"\"}[5m])) by (name)",
           "intervalFactor": 2,
           "legendFormat": "{{name}}",
+          "range": true,
           "refId": "A",
           "step": 20
         }
@@ -1040,5 +1054,5 @@
   "timezone": "browser",
   "title": "Platform Monitoring",
   "uid": "944fd6f9-38e7-46dc-8c3c-465f610b1f1e",
-  "version": 1
+  "version": 2
 }
