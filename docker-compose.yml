@@ -94,42 +94,6 @@ services:
 
 # ----------- monitoring ----------------#
 
-# checks if services are up
-  blackbox:
-    image: prom/blackbox-exporter:latest
-    container_name: blackbox
-    ports:
-      - "9115:9115"
-    command:
-      - "--config.file=/etc/blackbox/blackbox.yml"
-    volumes:
-      - ./blackbox.yml:/etc/blackbox/blackbox.yml
-    restart: unless-stopped
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
-        max-file: "3"
-
-  # collects information for each continer
-  # will host at http://159.65.41.22:8080/metrics
-  cadvisor:
-    image: gcr.io/cadvisor/cadvisor:latest
-    container_name: cadvisor
-    ports:
-      - "8080:8080"
-    volumes:
-      - /:/rootfs:ro
-      - /var/run:/var/run:ro
-      - /sys:/sys:ro
-      - /var/lib/docker/:/var/lib/docker:ro
-    restart: unless-stopped
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
-        max-file: "3"
-
   # tracks host level metrics
   # http://159.65.41.22:9100/metrics
   node_exporter:
@@ -138,6 +102,23 @@ services:
     ports:
       - "9100:9100"
     restart: unless-stopped    
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "3"
+
+  # ------ tracks kafka metrics ------#
+  kafka_exporter:
+    image: danielqsj/kafka-exporter:latest
+    container_name: kafka_exporter
+    ports:
+      - "9308:9308"
+    command:
+      - "--kafka.server=kafka:19092"
+    restart: unless-stopped
+    depends_on:
+      - kafka
     logging:
       driver: "json-file"
       options:
@@ -187,7 +168,6 @@ services:
         max-size: "50m"
         max-file: "3"
 
-# ----------- log rotation --------- #
 
 volumes:
   grafana-data:
