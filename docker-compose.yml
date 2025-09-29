@@ -4,6 +4,10 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.6.0
     container_name: kafka
+    # deploy:
+    #   resources:
+    #     limits:
+    #       memory: 512M
     ports:
       - "9092:9092"
       - "9093:9093"

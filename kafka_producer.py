@@ -7,22 +7,29 @@ import json, websocket, time, threading, logging
 from datetime import datetime, timezone
 logger = logging.getLogger(__name__)
 
-# producer class
-producer = KafkaProducer(
-    bootstrap_servers=KAFKA_BOOTSTRAP_SERVER,
-    value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-    linger_ms=100, # trades off latency for throughput
-    batch_size=32768,
-    retries=1, # retry once on failure
-    request_timeout_ms=2000,# wait for 2 seconds for a response
-    max_block_ms=2000  # max time to block on send
-)
+# in case the producer fails, we need a function to recreate it
+def make_producer():
+    return KafkaProducer(
+        bootstrap_servers=KAFKA_BOOTSTRAP_SERVER,
+        value_serializer=lambda v: json.dumps(v).encode('utf-8'),
+        linger_ms=100, # trades off latency for throughput
+        batch_size=32768,
+        retries=1, # retry once on failure
+        request_timeout_ms=2000, # wait for 2 seconds for a response
+        max_block_ms=2000 # max time to block on send
+    )
+
+producer = make_producer()
+last_message_time = time.time()
+ws = None  # making the ws accessible for shutdown
 
 def start_producer(SYMBOL, API_KEY, stop_event):
 
+    global producer, last_message_time, ws
     logger.info("Producer thread started.")
 
     def on_message(ws, message):
+        global last_message_time, producer
         data = json.loads(message)
         if data.get('type') == 'trade': #checks to make sure the data is trade data
             received_at = datetime.now(timezone.utc) # get the current time in UTC, which we will reference as the time the data arrived
@@ -37,19 +44,23 @@ def start_producer(SYMBOL, API_KEY, stop_event):
                     'volume': t['v'],
                     'received_at': received_at.isoformat()
                 }
-                producer.send('price_ticks', payload) #sends to the Kafka topic
-                logger.debug(f"Sent to Kafka: {payload}")
+                future = producer.send('price_ticks', payload)
+            last_message_time = time.time()
 
     # WebSocket event handlers
-    def on_open(ws):
+    def on_open(ws_inner):
         logger.info("WebSocket connected.")
-        ws.send(json.dumps({"type": "subscribe", "symbol": SYMBOL}))
+        ws_inner.send(json.dumps({"type": "subscribe", "symbol": SYMBOL}))
         logger.info(f"Subscribing to {SYMBOL}")
-    def on_close(ws, close_status_code, close_msg):
+
+    def on_close(ws_inner, close_status_code, close_msg):
         logger.info("WebSocket closed: code=%s msg=%s", close_status_code, close_msg)
-    def on_error(ws, err):
+        
+    def on_error(ws_inner, err):
         logger.exception(f"WebSocket error: {err}")
+
     def connect_ws():
+        global ws
         while not stop_event.is_set():
             try:
                 ws = websocket.WebSocketApp(
@@ -67,7 +78,7 @@ def start_producer(SYMBOL, API_KEY, stop_event):
             except Exception as e:
                 logger.exception(f"WebSocket crashed: {e}")
             if not stop_event.is_set():
-                logger.warning("WebSocket disconnected. Reconnecting in 5 seconds...")
+                logger.warning("WebSocket disconnected. Reconnecting in 10 seconds...")
                 time.sleep(10)
 
     # sub thread to keep the websocket alive
@@ -75,17 +86,22 @@ def start_producer(SYMBOL, API_KEY, stop_event):
 
     try:
         while not stop_event.is_set(): # keep the producer running
+            # hearbeat watchdog
+            if time.time() - last_message_time > 60:
+                logger.warning("No data for 60s, restarting WebSocket...")
+                if ws: ws.close()
+                producer = make_producer()
+                last_message_time = time.time()
             time.sleep(1)
     finally:
         logger.info("Shutting down producer.")
-        for action, func in [
-            ("closing WebSocket", lambda: ws.close()),
-            ("flushing producer", lambda: producer.flush(timeout=5)),
-            ("closing producer", lambda: producer.close(timeout=5)),
-        ]:
-            try:
-                func()
-            except Exception:
-                logger.exception(f"Error {action} during shutdown")
-
+        try: 
+            if ws: ws.close()
+        except Exception: 
+            logger.exception("Error closing WebSocket")
+        try: 
+            producer.flush(timeout=5)
+            producer.close(timeout=5)
+        except Exception:
+            logger.exception("Error closing producer")
     
