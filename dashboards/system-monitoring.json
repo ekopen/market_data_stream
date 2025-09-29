@@ -96,7 +96,7 @@
         ]
       },
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 3,
         "x": 0,
         "y": 0
@@ -143,12 +143,15 @@
       },
       "fieldConfig": {
         "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "dark-red",
+                "color": "green",
                 "value": 0
               }
             ]
@@ -158,14 +161,14 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 5,
         "x": 3,
         "y": 0
       },
-      "id": 16,
+      "id": 17,
       "options": {
-        "colorMode": "value",
+        "colorMode": "none",
         "graphMode": "none",
         "justifyMode": "auto",
         "orientation": "auto",
@@ -189,7 +192,7 @@
             "uid": "${ds_prometheus}"
           },
           "editorMode": "code",
-          "expr": "sum by (topic) (\r\n  rate(kafka_topic_partition_current_offset{topic=\"price_ticks\"}[1m])\r\n)\r\n",
+          "expr": "sum by (topic) (\r\n  last_over_time(\r\n    (increase(kafka_topic_partition_current_offset{topic=\"price_ticks\"}[5m]) / 300)[5m:]\r\n  )\r\n)\r\n",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -225,8 +228,8 @@
               "viz": false
             },
             "insertNulls": false,
-            "lineInterpolation": "linear",
-            "lineWidth": 2,
+            "lineInterpolation": "smooth",
+            "lineWidth": 3,
             "pointSize": 5,
             "scaleDistribution": {
               "type": "linear"
@@ -259,12 +262,12 @@
         "overrides": []
       },
       "gridPos": {
-        "h": 6,
+        "h": 7,
         "w": 16,
         "x": 8,
         "y": 0
       },
-      "id": 15,
+      "id": 16,
       "options": {
         "legend": {
           "calcs": [],
@@ -286,13 +289,13 @@
             "uid": "${ds_prometheus}"
           },
           "editorMode": "code",
-          "expr": "sum by (topic) (\r\n  rate(kafka_topic_partition_current_offset{topic=\"price_ticks\"}[1m])\r\n)\r\n",
+          "expr": "sum by (topic) (\r\n  increase(kafka_topic_partition_current_offset{topic=\"price_ticks\"}[5m])\r\n) / 300\r\n",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
         }
       ],
-      "title": "Messages in per Second",
+      "title": "Messages / Second",
       "type": "timeseries"
     }
   ],
@@ -332,5 +335,5 @@
   "timezone": "",
   "title": "System Monitoring",
   "uid": "blackbox-uptime",
-  "version": 7
+  "version": 9
 }

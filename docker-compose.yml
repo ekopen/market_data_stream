@@ -110,7 +110,7 @@ services:
     ports:
       - "9308:9308"
     command:
-      - "--kafka.server=kafka:19092"
+    - --kafka.server=kafka:9092
     restart: unless-stopped
     depends_on:
       - kafka
