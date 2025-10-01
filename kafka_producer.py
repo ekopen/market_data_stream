@@ -23,7 +23,7 @@ producer = make_producer()
 last_message_time = time.time()
 ws = None  # making the ws accessible for shutdown
 
-def start_producer(SYMBOL, API_KEY, stop_event):
+def start_producer(SYMBOLS, API_KEY, stop_event):
 
     global producer, last_message_time, ws
     logger.info("Producer thread started.")
@@ -50,8 +50,10 @@ def start_producer(SYMBOL, API_KEY, stop_event):
     # WebSocket event handlers
     def on_open(ws_inner):
         logger.info("WebSocket connected.")
-        ws_inner.send(json.dumps({"type": "subscribe", "symbol": SYMBOL}))
-        logger.info(f"Subscribing to {SYMBOL}")
+        for symbol in SYMBOLS:
+            ws_inner.send(json.dumps({"type": "subscribe", "symbol": symbol}))
+            logger.info(f"Subscribing to {symbol}")
+
 
     def on_close(ws_inner, close_status_code, close_msg):
         logger.info("WebSocket closed: code=%s msg=%s", close_status_code, close_msg)

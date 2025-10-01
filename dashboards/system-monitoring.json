@@ -33,119 +33,6 @@
           "color": {
             "mode": "thresholds"
           },
-          "mappings": [
-            {
-              "options": {
-                "match": "null",
-                "result": {
-                  "text": "N/A"
-                }
-              },
-              "type": "special"
-            },
-            {
-              "options": {
-                "1": {
-                  "text": "UP"
-                }
-              },
-              "type": "value"
-            },
-            {
-              "options": {
-                "0": {
-                  "text": "DOWN"
-                }
-              },
-              "type": "value"
-            }
-          ],
-          "thresholds": {
-            "mode": "absolute",
-            "steps": [
-              {
-                "color": "transparent",
-                "value": 0
-              },
-              {
-                "color": "dark-red",
-                "value": 0
-              },
-              {
-                "color": "#299c46",
-                "value": 1
-              }
-            ]
-          }
-        },
-        "overrides": [
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Value"
-            },
-            "properties": []
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Time"
-            },
-            "properties": []
-          }
-        ]
-      },
-      "gridPos": {
-        "h": 7,
-        "w": 3,
-        "x": 0,
-        "y": 0
-      },
-      "id": 2,
-      "options": {
-        "colorMode": "value",
-        "graphMode": "area",
-        "justifyMode": "auto",
-        "orientation": "auto",
-        "percentChangeColorMode": "standard",
-        "reduceOptions": {
-          "calcs": [
-            "lastNotNull"
-          ],
-          "fields": "",
-          "values": false
-        },
-        "showPercentChange": false,
-        "textMode": "auto",
-        "wideLayout": true
-      },
-      "pluginVersion": "12.1.1",
-      "targets": [
-        {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "${ds_prometheus}"
-          },
-          "editorMode": "code",
-          "expr": "up{job=\"kafka\"}",
-          "format": "table",
-          "instant": true,
-          "refId": "A"
-        }
-      ],
-      "title": "Kafka Status",
-      "type": "stat"
-    },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "${ds_prometheus}"
-      },
-      "fieldConfig": {
-        "defaults": {
-          "color": {
-            "mode": "thresholds"
-          },
           "mappings": [],
           "thresholds": {
             "mode": "absolute",
@@ -162,8 +49,8 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 5,
-        "x": 3,
+        "w": 4,
+        "x": 0,
         "y": 0
       },
       "id": 17,
@@ -263,8 +150,8 @@
       },
       "gridPos": {
         "h": 7,
-        "w": 16,
-        "x": 8,
+        "w": 20,
+        "x": 4,
         "y": 0
       },
       "id": 16,
@@ -289,7 +176,7 @@
             "uid": "${ds_prometheus}"
           },
           "editorMode": "code",
-          "expr": "sum by (topic) (\r\n  increase(kafka_topic_partition_current_offset{topic=\"price_ticks\"}[5m])\r\n) / 300\r\n",
+          "expr": "sum by (topic) (\r\n  increase(kafka_topic_partition_current_offset{topic=\"price_ticks\"}[10m])\r\n) / 600",
           "legendFormat": "__auto",
           "range": true,
           "refId": "A"
@@ -335,5 +222,5 @@
   "timezone": "",
   "title": "System Monitoring",
   "uid": "blackbox-uptime",
-  "version": 9
+  "version": 10
 }

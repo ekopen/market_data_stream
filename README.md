@@ -11,8 +11,8 @@ Configures a Kafka producer that captures real-time market data from a websocket
 - Other modules in the Live Trading Engine subscribe to this Kafka topic. For example, the market_data continuously writes streaming data into ClickHouse for historical analysis, while the trading consumes the latest prices for use in trading strategy execution.
 
 ## Future Improvements  
-- Expand the producer to stream more symbols and include bid/ask price levels and order book depth.   
+- Expand the producer include bid/ask price levels (for higher frequency strategies).   
 - Explore partitioning and schema management for scalability as data volume grows.  
 
 ## Known Issues  
-- Configuration files may contain redundant or overly complex settings; a review and simplification pass is planned to streamline the setup.  
+- Configuration files may contain redundant or overly complex settings. 

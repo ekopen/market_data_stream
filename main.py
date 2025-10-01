@@ -3,7 +3,7 @@
 
 # imports
 import threading, time, signal, logging
-from config import SYMBOL, API_KEY
+from config import SYMBOLS, API_KEY
 from kafka_producer import start_producer
 
 from logging.handlers import RotatingFileHandler
@@ -36,7 +36,7 @@ if __name__ == "__main__":
         logger.info("System starting.")
 
         # start ingesting data from the websocket and feed to kafka
-        producer_thread = threading.Thread(target=start_producer, args=(SYMBOL, API_KEY, stop_event))
+        producer_thread = threading.Thread(target=start_producer, args=(SYMBOLS, API_KEY, stop_event))
         producer_thread.start()
 
         while not stop_event.is_set():
