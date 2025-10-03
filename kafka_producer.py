@@ -12,11 +12,12 @@ def make_producer():
     return KafkaProducer(
         bootstrap_servers=KAFKA_BOOTSTRAP_SERVER,
         value_serializer=lambda v: json.dumps(v).encode('utf-8'),
-        linger_ms=100, # trades off latency for throughput
+        linger_ms=50, # trades off latency for throughput
         batch_size=32768,
-        retries=1, # retry once on failure
-        request_timeout_ms=2000, # wait for 2 seconds for a response
-        max_block_ms=2000 # max time to block on send
+        retries=5, # retry once on failure
+        retry_backoff_ms = 200, # wait between retries
+        request_timeout_ms=10000, # wait for 210 seconds for a response
+        max_block_ms=10000 # max time to block on send
     )
 
 producer = make_producer()

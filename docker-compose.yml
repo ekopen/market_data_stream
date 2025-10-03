@@ -4,38 +4,43 @@ services:
   kafka:
     image: confluentinc/cp-kafka:7.6.0
     container_name: kafka
-    # deploy:
-    #   resources:
-    #     limits:
-    #       memory: 512M
     ports:
-      - "9092:9092"
-      - "9093:9093"
+      - "9092:9092"   # external access
     environment:
-      KAFKA_PROCESS_ROLES: "broker,controller"
+      # Single broker in KRaft mode
       KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: "broker,controller"
       KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka:9093"
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+      # Listeners (internal for Docker, external for consumers)
       KAFKA_LISTENERS: "INTERNAL://0.0.0.0:19092,EXTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093"
       KAFKA_ADVERTISED_LISTENERS: "INTERNAL://kafka:19092,EXTERNAL://159.65.41.22:9092"
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: "INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT"
       KAFKA_INTER_BROKER_LISTENER_NAME: "INTERNAL"
-      KAFKA_CONTROLLER_LISTENER_NAMES: "CONTROLLER"
+
+      # Broker basics
+      KAFKA_BROKER_ID: 1
       CLUSTER_ID: "CQdFOKLdQ8Si0WWDeEUgGg"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+      # Single-node replication factors
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_MIN_INSYNC_REPLICAS: 1
-      KAFKA_BROKER_ID: 1
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+      # Memory
       KAFKA_HEAP_OPTS: "-Xmx256M -Xms128M"
 
-      KAFKA_LOG_RETENTION_MINUTES: 15           # keep messages for 15 min
-      KAFKA_LOG_SEGMENT_BYTES: 77428800       # 50 MB per segment
-      KAFKA_LOG_RETENTION_BYTES: 268435456  # 256 MB total
-      KAFKA_DELETE_TOPIC_ENABLE: "true"       # allow deleting topics
+      # Retention/logging (your values kept)
+      KAFKA_LOG_RETENTION_MINUTES: 15
+      KAFKA_LOG_SEGMENT_BYTES: 77428800
+      KAFKA_LOG_RETENTION_BYTES: 268435456
+      KAFKA_DELETE_TOPIC_ENABLE: "true"
 
     volumes:
-      - kafka-data:/var/lib/kafka/data       # <-- persist Kafka
+      - kafka-data:/var/lib/kafka/data
     restart: unless-stopped
 
     healthcheck:
